@@ -1,0 +1,35 @@
+repositories {
+    mavenCentral()
+}
+
+allprojects {
+    apply plugin: 'idea'
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+    }
+
+    ext {
+        // 资源文件名称
+        resourceList =["**/*.sql"]
+    }
+
+    dependencies {
+        testCompile 'junit:junit:4.+'
+        compile group: 'org.hsqldb', name: 'hsqldb', version: '2.3.0'
+    }
+
+    version = '1.0.0'
+
+    jar {
+        manifest.attributes provider: 'gradle'
+    }
+}
+
+// top-level build task that depends on the underlying tasks
+
+task build
