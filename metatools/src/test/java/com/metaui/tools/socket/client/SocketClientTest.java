@@ -12,10 +12,10 @@ public class SocketClientTest {
     @Test
     public void testCreateConnect() throws Exception {
         SocketClient client = new SocketClient();
-        Socket socket = client.createConnect("127.0.0.1", 9999);
+        ServerConnect connect = client.createConnect("127.0.0.1", 9999);
         CmdTransport transport = new CmdTransport();
         transport.setCmdInfo("dir");
-        client.send(socket, transport);
-        System.out.println(transport.getReceiveInfo());
+        connect.send(transport);
+        Thread.sleep(10000);
     }
 }

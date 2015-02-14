@@ -1,12 +1,14 @@
 package com.metaui.tools.socket.transport;
 
+import java.io.Serializable;
+
 /**
- * ÃüÁî´«Êä
+ * å‘½ä»¤ä¼ è¾“
  *
  * @author wei_jc
  * @since 1.0.0
  */
-public class CmdTransport implements ISocketTransport {
+public class CmdTransport implements ISocketTransport, Serializable {
     private String cmdInfo;
     private String receiveInfo;
 
@@ -20,11 +22,11 @@ public class CmdTransport implements ISocketTransport {
 
     @Override
     public String getSendInfo() {
-        return null;
+        return cmdInfo;
     }
 
     @Override
     public String getReceiveInfo() {
-        return null;
+        return receiveInfo;
     }
 }

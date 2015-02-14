@@ -1,35 +1,83 @@
 package com.metaui.tools.socket.server;
 
+import com.metaui.tools.socket.transport.CmdTransport;
 import com.metaui.tools.socket.transport.ISocketTransport;
+import javafx.collections.ObservableList;
 
+import java.io.*;
 import java.net.Socket;
 
 /**
- * ·şÎñÆ÷¶Ë´´½¨Óë¿Í»§¶ËµÄÁ¬½Ó
+ * æœåŠ¡å™¨ç«¯åˆ›å»ºä¸å®¢æˆ·ç«¯çš„è¿æ¥
  *
  * @author wei_jc
  * @since 1.0.0
  */
-public class ClientConnect implements Runnable {
+public class ClientConnect extends Thread {
     private Socket socket;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
+    private ObservableList<ClientConnect> connectList;
+    private ObservableList<String> logs;
 
-    public ClientConnect(Socket socket) {
+    public ClientConnect(Socket socket, ObservableList<ClientConnect> connectList, ObservableList<String> logs) throws IOException {
         this.socket = socket;
+        this.connectList = connectList;
+        this.logs = logs;
+        // å¯åŠ¨
+        start();
     }
 
     @Override
     public void run() {
+        try {
+            in = new ObjectInputStream(socket.getInputStream());
+            out = new ObjectOutputStream(socket.getOutputStream());
 
+            while (true) {
+                try {
+                    Object object = in.readObject();
+                    if (object instanceof ISocketTransport) {
+                        ISocketTransport transport = (ISocketTransport) object;
+                        handle(transport);
+                    } else {
+                        throw new RuntimeException("ä¸èƒ½è¯†åˆ«çš„å¯¹è±¡ï¼");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    logs.add("å®¢æˆ·ç«¯ï¼š" + socket.getInetAddress().getHostAddress() + "æ–­å¼€è¿æ¥ï¼");
+                    connectList.remove(this);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void send(ISocketTransport transport) {
-
+    public void send(ISocketTransport transport) throws IOException {
+        out.writeObject(transport);
+        out.flush();
     }
 
     /**
-     * ´¦Àí½ÓÊÕĞÅÏ¢
+     * å¤„ç†æ¥æ”¶ä¿¡æ¯
      */
-    public void handle(ISocketTransport transport) {
+    public void handle(ISocketTransport transport) throws Exception {
+        if (transport instanceof CmdTransport) {
+            CmdTransport cmdTransport = (CmdTransport) transport;
+            String cmd = transport.getSendInfo();
+            String response = ExecCmd.execute(cmd);
+            System.out.println(response);
+            cmdTransport.setReceiveInfo(response);
+        }
 
+        // å‘é€è¿”å›ä¿¡æ¯
+        send(transport);
+    }
+
+    @Override
+    public String toString() {
+        return socket.getInetAddress().getHostAddress();
     }
 }

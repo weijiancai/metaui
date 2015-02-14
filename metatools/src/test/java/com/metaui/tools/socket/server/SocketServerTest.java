@@ -10,5 +10,6 @@ public class SocketServerTest {
     public void testStart() throws Exception {
         SocketServer server = new SocketServer(9999);
         server.start();
+        Thread.sleep(100000);
     }
 }

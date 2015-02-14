@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="602.0" prefWidth="838.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.metaui.tools.socket.server.SocketServerCtrl">
+   <center>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="服务器">
+               <content>
+                  <VBox spacing="15.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="15.0">
+                           <children>
+                              <Label fx:id="serverIpLabel" text="127.0.0.1" />
+                              <TextField fx:id="serverPort" prefWidth="55.0" text="9999" />
+                              <Button fx:id="btnStartServer" defaultButton="true" mnemonicParsing="false" onAction="#startServer" text="启动" />
+                              <Button fx:id="btnStopServer" cancelButton="true" mnemonicParsing="false" onAction="#stopServer" text="停止" />
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </HBox>
+                        <TextArea fx:id="serverLogTA" />
+                        <ListView fx:id="logsList" prefHeight="200.0" prefWidth="200.0" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </VBox>
+               </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </center>
+   <left>
+      <ListView fx:id="clientList" BorderPane.alignment="CENTER" />
+   </left>
+</BorderPane>

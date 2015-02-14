@@ -8,6 +8,7 @@ repositories {
 }
 
 dependencies {
+    compile project(':core')
     testCompile 'junit:junit:4.+'
 
     compile group: 'org.hsqldb', name: 'hsqldb', version: '2.3.0'

@@ -5,21 +5,22 @@ import com.metaui.tools.socket.transport.ISocketTransport;
 import java.net.Socket;
 
 /**
- * Socket¿Í»§¶Ë
+ * Socketå®¢æˆ·ç«¯
  *
  * @author wei_jc
  * @since 1.0.0
  */
 public class SocketClient {
     /**
-     * ´´½¨Óë·şÎñÆ÷µÄÁ¬½Ó
+     * åˆ›å»ºä¸æœåŠ¡å™¨çš„è¿æ¥
      *
-     * @param ip IPµØÖ·
-     * @param port ¶Ë¿Ú
-     * @return ·µ»ØSocketÁ¬½Ó
+     * @param ip IPåœ°å€
+     * @param port ç«¯å£
+     * @return è¿”å›Socketè¿æ¥
      */
-    public Socket createConnect(String ip, int port) throws Exception {
-        return null;
+    public ServerConnect createConnect(String ip, int port) throws Exception {
+        Socket socket = new Socket(ip, port);
+        return new ServerConnect(socket);
     }
 
     public void send(Socket socket, ISocketTransport transport) {
