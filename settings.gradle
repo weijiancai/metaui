@@ -1,1 +1,1 @@
-include 'core', 'metatools'
+include 'core', 'metatools', 'dbtool'
