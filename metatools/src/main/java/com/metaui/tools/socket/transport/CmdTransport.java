@@ -1,14 +1,12 @@
 package com.metaui.tools.socket.transport;
 
-import java.io.Serializable;
-
 /**
  * 命令传输
  *
  * @author wei_jc
  * @since 1.0.0
  */
-public class CmdTransport implements ISocketTransport, Serializable {
+public class CmdTransport implements ISocketTransport {
     private String cmdInfo;
     private String receiveInfo;
 

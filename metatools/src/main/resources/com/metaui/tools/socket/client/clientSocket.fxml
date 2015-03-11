@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="695.0" prefWidth="927.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.metaui.tools.socket.client.SocketClientCtrl">
+   <left>
+      <ListView fx:id="serverListView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </left>
+   <center>
+      <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="桌面">
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                     <children>
+                        <HBox>
+                           <children>
+                              <Label text="添加服务器：" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="15.0">
+                           <children>
+                              <Label text="服务器名称：" />
+                              <TextField fx:id="serverNameField" />
+                              <Label text="IP：" />
+                              <TextField fx:id="ipField" prefWidth="120.0" promptText="127.120.120.111" />
+                              <Label text="端口：" />
+                              <TextField fx:id="portField" prefWidth="60.0" promptText="65536" />
+                              <Button fx:id="btnAddServer" defaultButton="true" mnemonicParsing="false" onAction="#addServer" text="添加" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </center>
+</BorderPane>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.metaui.tools.socket.client.ServerTabCtrl">
+   <top>
+      <HBox alignment="CENTER_LEFT" spacing="15.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="btnCreateConnect" defaultButton="true" mnemonicParsing="false" onAction="#createConnect" text="开始连接" />
+            <Button fx:id="btnStop" cancelButton="true" mnemonicParsing="false" onAction="#stopServer" text="停止" />
+         </children>
+      </HBox>
+   </top>
+   <center>
+      <TabPane fx:id="tabPane" prefHeight="1939.0" prefWidth="3108.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="cmd">
+               <content>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <bottom>
+                        <HBox spacing="15.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label text="命令：" />
+                              <TextField fx:id="cmdTF" HBox.hgrow="ALWAYS" />
+                              <Button fx:id="btnSendCmd" defaultButton="true" mnemonicParsing="false" onAction="#sendCmd" text="发送" />
+                           </children>
+                           <BorderPane.margin>
+                              <Insets />
+                           </BorderPane.margin>
+                        </HBox>
+                     </bottom>
+                     <center>
+                        <ListView fx:id="cmdLogListView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                     </center>
+                  </BorderPane>
+               </content>
+          </Tab>
+          <Tab text="文件系统">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+            <Tab text="服务">
+               <content>
+                  <VBox spacing="15.0">
+                     <children>
+                        <ToolBar>
+                          <items>
+                            <Button fx:id="btnRefresh" mnemonicParsing="false" onAction="#refreshService" text="刷新" />
+                              <Button fx:id="btnStartService" defaultButton="true" mnemonicParsing="false" onAction="#startService" text="启动服务" />
+                              <Button fx:id="btnstopService" cancelButton="true" mnemonicParsing="false" onAction="#stopService" text="停止服务" />
+                          </items>
+                        </ToolBar>
+                        <TableView fx:id="serviceTableView">
+                          <columns>
+                            <TableColumn fx:id="nameCol" prefWidth="75.0" text="名称" />
+                            <TableColumn fx:id="displayNameCol" prefWidth="75.0" text="显示名" />
+                              <TableColumn fx:id="stateCol" prefWidth="75.0" text="状态" />
+                          </columns>
+                        </TableView>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </VBox>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </center>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+</BorderPane>

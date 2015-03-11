@@ -17,11 +17,10 @@ public class ExecCmd {
             return "断开连接";
         }
         Runtime r = Runtime.getRuntime();
-        Process p = null;
+        Process p;
         String inline;
         StringBuffer sb = new StringBuffer();
         //输入提示信息
-        sb.append("服务器回复的执行结果为：").append("\n");
         try {
             p = r.exec("cmd /c " + cmd);
         } catch (Exception e) {
@@ -32,8 +31,7 @@ public class ExecCmd {
         while(null != (inline = br.readLine())){
             sb.append(inline).append("\n");
         }
-        //提示
-        sb.append("请继续输入:");
+
         return sb.toString();
     }
 }

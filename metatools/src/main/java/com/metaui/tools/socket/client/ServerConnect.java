@@ -1,8 +1,8 @@
 package com.metaui.tools.socket.client;
 
-import com.metaui.tools.socket.server.ExecCmd;
 import com.metaui.tools.socket.transport.CmdTransport;
 import com.metaui.tools.socket.transport.ISocketTransport;
+import com.metaui.tools.socket.transport.ITransportEvent;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -19,10 +19,12 @@ public class ServerConnect extends Thread {
     private Socket socket;
     private ObjectInputStream in;
     private ObjectOutputStream out;
+    private ITransportEvent event;
 
     public ServerConnect(Socket socket) throws IOException {
         this.socket = socket;
         out = new ObjectOutputStream(socket.getOutputStream());
+        in = new ObjectInputStream(socket.getInputStream());
 
         // 启动
         start();
@@ -33,7 +35,6 @@ public class ServerConnect extends Thread {
         try {
             while (true) {
                 try {
-                    in = new ObjectInputStream(socket.getInputStream());
                     Object object = in.readObject();
                     if (object instanceof ISocketTransport) {
                         ISocketTransport transport = (ISocketTransport) object;
@@ -65,6 +66,14 @@ public class ServerConnect extends Thread {
             String response = cmdTransport.getReceiveInfo();
             System.out.println(response);
         }
+
+        if (event != null) {
+            event.onTransport(transport);
+        }
+    }
+
+    public void setOnTransport(ITransportEvent event) {
+        this.event = event;
     }
 
     @Override

@@ -15,7 +15,7 @@ subprojects {
 
     ext {
         // 资源文件名称
-        resourceList =["**/*.sql"]
+        resourceList =["**/*.sql", "**/*.properties", "**/*.css", "**/*.xml"]
     }
 
     dependencies {
@@ -31,5 +31,5 @@ subprojects {
 }
 
 // top-level build task that depends on the underlying tasks
-
+task processResources
 task build

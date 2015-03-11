@@ -1,4 +1,4 @@
-package com.metaui.tools;
+package com.metaui.tools.socket.server.javafx;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -9,22 +9,23 @@ import javafx.stage.Stage;
 import java.net.URL;
 
 /**
- * 工具UI主界面
+ * JavaFx服务器端主界面
  *
  * @author wei_jc
  * @since 1.0.0
  */
-public class MetaToolsApp extends Application {
+public class FxServerApp extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage stage) throws Exception {
         URL url = getClass().getResource("/com/metaui/tools/socket/server/javafx/ServerSocket.fxml");
         Parent parent = FXMLLoader.load(url);
-        primaryStage.setScene(new Scene(parent));
-        primaryStage.show();
+        stage.setScene(new Scene(parent));
+        stage.setTitle("服务器端");
+        stage.show();
     }
 
     public static void main(String[] args) {
-        launch(MetaToolsApp.class);
+        launch(FxServerApp.class);
     }
 }
