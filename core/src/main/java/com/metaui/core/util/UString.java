@@ -298,4 +298,17 @@ public class UString {
     public static String getValue(String value, String defaultValue) {
         return UString.isEmpty(value) ? defaultValue : value;
     }
+
+    /**
+     * 删除末尾字符串
+     *
+     * @param sb
+     * @param endStr
+     */
+    public static void deleteEndStr(StringBuilder sb, String endStr) {
+        int start = sb.length() - endStr.length();
+        if (endStr.equals(sb.substring(start))) {
+            sb.delete(start, sb.length());
+        }
+    }
 }
