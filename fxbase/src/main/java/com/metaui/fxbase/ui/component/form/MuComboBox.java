@@ -6,7 +6,7 @@ import com.metaui.core.ui.layout.property.FormFieldProperty;
 import com.metaui.core.util.UString;
 import com.metaui.fxbase.BaseApp;
 import com.metaui.fxbase.MuEventHandler;
-import com.metaui.fxbase.ui.IValue;
+import com.metaui.core.ui.IValue;
 import com.metaui.fxbase.ui.component.FxLookDictPane;
 import com.metaui.fxbase.ui.event.FormFieldClickEvent;
 import com.metaui.fxbase.ui.view.MUDialog;

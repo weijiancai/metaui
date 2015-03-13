@@ -1,7 +1,7 @@
 package com.metaui.dbtool;
 
 
-import com.metaui.core.facade.IFacade;
+import com.metaui.fxbase.facade.IFacade;
 import com.metaui.fxbase.BaseApp;
 
 /**

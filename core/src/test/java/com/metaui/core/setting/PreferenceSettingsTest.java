@@ -10,7 +10,7 @@ public class PreferenceSettingsTest {
     @Test
     public void testObject() {
         PreferenceSettings settings = PreferenceSettings.getInstance();
-        List<String> list = new ArrayList<>();
+        List<String> list = new ArrayList<String>();
         list.add("weijiancai");
         list.add("1233");
         settings.put("testList", list);

@@ -1,1 +1,1 @@
-include 'core', 'metatools', 'dbtool'
+include 'core', 'fxbase', 'metatools', 'dbtool'

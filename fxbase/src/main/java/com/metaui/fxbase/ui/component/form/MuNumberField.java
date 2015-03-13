@@ -1,7 +1,7 @@
 package com.metaui.fxbase.ui.component.form;
 
 import com.metaui.core.ui.layout.property.FormFieldProperty;
-import com.metaui.fxbase.ui.IValue;
+import com.metaui.core.ui.IValue;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 

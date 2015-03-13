@@ -1,32 +1,31 @@
 package com.metaui.fxbase.ui.component.form;
 
 import com.metaui.core.ui.layout.property.FormFieldProperty;
-import com.metaui.fxbase.ui.IValue;
+import com.metaui.core.ui.IValue;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.PasswordField;
 
 /**
- * MetaUI 文本输入域
+ * MetaUI 密码输入框
  *
  * @author wei_jc
  * @since 1.0.0
  */
-public class MuTextArea extends BaseFormField implements IValue {
-    private TextArea textArea;
+public class MuPasswordField extends BaseFormField implements IValue {
+    private PasswordField passwordField;
 
-    public MuTextArea(FormFieldProperty property) {
+    public MuPasswordField(FormFieldProperty property) {
         super(property);
         init();
     }
 
     @Override
     protected void initPrep() {
-        textArea = new TextArea();
-        this.setPrefHeight(config.getHeight());
-        textArea.prefWidthProperty().bind(this.widthProperty());
-        textArea.textProperty().addListener(new ChangeListener<String>() {
+        passwordField = new PasswordField();
+        passwordField.setPrefWidth(config.getWidth());
+        passwordField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 valueProperty().set(newValue);
@@ -36,17 +35,18 @@ public class MuTextArea extends BaseFormField implements IValue {
 
     @Override
     protected Node[] getControls() {
-        return new Node[]{textArea};
+        return new Node[]{passwordField};
     }
 
     @Override
     public String value() {
-        return textArea.getText();
+        return passwordField.getText();
     }
 
     @Override
     public void setValue(String value) {
         super.setValue(value);
-        textArea.setText(value);
+        passwordField.setText(value);
     }
+
 }

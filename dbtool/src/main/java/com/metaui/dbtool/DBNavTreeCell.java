@@ -10,9 +10,7 @@ import com.metaui.fxbase.ui.component.tree.BaseTreeCell;
 import com.metaui.fxbase.ui.component.tree.MUTreeItem;
 import com.metaui.fxbase.ui.view.MUTree;
 import javafx.event.ActionEvent;
-import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 
 import java.util.ArrayList;

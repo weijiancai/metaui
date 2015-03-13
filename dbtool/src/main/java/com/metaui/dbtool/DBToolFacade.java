@@ -4,7 +4,7 @@ import com.metaui.core.config.ProjectConfig;
 import com.metaui.core.config.SystemManager;
 import com.metaui.core.datasource.DataSourceManager;
 import com.metaui.core.datasource.ResourceTreeAdapter;
-import com.metaui.core.facade.impl.BaseFacade;
+import com.metaui.fxbase.facade.impl.BaseFacade;
 import com.metaui.core.model.ITreeNode;
 import com.metaui.fxbase.ui.IDesktop;
 import com.metaui.fxbase.ui.view.MUTabsDesktop;

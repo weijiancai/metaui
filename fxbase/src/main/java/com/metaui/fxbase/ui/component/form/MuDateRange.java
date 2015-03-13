@@ -4,7 +4,7 @@ import com.metaui.core.dict.QueryModel;
 import com.metaui.core.meta.MetaDataType;
 import com.metaui.core.ui.layout.property.FormFieldProperty;
 import com.metaui.core.util.UString;
-import com.metaui.fxbase.ui.IValue;
+import com.metaui.core.ui.IValue;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 

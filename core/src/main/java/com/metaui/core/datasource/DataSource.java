@@ -10,8 +10,8 @@ import com.metaui.core.model.ITreeNode;
 import com.metaui.core.observer.BaseSubject;
 import com.metaui.core.observer.Subject;
 import com.metaui.core.rest.RestHandler;
-import com.metaui.fxbase.ui.IValue;
-import com.metaui.fxbase.ui.component.form.ICanQuery;
+import com.metaui.core.ui.ICanQuery;
+import com.metaui.core.ui.IValue;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import java.io.OutputStream;

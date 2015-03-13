@@ -14,6 +14,8 @@ import com.metaui.core.meta.MetaManager;
 import com.metaui.core.meta.action.MUAction;
 import com.metaui.core.meta.annotation.MetaElement;
 import com.metaui.core.meta.annotation.MetaFieldElement;
+import com.metaui.core.ui.ICanQuery;
+import com.metaui.core.ui.IValue;
 import com.metaui.core.ui.ViewManager;
 import com.metaui.core.ui.model.View;
 import com.metaui.core.util.UObject;
@@ -21,8 +23,7 @@ import com.metaui.core.util.UString;
 import com.metaui.core.util.UUIDUtil;
 import com.metaui.core.util.ftl.FreeMarkerConfiguration;
 import com.metaui.core.util.ftl.FreeMarkerTemplateUtils;
-import com.metaui.fxbase.ui.IValue;
-import com.metaui.fxbase.ui.component.form.ICanQuery;
+
 
 import javax.xml.bind.annotation.*;
 import java.io.File;

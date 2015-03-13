@@ -1,4 +1,4 @@
-package com.metaui.fxbase.ui;
+package com.metaui.core.ui;
 
 import com.metaui.core.meta.model.MetaField;
 import javafx.beans.property.StringProperty;

@@ -4,7 +4,7 @@ import com.metaui.core.ui.layout.property.FormFieldProperty;
 import com.metaui.core.util.UDate;
 import com.metaui.core.util.UString;
 import com.metaui.fxbase.MuEventHandler;
-import com.metaui.fxbase.ui.IValue;
+import com.metaui.core.ui.IValue;
 import com.metaui.fxbase.ui.event.FormFieldClickEvent;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

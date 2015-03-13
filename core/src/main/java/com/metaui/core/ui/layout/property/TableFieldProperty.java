@@ -12,7 +12,6 @@ import com.metaui.core.ui.layout.LayoutManager;
 import com.metaui.core.ui.model.View;
 import com.metaui.core.ui.model.ViewProperty;
 import com.metaui.core.util.UString;
-import com.metaui.fxbase.ui.view.MUDialog;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -169,7 +168,7 @@ public class TableFieldProperty extends BaseProperty {
                 viewProperty.update();
             }
         } catch (Exception e) {
-            MUDialog.showExceptionDialog(e);
+            throw new RuntimeException(e);
         }
     }
 

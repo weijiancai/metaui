@@ -2,8 +2,8 @@ package com.metaui.fxbase;
 
 import com.metaui.core.config.ProjectConfig;
 import com.metaui.core.config.SystemManager;
-import com.metaui.core.facade.IFacade;
-import com.metaui.core.facade.impl.BaseFacade;
+import com.metaui.fxbase.facade.IFacade;
+import com.metaui.fxbase.facade.impl.BaseFacade;
 import com.metaui.fxbase.ui.IDesktop;
 import com.metaui.fxbase.ui.view.MUTabsDesktop;
 

@@ -11,7 +11,7 @@ import com.metaui.core.observer.Observer;
 import com.metaui.core.ui.ViewManager;
 import com.metaui.core.ui.layout.property.FormProperty;
 import com.metaui.fxbase.MuEventHandler;
-import com.metaui.fxbase.ui.IValue;
+import com.metaui.core.ui.IValue;
 import com.metaui.fxbase.ui.component.tree.MUTreeItem;
 import com.metaui.fxbase.ui.event.data.DataStatusEventData;
 import com.metaui.fxbase.ui.view.MUDialog;

@@ -2,7 +2,7 @@ package com.metaui.fxbase.ui.view;
 
 import com.metaui.core.datasource.DataMap;
 import com.metaui.core.ui.layout.property.FormProperty;
-import com.metaui.fxbase.ui.IValue;
+import com.metaui.core.ui.IValue;
 import com.metaui.fxbase.ui.layout.MUFormLayout;
 import javafx.scene.layout.Pane;
 

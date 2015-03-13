@@ -1,31 +1,37 @@
 package com.metaui.fxbase.ui.component.form;
 
 import com.metaui.core.ui.layout.property.FormFieldProperty;
-import com.metaui.fxbase.ui.IValue;
+import com.metaui.core.ui.IValue;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
-import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 
 /**
- * MetaUI 密码输入框
+ * MetaUI 文本输入框
  *
  * @author wei_jc
  * @since 1.0.0
  */
-public class MuPasswordField extends BaseFormField implements IValue {
-    private PasswordField passwordField;
+public class MuTextField extends BaseFormField implements IValue {
+    private TextField textField;
 
-    public MuPasswordField(FormFieldProperty property) {
+    public MuTextField(FormFieldProperty property) {
         super(property);
+        init();
+    }
+
+    public MuTextField(FormFieldProperty property, boolean isAddQueryModel) {
+        super(property);
+        this.isAddQueryMode = isAddQueryModel;
         init();
     }
 
     @Override
     protected void initPrep() {
-        passwordField = new PasswordField();
-        passwordField.setPrefWidth(config.getWidth());
-        passwordField.textProperty().addListener(new ChangeListener<String>() {
+        textField = new TextField();
+        textField.prefWidthProperty().bind(this.widthProperty());
+        textField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 valueProperty().set(newValue);
@@ -35,18 +41,17 @@ public class MuPasswordField extends BaseFormField implements IValue {
 
     @Override
     protected Node[] getControls() {
-        return new Node[]{passwordField};
+        return new Node[]{textField};
     }
 
     @Override
     public String value() {
-        return passwordField.getText();
+        return textField.getText();
     }
 
     @Override
     public void setValue(String value) {
         super.setValue(value);
-        passwordField.setText(value);
+        textField.setText(value);
     }
-
 }

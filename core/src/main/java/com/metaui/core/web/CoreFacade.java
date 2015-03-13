@@ -3,16 +3,14 @@ package com.metaui.core.web;
 import com.metaui.core.config.ProjectConfig;
 import com.metaui.core.config.SystemManager;
 import com.metaui.core.datasource.db.DBDataSource;
-import com.metaui.core.facade.impl.BaseFacade;
 import com.metaui.core.util.HSqlDBServer;
 import com.metaui.core.util.UFile;
-import com.metaui.fxbase.ui.IDesktop;
 
 /**
  * @author wei_jc
  * @version 1.0.0
  */
-public class CoreFacade extends BaseFacade {
+public class CoreFacade {
     /**
      * 项目名称
      */
@@ -26,7 +24,6 @@ public class CoreFacade extends BaseFacade {
 
     }
 
-    @Override
     protected void initProjectConfig() throws Exception {
         SystemManager factory = SystemManager.getInstance();
         projectConfig = factory.getProjectConfig(PROJECT_NAME);
@@ -49,12 +46,10 @@ public class CoreFacade extends BaseFacade {
         return instance;
     }
 
-    @Override
     public ProjectConfig getProjectConfig() throws Exception {
         return projectConfig;
     }
 
-    @Override
     public void initAfter() throws Exception {
         // 初始化数据库表
         /*DBConnection conn = DBManager.getConnection(projectConfig.getDataSources().get(0));
@@ -66,10 +61,5 @@ public class CoreFacade extends BaseFacade {
         root.setCid(0L);
         TbItemFacade facade = new TbItemFacade(AppKeyFactory.getZt().getClient(), AppKeyFactory.getZt().sessionKey);
         facade.getItemCats(root);*/
-    }
-
-    @Override
-    public IDesktop getDesktop() {
-        return null;
     }
 }

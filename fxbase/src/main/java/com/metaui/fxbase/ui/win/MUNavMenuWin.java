@@ -6,7 +6,7 @@ import com.metaui.core.model.ITreeNode;
 import com.metaui.core.project.NavMenu;
 import com.metaui.core.project.NavMenuTreeNode;
 import com.metaui.core.project.ProjectDefine;
-import com.metaui.fxbase.ui.IValue;
+import com.metaui.core.ui.IValue;
 
 import java.util.Map;
 

@@ -4,8 +4,8 @@ import com.metaui.core.datasource.db.QueryResult;
 import com.metaui.core.datasource.persist.IPDB;
 import com.metaui.core.meta.MetaDataType;
 import com.metaui.core.meta.model.Meta;
+import com.metaui.core.ui.ICanQuery;
 import com.metaui.core.ui.model.View;
-import com.metaui.fxbase.ui.component.form.ICanQuery;
 
 import java.util.List;
 import java.util.Map;

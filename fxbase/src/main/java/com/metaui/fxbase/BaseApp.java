@@ -3,7 +3,7 @@ package com.metaui.fxbase;
 import com.metaui.core.config.PathManager;
 import com.metaui.core.config.ProjectConfig;
 import com.metaui.core.config.SystemManager;
-import com.metaui.core.facade.IFacade;
+import com.metaui.fxbase.facade.IFacade;
 import com.metaui.core.ui.IView;
 import com.metaui.core.ui.config.ConfigInit;
 import com.metaui.core.util.HSqlDBServer;

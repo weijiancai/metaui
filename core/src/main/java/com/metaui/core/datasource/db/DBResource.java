@@ -9,8 +9,8 @@ import com.metaui.core.meta.MetaDataType;
 import com.metaui.core.meta.model.Meta;
 import com.metaui.core.meta.model.MetaField;
 import com.metaui.core.model.ITreeNode;
+import com.metaui.core.ui.ICanQuery;
 import com.metaui.core.ui.model.View;
-import com.metaui.fxbase.ui.component.form.ICanQuery;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.metaui.fxbase.ui.component.form;
+package com.metaui.core.ui;
 
 import com.metaui.core.dict.QueryModel;
 import com.metaui.core.meta.MetaDataType;

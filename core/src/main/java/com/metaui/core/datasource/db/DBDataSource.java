@@ -20,11 +20,11 @@ import com.metaui.core.meta.model.Meta;
 import com.metaui.core.meta.model.MetaField;
 import com.metaui.core.model.ITreeNode;
 import com.metaui.core.rest.PathHandler;
+import com.metaui.core.ui.ICanQuery;
+import com.metaui.core.ui.IValue;
 import com.metaui.core.util.UFile;
 import com.metaui.core.util.UString;
 import com.metaui.core.util.UUIDUtil;
-import com.metaui.fxbase.ui.IValue;
-import com.metaui.fxbase.ui.component.form.ICanQuery;
 import org.apache.log4j.Logger;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -350,7 +350,7 @@ public class DBDataSource extends DataSource {
                 return new DBResource(this, dbObject);
             }
         } catch (Exception e) {
-            throw new NotFoundResourceException(path);
+            e.printStackTrace();
         }
 
         return null;

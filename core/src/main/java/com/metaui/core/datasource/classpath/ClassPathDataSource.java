@@ -6,8 +6,8 @@ import com.metaui.core.datasource.persist.IPDB;
 import com.metaui.core.datasource.request.IRequest;
 import com.metaui.core.meta.model.Meta;
 import com.metaui.core.model.ITreeNode;
-import com.metaui.fxbase.ui.IValue;
-import com.metaui.fxbase.ui.component.form.ICanQuery;
+import com.metaui.core.ui.ICanQuery;
+import com.metaui.core.ui.IValue;
 import org.apache.log4j.Logger;
 
 import java.io.OutputStream;
