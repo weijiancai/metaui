@@ -27,13 +27,17 @@ public class ClassPathDataSource extends DataSource {
     private static ClassPathDataSource dataSource;
     private ClassPathLoader loader;
 
-    private ClassPathDataSource() {
-        this.loader = ClassPathLoader.getLoader();
+    private ClassPathDataSource(String path) {
+        this.loader = ClassPathLoader.getLoader(path);
     }
 
     public static ClassPathDataSource getInstance() {
+        return getInstance(null);
+    }
+
+    public static ClassPathDataSource getInstance(String path) {
         if (dataSource == null) {
-            dataSource = new ClassPathDataSource();
+            dataSource = new ClassPathDataSource(path);
             try {
                 dataSource.load();
             } catch (Exception e) {

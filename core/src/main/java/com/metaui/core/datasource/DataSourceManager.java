@@ -4,8 +4,10 @@ import com.metaui.core.config.SystemConfig;
 import com.metaui.core.datasource.classpath.ClassPathDataSource;
 import com.metaui.core.datasource.db.DBDataSource;
 import com.metaui.core.datasource.db.DatabaseType;
+import com.metaui.core.datasource.db.JdbcDrivers;
 import com.metaui.core.datasource.db.object.enums.DBObjectType;
 import com.metaui.core.datasource.db.object.impl.DBObjectImpl;
+import com.metaui.core.datasource.db.util.SqlUtil;
 import com.metaui.core.datasource.request.BaseRequest;
 import com.metaui.core.datasource.request.IResponse;
 import com.metaui.core.model.ITreeNode;
@@ -109,8 +111,8 @@ public class DataSourceManager {
     private static DBDataSource initSysDataSource() {
         DBDataSource dataSource;
         // 从类路径下获得db.property配置信息
-        ResourceItem dbProperty = ClassPathDataSource.getInstance().getResource("db.properties");
-        if (dbProperty == null) { // 创建hsqldb进程数据库
+        ResourceItem dbProperty = ClassPathDataSource.getInstance("/db.properties").getResource("db.properties");
+        /*if (dbProperty == null) { // 创建hsqldb进程数据库
             File sysDbFile;
             try {
                 sysDbFile = UFile.createFile(DIR_SYSTEM_HSQL_DB, SYSTEM_NAME);
@@ -137,7 +139,9 @@ public class DataSourceManager {
                 log.error("获得db.property文件失败！", e);
                 throw new RuntimeException("获得db.property文件失败！");
             }
-        }
+        }*/
+
+        dataSource = new DBDataSource(SYSTEM_NAME, JdbcDrivers.MYSQL, "jdbc:mysql://localhost:3306/metaui", "root", "root", SystemConfig.SYS_DB_VERSION);
 
 
         dataSource.setId("MetaUI_DataSource");
@@ -171,7 +175,22 @@ public class DataSourceManager {
     public static ClassPathDataSource getClassPathDataSource() {
         ClassPathDataSource classPathDataSource = (ClassPathDataSource) dataSourceMap.get("classpath");
         if (classPathDataSource == null) {
-            classPathDataSource = ClassPathDataSource.getInstance();
+            classPathDataSource = ClassPathDataSource.getInstance("/");
+            dataSourceMap.put("classpath", classPathDataSource);
+        }
+        return classPathDataSource;
+    }
+
+    /**
+     * 获得类路径数据源
+     *
+     * @return 返回类路径数据源
+     * @since 1.0.0
+     */
+    public static ClassPathDataSource getClassPathDataSource(String path) {
+        ClassPathDataSource classPathDataSource = (ClassPathDataSource) dataSourceMap.get("classpath");
+        if (classPathDataSource == null) {
+            classPathDataSource = ClassPathDataSource.getInstance(path);
             dataSourceMap.put("classpath", classPathDataSource);
         }
         return classPathDataSource;

@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import java.io.File;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -89,7 +90,7 @@ public class SystemManager {
         // 加载系统数据源
         DataSourceManager.getSysDataSource();
         // 检查数据库版本
-        checkDbVersion();
+//        checkDbVersion();
         // 加载参数配置
         loadProfileSetting();
         // 加载数据源
@@ -187,10 +188,13 @@ public class SystemManager {
         DatabaseType dbType = dataSource.getDatabaseType();
         log.info("当前系统版本为：" + maxVersion + ", 数据库为：" + dbType.getDisplayName());
         // 获得升级目录下升级脚本
+        URL url = getClass().getResource("/");
+        System.out.println(url);
         ClassPathDataSource cpDataSource = DataSourceManager.getClassPathDataSource();
         ResourceItem dbUpgrade = cpDataSource.getResource("db_upgrade/");
         if (dbUpgrade == null) {
-            return;
+            System.err.println(String.format("没有数据库升级脚本目录【%s】，系统将退出！", cpDataSource.toString() + "\\db_upgrade"));
+            System.exit(0);
         }
         for (ITreeNode node : dbUpgrade.getChildren()) {
             final String version = node.getName();

@@ -20,6 +20,7 @@ import java.util.List;
 public class BookuuParser extends ProductParser {
     private static final Logger log = Logger.getLogger(BookuuParser.class);
     public static final String SEARCH_URL = "http://search.bookuu.com/k_%s.html";
+    private static final String USER_AGENT = "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)"; // 用户浏览器信息
 
     private String isbn;
 
@@ -33,7 +34,7 @@ public class BookuuParser extends ProductParser {
 
         String url = String.format(SEARCH_URL, isbn);
         try {
-            Document doc = Jsoup.connect(url).get();
+            Document doc = Jsoup.connect(url).userAgent(USER_AGENT).get();
             Elements elements = doc.select("div.container div.main div.main-wrap div.books-list");
             for (Element element : elements) {
                 IWebProduct product = parseProduct(element);
@@ -51,6 +52,7 @@ public class BookuuParser extends ProductParser {
     private IWebProduct parseProduct(Element element) {
         WebProductImpl product = new WebProductImpl();
         product.setSourceSite(SiteName.BOOKUU.name());
+        product.setIsbn(isbn);
         List<ProductPic> picList = new ArrayList<ProductPic>();
 
         try {
@@ -60,24 +62,64 @@ public class BookuuParser extends ProductParser {
             // 取图片
             picList.add(new ProductPic(new URL(getPicUrl(element)), true));
             // 取书名
-            product.setName(JsoupUtil.text(doc, "div#main div#rightcontent div.products-detail-info h1"));
+            product.setName(JsoupUtil.text(doc, "div.product-intro div.summary div#name h2"));
             // 取定价
-            Elements elements = doc.select("div#main div#rightcontent div.products-detail-info div.desc ul.info-li li");
+            product.setPrice(JsoupUtil.text(doc, "div.product-intro div.sale span.original-price del").replace("?", ""));
+            // 商品详情
+            Elements elements = doc.select("div.detail-main div#goods-detail div.parameter ul li");
             for (Element aElement : elements) {
                 String text = aElement.text();
-                if (text.contains("定 价：")) {
-                    product.setPrice(JsoupUtil.text(aElement, "del").replace("¥", ""));
-                } else if (text.contains("作者：")) {
-                    product.setAuthor(text.replace("作者：", "").trim());
+                if (text.contains("作　者：")) {
+                    product.setAuthor(text.replace("作　者：", "").trim());
                 } else if (text.contains("出版社：")) {
                     product.setPublishing(text.replace("出版社：", "").trim());
-                } else if (text.contains("开本")) {
-                    setKaiBen(product, text);
-                } else if (text.contains("版")) {
-                    setBanCi(product, text);
+                } else if (text.contains("开本：")) {
+                    product.setKaiben(text.replace("开本：", "").replace("开", "").trim());
+                } else if (text.contains("页数：")) {
+                    product.setPageNum(text.replace("页数：", "").trim());
+                } else if (text.contains("版次：")) {
+                    product.setBanci(text.replace("版次：", "").trim());
+                } else if (text.contains("字数：")) {
+                    product.setWordCount(text.replace("字数：", "").trim());
+                } else if (text.contains("印次：")) {
+                    product.setPrintNum(text.replace("印次：", "").trim());
+                } else if (text.contains("印刷时间：")) {
+                    product.setPrintDate(text.replace("印刷时间：", "").trim());
+                } else if (text.contains("出版时间：")) {
+                    product.setPublishDate(text.replace("出版时间：", "").trim());
+                } else if (text.contains("包装：")) {
+                    product.setPack(text.replace("包装：", "").trim());
                 }
             }
-            // 编辑推荐
+
+            elements = doc.select("div.detail-main div.detail-wrap div.txt-wrap div.section");
+            for (Element aElement : elements) {
+                String title = JsoupUtil.text(aElement, "div.txt-hd h5");
+                if ("编辑推荐语".equals(title)) { // 编辑推荐
+                    product.setHAbstract(JsoupUtil.html(aElement, "div.txt-bd"));
+                } else if ("内容提要".equals(title)) { // 内容提要
+                    product.setContent(JsoupUtil.html(aElement, "div.txt-bd"));
+                } else if ("作者简介".equals(title)) { // 作者简介
+                    product.setAuthorIntro(JsoupUtil.html(aElement, "div.txt-bd"));
+                } else if ("媒体评论".equals(title)) { // 媒体评论
+                    product.setMediaFeedback(JsoupUtil.html(aElement, "div.txt-bd"));
+                } else if("目录".equals(title)) { // 目录
+                    Elements es = aElement.select("div.txt-bd div#ml_s");
+                    if (es.size() > 0) {
+                        product.setCatalog(es.get(0).html());
+                    } else {
+                        product.setCatalog(JsoupUtil.html(aElement, "div.txt-bd div#ml"));
+                    }
+                } else if("精彩试读".equals(title)) { // 精彩页
+                    Elements es = aElement.select("div.txt-bd div#JCY_s");
+                    if (es.size() > 0) {
+                        product.setExtract(es.get(0).html());
+                    } else {
+                        product.setExtract(JsoupUtil.html(aElement, "div.txt-bd div#JCY"));
+                    }
+                }
+            }
+           /* // 编辑推荐
             product.setHAbstract(getOtherInfo(doc, "div#main div#rightcontent div.tabcon dl#goodsdetail div#bjtj_s"));
             // 内容提要
             product.setContent(getOtherInfo(doc, "div#main div#rightcontent div.tabcon dl#goodsdetail div#nrty_s"));
@@ -88,7 +130,7 @@ public class BookuuParser extends ProductParser {
             // 精彩页
             product.setExtract(getOtherInfo(doc, "div#main div#rightcontent div.tabcon dl#goodsdetail div#JCY_s"));
             // 前言
-            product.setPrologue(getOtherInfo(doc, "div#main div#rightcontent div.tabcon dl#goodsdetail div#XY_s"));
+            product.setPrologue(getOtherInfo(doc, "div#main div#rightcontent div.tabcon dl#goodsdetail div#XY_s"));*/
 
             // 下载图片
             new DownloadPicture(picList);
@@ -105,60 +147,5 @@ public class BookuuParser extends ProductParser {
     private String getPicUrl(Element element) {
         String picUrl = JsoupUtil.attr(element, "div.photo span.subpic a img", "src");
         return picUrl.replace("book_m", "book").replace("-fm-m.jpg", "-fm.jpg");
-    }
-
-    private void setKaiBen(WebProductImpl product, String text) {
-        try {
-            int start = text.indexOf("开本：");
-            int end = text.indexOf("开", start + 3);
-            if (start >= 0) {
-                product.setKaiben(text.substring(start + 3, end));
-            }
-            start = text.indexOf("页数:", end + 1);
-            end = text.indexOf("页", start + 3);
-            if (start >= 0) {
-                product.setPageNum(text.substring(start + 3, end));
-            }
-        } catch (Exception e) {
-            log.error(String.format("解析开本、页数【%s】失败！", text), e);
-        }
-    }
-
-    private void setBanCi(WebProductImpl product, String text) {
-        try {
-            String[] strs = text.split("版");
-            if (strs.length == 2) {
-                String[] strs1 = strs[0].split("第");
-                if (strs1.length == 1) {
-                    product.setBanci(strs1[0]);
-                } else {
-                    product.setPublishDate(strs1[0].trim());
-                    product.setBanci(strs1[1]);
-                }
-                String[] strs2 = strs[1].split("第");
-                if (strs2.length == 1) {
-                    product.setPrintNum(strs2[0]);
-                } else {
-                    product.setPrintDate(strs2[0].trim());
-                    product.setPrintNum(strs2[1].replace("次印刷", ""));
-                }
-            }
-        } catch (Exception e) {
-            log.error(String.format("解析出版年月、版次、印次【%s】失败！", text), e);
-        }
-    }
-
-    private String getOtherInfo(Element element, String cssQuery) {
-        Elements elements = element.select(cssQuery);
-        if (elements.size() > 0) {
-            for (Element aElement : elements.get(0).select("a")) {
-                if (aElement.text().contains("显示部分信息")) {
-                    aElement.remove();
-                }
-            }
-            return elements.get(0).html();
-        }
-
-        return "";
     }
 }

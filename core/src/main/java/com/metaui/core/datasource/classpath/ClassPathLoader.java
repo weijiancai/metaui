@@ -29,13 +29,15 @@ public class ClassPathLoader implements ILoader {
     private BaseTreeNode navTree;
     private Map<String, ResourceItem> nodeMap;
     private String baseDir;
+    private String path = "/com/metaui";
 
-    private ClassPathLoader() {
+    private ClassPathLoader(String path) {
+        this.path = UString.isEmpty(path) ? "/com/metaui" : path;
     }
 
-    public static ClassPathLoader getLoader() {
+    public static ClassPathLoader getLoader(String path) {
         if (loader == null) {
-            loader = new ClassPathLoader();
+            loader = new ClassPathLoader(path);
         }
 
         return loader;
@@ -49,9 +51,9 @@ public class ClassPathLoader implements ILoader {
         navTree.setDisplayName("Root");
         nodeMap = new HashMap<String, ResourceItem>();
 
-        URL url = Thread.currentThread().getContextClassLoader().getResource("/com/metaui");
+        URL url = Thread.currentThread().getContextClassLoader().getResource(path);
         if (url == null) {
-            url = getClass().getResource("/com/metaui");
+            url = getClass().getResource(path);
         }
         // 得到协议的名称
         String protocol = url.getProtocol();
@@ -61,9 +63,11 @@ public class ClassPathLoader implements ILoader {
             // 获取包的物理路径
             String filePath = URLDecoder.decode(url.getFile(), "UTF-8");
             File root = new File(filePath).getParentFile().getParentFile();
-            baseDir = root.getAbsolutePath();
-            // 以文件的方式扫描整个包下的文件 并添加到集合中
-            loadByFile(baseDir, baseDir);
+            if(root.isDirectory()) {
+                baseDir = root.getAbsolutePath();
+                // 以文件的方式扫描整个包下的文件 并添加到集合中
+                loadByFile(baseDir, baseDir);
+            }
         } else if ("jar".equals(protocol)) {
             // 如果是jar包文件
             // 定义一个JarFile

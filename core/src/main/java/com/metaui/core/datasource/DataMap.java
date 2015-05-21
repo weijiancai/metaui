@@ -71,7 +71,7 @@ public class DataMap extends HashMap<String,Object> {
         if (UString.isEmpty(key)) {
             return null;
         }
-        return super.put(key.toLowerCase(), value);
+        return super.put(key, value);
     }
 
 
@@ -83,7 +83,7 @@ public class DataMap extends HashMap<String,Object> {
      * @since 1.0.0
      */
     public Object get(String key) {
-        return super.get(key.toLowerCase());
+        return super.get(key);
     }
 
     /**

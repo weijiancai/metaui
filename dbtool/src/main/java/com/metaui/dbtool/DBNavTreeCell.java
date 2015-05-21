@@ -40,7 +40,7 @@ public class DBNavTreeCell extends BaseTreeCell {
                 MenuItem menuItem = new MenuItem("新增视图");
                 addContextMenu(menuItem);
             }*/
-            ResourceTreeAdapter adapter = (ResourceTreeAdapter) item;
+            /*ResourceTreeAdapter adapter = (ResourceTreeAdapter) item;
             VirtualResource resource = adapter.getResource();
             ResourceType type = resource.getResourceType();
 
@@ -61,7 +61,7 @@ public class DBNavTreeCell extends BaseTreeCell {
                     }
                 });
                 addContextMenu(menuItem);
-            }
+            }*/
         }
     }
 }

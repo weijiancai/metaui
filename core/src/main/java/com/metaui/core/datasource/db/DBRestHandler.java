@@ -30,6 +30,9 @@ public class DBRestHandler {
             return null;
         }
         DBSchema schema = dataSource.getSchema(schemaName);
+        if (schema == null) {
+            return null;
+        }
         String tableName = map.get("table");
         if (UString.isEmpty(tableName)) {
             return schema;

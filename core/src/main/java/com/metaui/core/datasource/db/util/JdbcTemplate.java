@@ -64,7 +64,7 @@ public class JdbcTemplate {
             conditionMap = new HashMap<String, Object>();
         }
         StringBuilder sb = new StringBuilder();
-        if (!sql.toLowerCase().contains("where")) {
+        if (!sql.toLowerCase().contains("where") && !sql.toLowerCase().contains("order by")) {
             sb.append(" WHERE 1=1");
         }
         List<String> conditionKeyList = new ArrayList<String>();
@@ -151,9 +151,12 @@ public class JdbcTemplate {
     public int queryForInt(String sql, Object[] paramValues) throws SQLException {
         int result = 0;
 
+        System.out.println(sql);
         PreparedStatement pstmt = conn.prepareStatement(sql);
-        for (int i = 0; i < paramValues.length; i++) {
-            pstmt.setObject(i + 1, paramValues[i]);
+        if (paramValues != null) {
+            for (int i = 0; i < paramValues.length; i++) {
+                pstmt.setObject(i + 1, paramValues[i]);
+            }
         }
         ResultSet rs = pstmt.executeQuery();
         if (rs.next()) {
