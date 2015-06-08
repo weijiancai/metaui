@@ -413,6 +413,7 @@ public class JdbcTemplate {
 
     public void update(String sql) throws SQLException {
         try {
+            System.out.println(sql);
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.executeUpdate();
             pstmt.close();

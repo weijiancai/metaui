@@ -36,22 +36,31 @@ public class DBAction extends BaseAction {
         Connection connection;
         List<DataMap> list = new ArrayList<>();
         Map<String, Object> map = new HashMap<>();
+        JdbcTemplate template = null;
         try {
             Class.forName(JdbcDrivers.SQL_SERVER);
             connection = DriverManager.getConnection(String.format("jdbc:sqlserver://%s:%s;databaseName=%s", host, port, database), user, password);
-            JdbcTemplate template = new JdbcTemplate(connection);
-            list = template.queryForList(sql);
+            template = new JdbcTemplate(connection);
+            if(sql.trim().toLowerCase().startsWith("update")) {
+                template.update(sql);
+                template.commit();
+            } else {
+                list = template.queryForList(sql);
 
-            if (UString.isNotEmpty(countSql)) {
-                int total = template.queryForInt(countSql, null);
-                map.put("recordsTotal", total);
-                map.put("recordsFiltered", total);
-                map.put("data", list);
+                if (UString.isNotEmpty(countSql)) {
+                    int total = template.queryForInt(countSql, null);
+                    map.put("recordsTotal", total);
+                    map.put("recordsFiltered", total);
+                    map.put("data", list);
+                }
             }
 
-            template.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (template != null) {
+                template.close();
+            }
         }
 
         String json;
