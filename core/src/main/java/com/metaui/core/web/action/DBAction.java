@@ -41,7 +41,7 @@ public class DBAction extends BaseAction {
             Class.forName(JdbcDrivers.SQL_SERVER);
             connection = DriverManager.getConnection(String.format("jdbc:sqlserver://%s:%s;databaseName=%s", host, port, database), user, password);
             template = new JdbcTemplate(connection);
-            if(sql.trim().toLowerCase().startsWith("update")) {
+            if(sql.trim().toLowerCase().startsWith("update") || sql.trim().toLowerCase().startsWith("delete")) {
                 template.update(sql);
                 template.commit();
             } else {
