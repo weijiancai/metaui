@@ -1,0 +1,48 @@
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://wllgs" xmlns:intf="http://wllgs" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://rpc.xml.coldfusion" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://wllgs">
+    <!-- WSDL created by ColdFusion version 8,0,0,176276 -->
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://rpc.xml.coldfusion">
+            <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+            <complexType name="CFCInvocationException">
+                <sequence/>
+            </complexType>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="CFCInvocationException">
+        <wsdl:part name="fault" type="tns1:CFCInvocationException"/>
+    </wsdl:message>
+    <wsdl:message name="wsCargoRequest">
+        <wsdl:part name="Xml" type="xsd:string"/>
+    </wsdl:message>
+    <wsdl:message name="wsCargoResponse">
+        <wsdl:part name="wsCargoReturn" type="xsd:string"/>
+    </wsdl:message>
+    <wsdl:portType name="YYWebService">
+        <wsdl:operation name="wsCargo" parameterOrder="Xml">
+            <wsdl:input message="impl:wsCargoRequest" name="wsCargoRequest"/>
+            <wsdl:output message="impl:wsCargoResponse" name="wsCargoResponse"/>
+            <wsdl:fault message="impl:CFCInvocationException" name="CFCInvocationException"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="pr2lg.cfcSoapBinding" type="impl:YYWebService">
+        <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="wsCargo">
+            <wsdlsoap:operation soapAction=""/>
+            <wsdl:input name="wsCargoRequest">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wllgs" use="encoded"/>
+            </wsdl:input>
+            <wsdl:output name="wsCargoResponse">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wllgs" use="encoded"/>
+            </wsdl:output>
+            <wsdl:fault name="CFCInvocationException">
+                <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="CFCInvocationException" namespace="http://wllgs" use="encoded"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="pr2lgService">
+        <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">云因信息www.yunyin.com发行物流数据接口WebService.</wsdl:documentation>
+        <wsdl:port binding="impl:pr2lg.cfcSoapBinding" name="pr2lg.cfc">
+            <wsdlsoap:address location="http://117.34.87.29/wllgs/pr2lg.cfc"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

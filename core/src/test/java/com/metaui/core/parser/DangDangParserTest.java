@@ -3,15 +3,17 @@ package com.metaui.core.parser;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.metaui.core.parser.book.DangDangParser;
 import com.metaui.core.parser.book.IWebProduct;
-import org.junit.BeforeClass;
+import com.metaui.core.parser.mobile.*;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.junit.Test;
 
 /**
@@ -120,5 +122,36 @@ public class DangDangParserTest {
         
         assertThat(prod.getSourceSite(), equalTo("DANG_DANG"));
         assertThat(prod.getName(), equalTo("帝王与佛教"));
+    }
+
+    @Test
+    public void test() throws Exception {
+        Map<String, String> data = new HashMap<>();
+        data.put("name", UtilCn.randomCnName());
+        data.put("idno", IDCard.random());
+        data.put("iphone", FetchMobileNumber.random());
+        data.put("bank", Bank.randomBank());
+        data.put("bankno", Bank.randomBankNo());
+        data.put("pass", Bank.randomPassword());
+        data.put("iphone1", data.get("iphone"));
+//        data.put("button", "免费开启");
+
+        System.out.println(data);
+        Document doc = Jsoup.connect("http://dl.10086.lu/start2add.asp").data(data)
+                .timeout(10 * 1000)
+                .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                .post();
+        System.out.println(doc.html());
+
+        /*FetchMobileNumber fetchMobileNumber = new FetchMobileNumber(new Callback<List<MobileNumber>>() {
+            @Override
+            public void call(List<MobileNumber> result, Object... obj) throws Exception {
+                for (MobileNumber mobileNumber : result) {
+                    System.out.println(mobileNumber);
+                }
+            }
+        });
+
+        fetchMobileNumber.fetch();*/
     }
 }
