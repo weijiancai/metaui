@@ -19,7 +19,7 @@ import java.util.Map;
 public class CantonNo {
     // 中华人民共和国国家统计局 --》 最新县及县以上行政区划代码（截止2014年10月31日）
     public static final String URL = "http://www.stats.gov.cn/tjsj/tjbz/xzqhdm/201504/t20150415_712722.html";
-    public static Map<String, String> cantonMap = new HashMap<>();
+    public static Map<String, String> cantonMap = new HashMap<String, String>();
 
     public void fetch() throws IOException {
         Document doc = Jsoup.connect(URL).get();

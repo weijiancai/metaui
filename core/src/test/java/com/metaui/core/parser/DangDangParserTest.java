@@ -126,7 +126,7 @@ public class DangDangParserTest {
 
     @Test
     public void test() throws Exception {
-        Map<String, String> data = new HashMap<>();
+        Map<String, String> data = new HashMap<String, String>();
         data.put("name", UtilCn.randomCnName());
         data.put("idno", IDCard.random());
         data.put("iphone", FetchMobileNumber.random());

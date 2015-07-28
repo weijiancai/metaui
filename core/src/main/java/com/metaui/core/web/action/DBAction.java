@@ -34,14 +34,14 @@ public class DBAction extends BaseAction {
         String database = request.getParameter("database");
 
         Connection connection;
-        List<DataMap> list = new ArrayList<>();
-        Map<String, Object> map = new HashMap<>();
+        List<DataMap> list = new ArrayList<DataMap>();
+        Map<String, Object> map = new HashMap<String, Object>();
         JdbcTemplate template = null;
         try {
             Class.forName(JdbcDrivers.SQL_SERVER);
             connection = DriverManager.getConnection(String.format("jdbc:sqlserver://%s:%s;databaseName=%s", host, port, database), user, password);
             template = new JdbcTemplate(connection);
-            if(sql.trim().toLowerCase().startsWith("update") || sql.trim().toLowerCase().startsWith("delete")) {
+            if(sql.trim().toLowerCase().startsWith("update") || sql.trim().toLowerCase().startsWith("delete") || sql.trim().toLowerCase().startsWith("insert")) {
                 template.update(sql);
                 template.commit();
             } else {
@@ -65,11 +65,13 @@ public class DBAction extends BaseAction {
 
         String json;
         if (map.size() > 0) {
-            json = JSON.toJSONString(map, SerializerFeature.PrettyFormat);
+            json = JSON.toJSONString(map, SerializerFeature.PrettyFormat, SerializerFeature.WriteDateUseDateFormat);
         } else {
-            json = JSON.toJSONString(list, SerializerFeature.PrettyFormat);
+            json = JSON.toJSONString(list, SerializerFeature.PrettyFormat, SerializerFeature.WriteDateUseDateFormat);
         }
         response.getWriter().println(json);
+        response.getWriter().flush();
+        response.getWriter().close();
     }
 
     @Override

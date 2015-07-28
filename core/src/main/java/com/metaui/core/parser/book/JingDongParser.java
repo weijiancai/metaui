@@ -46,10 +46,10 @@ public class JingDongParser implements IProductParser {
 	public List<IWebProduct> parse() {
 		List<IWebProduct> prodList = new ArrayList<IWebProduct>();
 		try {
-			// ´ò¿ªËÑË÷½á¹ûÒ³Ãæ
+			// æ‰“å¼€æœç´¢ç»“æœé¡µé¢
 			// Document doc = Jsoup.connect(SEARCH_URL + isbn).get();
 			Document doc;
-			if(isbn.startsWith("977")) { // ÔÓÖ¾´¦Àí
+			if(isbn.startsWith("977")) { // æ‚å¿—å¤„ç†
 				String year = Calendar.getInstance().get(Calendar.YEAR) + "";
 				doc = get(String.format(JOURNAL_SEARCH_URL, year, isbn), "UTF-8");
 			} else {
@@ -63,7 +63,7 @@ public class JingDongParser implements IProductParser {
 			if (elements != null && elements.size() > 0) {
 				for (Element element : elements) {
                     String text = element.select("ul.summary li.summary-service div.dd").first().text();
-                    if (!text.contains("ÓÉ ¾©¶« ·¢»õ")) {
+                    if (!text.contains("ç”± äº¬ä¸œ å‘è´§")) {
                         continue;
                     }
 					prod = parseProduct(element);
@@ -76,7 +76,7 @@ public class JingDongParser implements IProductParser {
 		        elements = doc.select("div.main div.right-extra div#plist ul.list-h li.item-book");
 		        for (Element element : elements) {
                     String text = element.select("div.service").first().text();
-                    if (!text.contains("ÓÉ ¾©¶« ·¢»õ")) {
+                    if (!text.contains("ç”± äº¬ä¸œ å‘è´§")) {
                         continue;
                     }
 					prod = parseOtherProduct(element);
@@ -87,7 +87,7 @@ public class JingDongParser implements IProductParser {
 
 			}
 		} catch (Exception e) {
-			log.error("Á¬½Ó¾©¶«ÍøÕ¾Ê§°Ü£¡", e);
+			log.error("è¿æ¥äº¬ä¸œç½‘ç«™å¤±è´¥ï¼", e);
 		}
 
 		return prodList;
@@ -100,42 +100,42 @@ public class JingDongParser implements IProductParser {
 			prod.setSourceSite(SiteName.JING_DONG.name());
 			List<ProductPic> picList = new ArrayList<ProductPic>();
 
-			// È¡ËÑË÷½á¹ûÍ¼Æ¬ 160 * 160
+			// å–æœç´¢ç»“æœå›¾ç‰‡ 160 * 160
 			picList.add(new ProductPic(new URL(element.select("div.p-img a img").first().attr("data-lazyload")), false));
 
             Elements mElements;
-			// ´ò¿ªÏêÏ¸Ò³Ãæ
+			// æ‰“å¼€è¯¦ç»†é¡µé¢
 			String detailUrl = element.select("div.p-img a").first().attr("href");
 			detailDoc = get(detailUrl, "GBK");
 			if (detailDoc == null) {
 				return null;
 			}
-            // È¡ÊéÃû
+            // å–ä¹¦å
             prod.setName(detailDoc.select("div#name h1").first().ownText());
-            // È¡ÏêÏ¸Ò³ÃæÍ¼Æ¬ 280 * 280
+            // å–è¯¦ç»†é¡µé¢å›¾ç‰‡ 280 * 280
             String picUrl = detailDoc.select("div#spec-n1 img").first().attr("src");
 			if (!picUrl.equals("http://img10.360buyimg.com/n11/")) {
 				picList.add(new ProductPic(new URL(picUrl), true));
 			}
 
-            // È¡¶¨¼Û
+            // å–å®šä»·
 			Elements priceElement = detailDoc.select("li#summary-market div.dd");
 			if(priceElement != null && priceElement.size() > 0) {
-				prod.setPrice(priceElement.first().text().replace("£¤", "").replace("?", "").trim());
+				prod.setPrice(priceElement.first().text().replace("ï¿¥", "").replace("?", "").trim());
 			}
-            // È¡×÷Õß
+            // å–ä½œè€…
 			Elements authorElement = detailDoc.select("div#name div#product-authorinfo");
 			if(authorElement != null && authorElement.size() > 0) {
 				String authorStr = authorElement.text();
 	            StringBuilder sb = new StringBuilder();
 	            for(char c : authorStr.toCharArray()) {
-	                if(c == 'Öø') {
+	                if(c == 'è‘—') {
 	                    prod.setAuthor(UString.trim(sb.toString()));
 	                    sb = new StringBuilder();
-	                } else if(c == 'Òë') {
+	                } else if(c == 'è¯‘') {
 	                    prod.setTranslator(UString.trim(sb.toString()));
 	                    sb = new StringBuilder();
-	                } else if(c == '»æ') {
+	                } else if(c == 'ç»˜') {
 	                    prod.setPainter(UString.trim(sb.toString()));
 	                    sb = new StringBuilder();
 	                } else {
@@ -145,39 +145,39 @@ public class JingDongParser implements IProductParser {
 			} else {
 				return null;
 			}
-            // È¡³ö°æÉç
+            // å–å‡ºç‰ˆç¤¾
 //            prod.setPublishing(detailDoc.select("div.w div.right ul#summary li#summary-ph div.dd").first().text());
-            // È¡³ö°æÊ±¼ä
+            // å–å‡ºç‰ˆæ—¶é—´
             mElements = detailDoc.select("div.w div.right ul#summary li#summary-published div.dd");
             if(mElements != null && mElements.size() > 0) {
             	prod.setPublishDate(mElements.first().text());
             }
 
-            // È¡ISBN
+            // å–ISBN
 //            prod.setIsbn(detailDoc.select("div.w div.right ul#summary li#summary-isbn div.dd").first().text());
-            // È¡ÉÌÆ·½éÉÜ
+            // å–å•†å“ä»‹ç»
             mElements = detailDoc.select("div.w div.right div#product-detail div#product-detail-1 > ul li");
             for (Element aElement : mElements) {
                 String text = aElement.text().trim();
-                if (text.startsWith("°æ´Î£º")) { // È¡°æ´Î
+                if (text.startsWith("ç‰ˆæ¬¡ï¼š")) { // å–ç‰ˆæ¬¡
                     prod.setBanci(text.substring(3).trim());
-                } else if (text.startsWith("×°Ö¡£º")) { // È¡×°Ö¡
+                } else if (text.startsWith("è£…å¸§ï¼š")) { // å–è£…å¸§
                     prod.setPack(text.substring(3).trim());
-                } else if (text.startsWith("Ö½ÕÅ£º")) { // È¡Ö½ÕÅ
+                } else if (text.startsWith("çº¸å¼ ï¼š")) { // å–çº¸å¼ 
                     prod.setPaper(text.substring(3).trim());
-                } else if (text.startsWith("Ó¡Ë¢Ê±¼ä£º")) { // È¡Ó¡Ë¢Ê±¼ä
+                } else if (text.startsWith("å°åˆ·æ—¶é—´ï¼š")) { // å–å°åˆ·æ—¶é—´
                     prod.setPrintDate(text.substring(5).trim());
-                } else if (text.startsWith("Ó¡´Î£º")) { // È¡Ó¡´Î
+                } else if (text.startsWith("å°æ¬¡ï¼š")) { // å–å°æ¬¡
                     prod.setPrintNum(text.substring(3).trim());
-                } else if (text.startsWith("ÕıÎÄÓïÖÖ£º")) { // È¡ÕıÎÄÓïÖÖ
+                } else if (text.startsWith("æ­£æ–‡è¯­ç§ï¼š")) { // å–æ­£æ–‡è¯­ç§
                     prod.setLanguage(text.substring(5).trim());
-                } else if (text.startsWith("¿ª±¾£º")) { // È¡¿ª±¾
+                } else if (text.startsWith("å¼€æœ¬ï¼š")) { // å–å¼€æœ¬
                     prod.setKaiben(text.substring(3).trim());
-                } else if (text.startsWith("Ò³Êı£º")) { // È¡Ò³Êı
+                } else if (text.startsWith("é¡µæ•°ï¼š")) { // å–é¡µæ•°
                     prod.setPageNum(text.substring(3).trim());
-//                } else if (text.startsWith("×÷Õß£º")) { // ×÷Õß
+//                } else if (text.startsWith("ä½œè€…ï¼š")) { // ä½œè€…
                     prod.setAuthor(text.substring(3).trim());
-                } else if (text.startsWith("³ß´ç£º")) { // ³ß´ç
+                } else if (text.startsWith("å°ºå¯¸ï¼š")) { // å°ºå¯¸
                     String[] strs = text.substring(3).trim().split(";");
                     if(strs.length == 1) {
                         prod.setSize(strs[0]);
@@ -193,36 +193,36 @@ public class JingDongParser implements IProductParser {
                             prod.setDeep(strs[2]);
                         }
                     }
-                } else if (text.startsWith("³ö°æÉç£º")) { // ³ö°æÉç
+                } else if (text.startsWith("å‡ºç‰ˆç¤¾ï¼š")) { // å‡ºç‰ˆç¤¾
                     prod.setPublishing(text.substring(4).trim());
-                } else if (text.startsWith("ISBN£º")) { // ISBN
+                } else if (text.startsWith("ISBNï¼š")) { // ISBN
                     prod.setIsbn(text.substring(4).trim());
                 }
             }
 
-            // È¡ÆäËûĞÅÏ¢
+            // å–å…¶ä»–ä¿¡æ¯
             mElements = detailDoc.select("div.w div.right div#product-detail div#product-detail-1 > div.sub-m");
             for (Element aElement : mElements) {
                 String title = aElement.select("div.sub-mt h3").text();
                 String value = aElement.select("div.sub-mc").html();
-                if("ÄÚÈİ¼ò½é".equals(title)) { // ÄÚÈİ¼ò½é
+                if("å†…å®¹ç®€ä»‹".equals(title)) { // å†…å®¹ç®€ä»‹
                     prod.setContent(value);
-                } else if("×÷Õß¼ò½é".equals(title)) { // ×÷Õß¼ò½é
+                } else if("ä½œè€…ç®€ä»‹".equals(title)) { // ä½œè€…ç®€ä»‹
                     prod.setAuthorIntro(value);
-                } else if("¾«²ÊÊéÕª".equals(title)) { // È¡¾«²ÊÊéÕª
+                } else if("ç²¾å½©ä¹¦æ‘˜".equals(title)) { // å–ç²¾å½©ä¹¦æ‘˜
                     prod.setExtract(value);
-                } else if("±à¼­ÍÆ¼ö".equals(title)) { // ±à¼­ÍÆ¼ö
+                } else if("ç¼–è¾‘æ¨è".equals(title)) { // ç¼–è¾‘æ¨è
                     prod.setHAbstract(value);
-                } else if("Ã½ÌåÆÀÂÛ".equals(title)) { // Ã½ÌåÆÀÂÛ
+                } else if("åª’ä½“è¯„è®º".equals(title)) { // åª’ä½“è¯„è®º
                     prod.setMediaFeedback(value);
-                } else if("Ä¿Â¼".equals(title)) { // Ä¿Â¼
+                } else if("ç›®å½•".equals(title)) { // ç›®å½•
                     prod.setCatalog(value);
-                } else if("Ç°ÑÔ".equals(title)) { // Ç°ÑÔ
+                } else if("å‰è¨€".equals(title)) { // å‰è¨€
                     prod.setPrologue(value);
                 }
             }
 
-			// ÏÂÔØÍ¼Æ¬
+			// ä¸‹è½½å›¾ç‰‡
 			new DownloadPicture(picList);
 			prod.setProductPic(picList);
 
@@ -231,7 +231,7 @@ public class JingDongParser implements IProductParser {
 			return prod;
 		} catch (Exception e) {
             e.printStackTrace();
-			log.error(String.format("½âÎö¾©¶«ÍøÉÏÍ¼ÊéĞÅÏ¢¡¾%s¡¿Ê§°Ü£¡", isbn), e);
+			log.error(String.format("è§£æäº¬ä¸œç½‘ä¸Šå›¾ä¹¦ä¿¡æ¯ã€%sã€‘å¤±è´¥ï¼", isbn), e);
 		}
 
 		return null;
@@ -244,58 +244,58 @@ public class JingDongParser implements IProductParser {
             prod.setSourceSite(SiteName.JING_DONG.name());
             List<ProductPic> picList = new ArrayList<ProductPic>();
 
-            // È¡ËÑË÷½á¹ûÍ¼Æ¬ 160 * 160
+            // å–æœç´¢ç»“æœå›¾ç‰‡ 160 * 160
             picList.add(new ProductPic(new URL(element.select("div.p-img a img").first().attr("data-lazyload")), false));
-            // ´ò¿ªÏêÏ¸Ò³Ãæ
+            // æ‰“å¼€è¯¦ç»†é¡µé¢
             String detailUrl = element.select("div.p-img a").first().attr("href");
 
             detailDoc = get(detailUrl, "GBK");
-            // È¡ÊéÃû
+            // å–ä¹¦å
             prod.setName(detailDoc.select("div#name h1").first().ownText());
-            // È¡ÏêÏ¸Ò³ÃæÍ¼Æ¬ 280 * 280
+            // å–è¯¦ç»†é¡µé¢å›¾ç‰‡ 280 * 280
             picList.add(new ProductPic(new URL(detailDoc.select("div#spec-n1 img").first().attr("src")), true));
 
-            // È¡summary
+            // å–summary
             Elements mElements = detailDoc.select("ul#summary");
             Element summaryElements = mElements.first();
             for (Element aElement : summaryElements.select("> li")) {
                 String span = aElement.getElementsByTag("span").text();
-                if ("Ñİ³ªÕß/Ñİ×àÕß£º".equals(span)) {
-                    String values = aElement.text().replace("Ñİ³ªÕß/Ñİ×àÕß£º", "");
+                if ("æ¼”å”±è€…/æ¼”å¥è€…ï¼š".equals(span)) {
+                    String values = aElement.text().replace("æ¼”å”±è€…/æ¼”å¥è€…ï¼š", "");
                     prod.setAuthor(UString.trim(values));
-                } else if (span.contains("Ìõ") && span.contains("ĞÎ") && span.contains("Âë")) {
+                } else if (span.contains("æ¡") && span.contains("å½¢") && span.contains("ç ")) {
                     prod.setIsbn(span.substring(6));
                 }
             }
 
-            // È¡¶¨¼Û
+            // å–å®šä»·
             Elements priceElement = detailDoc.select("li#summary-market div.dd");
             if(priceElement != null && priceElement.size() > 0) {
             	prod.setPrice(priceElement.first().text().substring(1));
             }
 
-            // È¡±à¼­ÍÆ¼ö
+            // å–ç¼–è¾‘æ¨è
             mElements = detailDoc.select("div.w div.right div#recommend-editor div.mc div.con");
             if (mElements.size() > 0) {
                 prod.setHAbstract(mElements.first().html());
             }
 
-            // TODO ĞŞÕıÄÚÈİ¼ò½éµÈĞÅÏ¢
+            // TODO ä¿®æ­£å†…å®¹ç®€ä»‹ç­‰ä¿¡æ¯
             mElements = detailDoc.select("div.w div.right-extra > div.m1 div.mt h2");
             for (Element aElement : mElements) {
                 String text = aElement.ownText();
                 if (text != null) {
                     text = text.trim();
                     String value = aElement.parent().parent().select("div.mc div.con").html();
-                    if ("ÄÚÈİ¼ò½é".equals(text)) { // È¡ÄÚÈİ¼ò½é
+                    if ("å†…å®¹ç®€ä»‹".equals(text)) { // å–å†…å®¹ç®€ä»‹
                         prod.setContent(value);
-                    }  else if ("ÇúÄ¿".equals(text)) { // È¡ÇúÄ¿
+                    }  else if ("æ›²ç›®".equals(text)) { // å–æ›²ç›®
                         prod.setCatalog(value);
                     }
                 }
             }
 
-            // ÏÂÔØÍ¼Æ¬
+            // ä¸‹è½½å›¾ç‰‡
 			new DownloadPicture(picList);
 			prod.setProductPic(picList);
 
@@ -303,17 +303,17 @@ public class JingDongParser implements IProductParser {
 
             return prod;
         } catch (Exception e) {
-        	log.error(String.format("½âÎö¾©¶«ÍøÉÏÒôÀÖ/CDĞÅÏ¢¡¾%s¡¿Ê§°Ü£¡", isbn), e);
+        	log.error(String.format("è§£æäº¬ä¸œç½‘ä¸ŠéŸ³ä¹/CDä¿¡æ¯ã€%sã€‘å¤±è´¥ï¼", isbn), e);
         }
 
         return null;
     }
     /**
-     * HTTP GETÇëÇó
-     * ×¢Òâ£ºÄ¿Ç°Ö»ÓÃÓÚ¾©¶«¡¾gb2312¡¿£¬ÆäËûÍøÕ¾¡¾utf8¡¿ÕâÑù×ªÂë»áÓĞÎÊÌâ
+     * HTTP GETè¯·æ±‚
+     * æ³¨æ„ï¼šç›®å‰åªç”¨äºäº¬ä¸œã€gb2312ã€‘ï¼Œå…¶ä»–ç½‘ç«™ã€utf8ã€‘è¿™æ ·è½¬ç ä¼šæœ‰é—®é¢˜
      *
      * @param url
-     * @return ·µ»ØJsoup Document¶ÔÏó
+     * @return è¿”å›Jsoup Documentå¯¹è±¡
      */
     public static Document get(String url, String charset) {
         HttpClient client = new DefaultHttpClient();
@@ -323,7 +323,7 @@ public class JingDongParser implements IProductParser {
         try {
             HttpResponse response = client.execute(httpGet);
             if(response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
-                log.debug(String.format("HTTPÇëÇóÊ§°Ü£¬×´Ì¬Âğ¡¾%s¡¿£¡£¡£¡ ", response.getStatusLine().getStatusCode()));
+                log.debug(String.format("HTTPè¯·æ±‚å¤±è´¥ï¼ŒçŠ¶æ€å—ã€%sã€‘ï¼ï¼ï¼ ", response.getStatusLine().getStatusCode()));
                 return null;
             }
             HttpEntity entity = response.getEntity();
@@ -331,7 +331,7 @@ public class JingDongParser implements IProductParser {
 
             return Jsoup.parse(content);
         } catch (Exception e) {
-            log.debug("HTTPÇëÇóÊ§°Ü£¡£¡£¡", e);
+            log.debug("HTTPè¯·æ±‚å¤±è´¥ï¼ï¼ï¼", e);
         } finally {
             httpGet.releaseConnection();
             client.getConnectionManager().shutdown();

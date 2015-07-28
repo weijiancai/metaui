@@ -25,7 +25,7 @@ public class FetchMobileNumber {
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.102 Safari/537.36"; // 用户浏览器信息
     private static final int TIME_OUT = 2 * 60 * 1000; // 2分钟超时
     public static final String BASE_URL = "http://www.jihaoba.com/tools/?com=haoduan";
-    private static List<String> codeSegmentList = new ArrayList<>();
+    private static List<String> codeSegmentList = new ArrayList<String>();
 
     private Map<String, String> cookies;
     private Callback<List<MobileNumber>> callback;

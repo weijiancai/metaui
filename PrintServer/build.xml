@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="PrintServer" default="fxApplication" basedir="." xmlns:fx="javafx:com.sun.javafx.tools.ant">
+    <!-- 变量设置 必须放在最前面，可以确保能使用到编译平台的环境变量  -->
+    <property environment="env"/>
+    <property name="jdk.home" value="${env.JAVA_HOME}"/>
+
+    <property name="src.dir" value="src"/>
+    <property name="build.dir" value="build"/>
+    <property name="dist.dir" value="dist"/>
+
+    <property name="application.title" value="PrintServer"/>
+    <property name="application.vendor" value="metaui"/>
+    <property name="application.version" value="1.0"/>
+    <!-- 数字签名用的密钥参数属性 -->
+    <property name="alias" value="metaui"/>
+    <property name="storepass" value="metaui$888"/>
+    <property name="validity" value="365"/>
+    <property name="keysize" value="1024"/>
+    <property name="keyalg" value="RSA"/>
+    <property name="sigalg" value="MD5withRSA"/>
+    <!-- 名字与姓氏 -->
+    <property name="dname.CN" value="metaui.com"/>
+    <!-- 组织单位名称 -->
+    <property name="dname.OU" value="metaui.com"/>
+    <!-- 组织名称 -->
+    <property name="dname.O" value="metaui"/>
+
+    <!-- JavaF参数 -->
+    <property name="javafx.run.width" value="690"/>
+    <property name="javafx.run.height" value="600"/>
+
+    <path id="project.lib">
+        <fileset dir="${jdk.home}/jre/lib/ext">
+            <include name="jfxrt.jar"/>
+        </fileset>
+    </path>
+
+    <!-- 初始化 -->
+    <target name="init">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.dir}/classes"/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
+
+    <!-- 编译 -->
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}" destdir="${build.dir}/classes">
+            <!--<classpath refid="project.lib"/>-->
+        </javac>
+
+        <!-- 复制资源文件 -->
+        <copy todir="${build.dir}/classes">
+            <fileset dir="${src.dir}">
+                <include name="**/*.fxml"/>
+                <include name="**/*.xml"/>
+                <include name="**/*.css"/>
+                <include name="**/*.png"/>
+                <include name="**/*.properties"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <!-- JavaFX Application -->
+    <target name="fxApplication" depends="compile">
+        <taskdef resource="com/sun/javafx/tools/ant/antlib.xml" uri="javafx:com.sun.javafx.tools.ant" classpath="${jdk.home}/lib/ant-javafx.jar"/>
+
+        <fx:application id="PrintServer" name="打印服务器" mainClass="print.PrintDemo"/>
+
+        <fx:resources id="appRes">
+            <fx:fileset dir="${dist.dir}" includes="${application.title}.jar"/>
+        </fx:resources>
+
+        <fx:jar destfile="dist/${application.title}.jar">
+            <!-- Define what to launch -->
+            <fx:application refid="PrintServer"/>
+
+            <!-- Define what classpath to use -->
+            <fx:resources refid="appRes"/>
+
+            <manifest>
+                <attribute name="Implementation-Vendor" value="${application.vendor}"/>
+                <attribute name="Implementation-Title" value="${application.title}"/>
+                <attribute name="Implementation-Version" value="${application.version}"/>
+            </manifest>
+
+            <!-- Define what files to include -->
+            <fileset dir="${build.dir}/classes"/>
+        </fx:jar>
+    </target>
+
+    <!-- 生成密钥 -->
+    <target name="genkey" depends="fxApplication">
+        <echo message="genkey......"/>
+
+        <genkey alias="${alias}" storepass="${storepass}" keystore="${build.dir}/${alias}.keystore"
+                validity="${validity}" verbose="true" keysize="${keysize}" keyalg="${keyalg}" sigalg="${sigalg}">
+            <dname>
+                <param name="CN" value="${dname.CN}"/>
+                <param name="OU" value="${dname.OU}"/>
+                <param name="O" value="${dname.O}"/>
+                <param name="C" value="CN"/>
+            </dname>
+        </genkey>
+        <echo message="genkey ok"/>
+    </target>
+
+    <target name="signJar" depends="genkey">
+        <signjar keystore="${build.dir}/${alias}.keystore" destdir="${dist.dir}" alias="${alias}" storepass="${storepass}" keypass="${storepass}">
+            <path>
+                <fileset dir="${dist.dir}">
+                    <include name="${application.title}.jar"/>
+                </fileset>
+            </path>
+        </signjar>
+    </target>
+
+    <target name="fxDeploy" depends="signJar">
+        <fx:deploy width="${javafx.run.width}" height="${javafx.run.height}" outdir="${dist.dir}" embedjnlp="false" outfile="${application.title}" updatemode="always">
+            <fx:application refid="PrintServer"/>
+            <fx:resources refid="appRes"/>
+            <fx:info title="ECT : ${application.title}" vendor="${application.vendor}">
+            </fx:info>
+            <fx:permissions elevated="true"/>
+
+            <fx:platform javafx="2.0+" j2se="1.8+">
+                <fx:jvmarg value="-Xms256m"/>
+                <fx:jvmarg value="-Xmx1024m"/>
+            </fx:platform>
+
+            <!--<fx:template file="${javafx.html.template}" tofile="${dist.dir}/${application.title}.html"/>-->
+        </fx:deploy>
+
+        <!--<copy tofile="../../../fxtools/lib/fxclient.jar" file="${dist.dir}/fxclient.jar"/>-->
+    </target>
+
+    <target name="runJar" depends="fxDeploy">
+        <java jar="${dist.dir}/${application.title}.jar" fork="true"/>
+    </target>
+
+    <target name="runJNLP" depends="fxDeploy">
+        <echo message="&quot;${java.home}/bin/javaws&quot; &quot;${basedir}/${dist.dir}/${application.title}.jnlp&quot;"/>
+        <exec executable="cmd" failonerror="true">
+            <arg line="${java.home}/bin/javaws ${basedir}/${dist.dir}/${application.title}.jnlp"/>
+        </exec>
+    </target>
+</project>
