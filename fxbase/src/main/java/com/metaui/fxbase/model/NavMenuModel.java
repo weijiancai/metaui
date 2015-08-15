@@ -1,4 +1,4 @@
-package com.metaui.fxbase.vm;
+package com.metaui.fxbase.model;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -9,7 +9,7 @@ import javafx.beans.property.StringProperty;
  * @author wei_jc
  * @since 1.0.0
  */
-public class NavMenuVM {
+public class NavMenuModel {
     private StringProperty title = new SimpleStringProperty();
     private IViewModel viewModel;
 

@@ -1,4 +1,4 @@
-package com.metaui.fxbase.vm;
+package com.metaui.fxbase.model;
 
 /**
  * 视图模型接口
