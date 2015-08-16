@@ -15,7 +15,7 @@ import javafx.collections.ObservableList;
  */
 public class AppModel {
     private StringProperty title = new SimpleStringProperty("系统名称");
-    private ObjectProperty<ObservableList<NavMenuModel>> navMenuList = new SimpleObjectProperty<>(FXCollections.observableArrayList());
+    private ObjectProperty<ObservableList<NavMenuModel>> navMenus = new SimpleObjectProperty<>(FXCollections.observableArrayList());
 
     public String getTitle() {
         return title.get();
@@ -29,15 +29,15 @@ public class AppModel {
         this.title.set(title);
     }
 
-    public ObservableList<NavMenuModel> getNavMenuList() {
-        return navMenuList.get();
+    public ObservableList<NavMenuModel> getNavMenus() {
+        return navMenus.get();
     }
 
-    public ObjectProperty<ObservableList<NavMenuModel>> navMenuListProperty() {
-        return navMenuList;
+    public ObjectProperty<ObservableList<NavMenuModel>> navMenusProperty() {
+        return navMenus;
     }
 
-    public void setNavMenuList(ObservableList<NavMenuModel> navMenuList) {
-        this.navMenuList.set(navMenuList);
+    public void setNavMenus(ObservableList<NavMenuModel> navMenus) {
+        this.navMenus.set(navMenus);
     }
 }

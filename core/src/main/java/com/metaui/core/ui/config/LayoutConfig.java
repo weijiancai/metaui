@@ -1,7 +1,7 @@
 package com.metaui.core.ui.config;
 
 import com.metaui.core.meta.MetaDataType;
-import com.metaui.core.ui.IActionConfig;
+import com.metaui.core.ui.IAction;
 import com.metaui.core.ui.ILayoutConfig;
 import com.metaui.core.ui.ILayoutProperty;
 import com.metaui.core.util.UNumber;
@@ -35,7 +35,7 @@ public class LayoutConfig implements ILayoutConfig {
 
     private LayoutConfig parent;
     private List<ILayoutConfig> children;
-    private List<IActionConfig> actionConfigs;
+    private List<IAction> actionConfigs;
     private List<ILayoutProperty> properties;
 
     public LayoutConfig() {}
@@ -71,7 +71,7 @@ public class LayoutConfig implements ILayoutConfig {
         this.sortNum = sortNum;
     }
 
-    public void setActionConfigs(List<IActionConfig> actionConfigs) {
+    public void setActionConfigs(List<IAction> actionConfigs) {
         this.actionConfigs = actionConfigs;
     }
 
@@ -134,11 +134,11 @@ public class LayoutConfig implements ILayoutConfig {
     }
 
     @Override
-    @XmlElement(type = ActionConfig.class, name = "Action")
+    @XmlElement(type = Action.class, name = "Action")
     @XmlElementWrapper(name = "Actions")
-    public List<IActionConfig> getActionConfigs() {
+    public List<IAction> getActionConfigs() {
         if (actionConfigs == null) {
-            actionConfigs = new ArrayList<IActionConfig>();
+            actionConfigs = new ArrayList<IAction>();
         }
         return actionConfigs;
     }
@@ -215,8 +215,8 @@ public class LayoutConfig implements ILayoutConfig {
             config.setProperties(propertyList);
 
             // Clone Action
-            List<IActionConfig> actionConfigList = new ArrayList<IActionConfig>();
-            for (IActionConfig action : actionConfigs) {
+            List<IAction> actionConfigList = new ArrayList<IAction>();
+            for (IAction action : actionConfigs) {
                 actionConfigList.add(action.clone());
             }
             config.setActionConfigs(actionConfigList);

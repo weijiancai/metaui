@@ -6,7 +6,7 @@ package com.metaui.core.ui;
  * @author wei_jc
  * @version 1.0.0
  */
-public interface IActionConfig extends Cloneable {
+public interface IAction extends Cloneable {
     /**
      * 获得Action Id
      *
@@ -40,5 +40,10 @@ public interface IActionConfig extends Cloneable {
      *
      * @return 返回Clone的布局Action配置
      */
-    IActionConfig clone();
+    IAction clone();
+
+    /**
+     * 回调函数
+     */
+    void callback();
 }

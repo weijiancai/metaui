@@ -5,6 +5,7 @@ import com.metaui.core.dict.QueryModel;
 import com.metaui.core.meta.DisplayStyle;
 import com.metaui.core.meta.MetaDataType;
 import javafx.beans.property.*;
+import javafx.util.Callback;
 
 /**
  * 表单字段模型
@@ -24,10 +25,13 @@ public class FormFieldModel {
     private BooleanProperty isSingleLine = new SimpleBooleanProperty();
     private StringProperty defaultValue = new SimpleStringProperty();
     private StringProperty value = new SimpleStringProperty();
+    private StringProperty placeholder = new SimpleStringProperty();
     private ObjectProperty<DisplayStyle> displayStyle = new SimpleObjectProperty<>(DisplayStyle.TEXT_FIELD);
     private ObjectProperty<DictCategory> dict = new SimpleObjectProperty<>();
     private ObjectProperty<QueryModel> queryModel = new SimpleObjectProperty<>(QueryModel.EQUAL);
     private ObjectProperty<MetaDataType> dataType = new SimpleObjectProperty<>(MetaDataType.STRING);
+
+    private Callback callback;
 
     public FormFieldModel() {
     }
@@ -217,7 +221,27 @@ public class FormFieldModel {
         this.value.set(value);
     }
 
-    public static FormFieldBuilder builder() {
-        return FormFieldBuilder.create();
+    public static FormFieldModelBuilder builder() {
+        return FormFieldModelBuilder.create();
+    }
+
+    public Callback getCallback() {
+        return callback;
+    }
+
+    public void setCallback(Callback callback) {
+        this.callback = callback;
+    }
+
+    public String getPlaceholder() {
+        return placeholder.get();
+    }
+
+    public StringProperty placeholderProperty() {
+        return placeholder;
+    }
+
+    public void setPlaceholder(String placeholder) {
+        this.placeholder.set(placeholder);
     }
 }

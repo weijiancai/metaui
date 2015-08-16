@@ -23,6 +23,7 @@ public class MUPasswordField extends BaseFormField {
 
         // 双向绑定值
         passwordField.textProperty().bindBidirectional(model.valueProperty());
+        passwordField.promptTextProperty().bindBidirectional(model.placeholderProperty());
     }
 
     @Override

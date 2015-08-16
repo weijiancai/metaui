@@ -4,6 +4,7 @@ import com.metaui.fxbase.model.FormFieldModel;
 import javafx.scene.control.TextField;
 
 /**
+ *  MetaUI 文本输入框
  * @author wei_jc
  * @since 1.0.0
  */
@@ -23,6 +24,7 @@ public class MUTextField extends BaseFormField {
 
         // 双向绑定值
         textField.textProperty().bindBidirectional(model.valueProperty());
+        textField.promptTextProperty().bindBidirectional(model.placeholderProperty());
     }
 
     @Override

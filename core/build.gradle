@@ -42,6 +42,7 @@ dependencies {
     compile group: 'dom4j', name: 'dom4j', version: '1.6.1'
     compile group: 'jaxen', name: 'jaxen', version: '1.1.6'
     compile group: 'javax.mail', name: 'mail', version: '1.4.7'
+    compile group: 'com.belerweb', name: 'pinyin4j', version: '2.5.0'
     compile fileTree(dir: 'libs', include: '*.jar')
 
     providedCompile group: 'javax.servlet', name: 'servlet-api', version: '3.0-alpha-1'

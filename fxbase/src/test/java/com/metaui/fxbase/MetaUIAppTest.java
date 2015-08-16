@@ -4,15 +4,15 @@ import com.metaui.core.dict.DictManager;
 import com.metaui.core.dict.EnumBoolean;
 import com.metaui.core.meta.DisplayStyle;
 import com.metaui.fxbase.desktop.MUListViewTabsDesktop;
-import com.metaui.fxbase.model.AppModel;
-import com.metaui.fxbase.model.FormFieldModel;
-import com.metaui.fxbase.model.FormModel;
-import com.metaui.fxbase.model.NavMenuModel;
+import com.metaui.fxbase.model.*;
 import com.metaui.fxbase.view.MUForm;
+import com.metaui.fxbase.win.ApkToolWin;
+import com.metaui.fxbase.win.ConsoleWin;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,16 +26,29 @@ public class MetaUIAppTest extends Application {
         AppModel viewModel = new AppModel();
         primaryStage.titleProperty().bind(viewModel.titleProperty());
 
+        FormModel formModel = getFormModel();
+        MUForm form = new MUForm(formModel);
+
         // 导航菜单
         NavMenuModel menu1 = new NavMenuModel();
+        menu1.setId("APK_TOOLS");
         menu1.setTitle("apk工具");
-        viewModel.getNavMenuList().add(menu1);
+        menu1.setView(new ApkToolWin());
+
+        NavMenuModel menu2 = new NavMenuModel();
+        menu2.setId("FORM_TEST");
+        menu2.setTitle("表单测试");
+        menu2.setView(form);
+
+        NavMenuModel console = new NavMenuModel();
+        console.setId("CONSOLE");
+        console.setTitle("控制台");
+        console.setView(new ConsoleWin());
+
+        viewModel.getNavMenus().addAll(menu1, menu2, console);
 
         MUListViewTabsDesktop desktop = new MUListViewTabsDesktop(viewModel);
 
-        FormModel formModel = getFormModel();
-        MUForm form = new MUForm(formModel);
-        desktop.setTop(form);
         primaryStage.setScene(new Scene(desktop));
 
         primaryStage.show();
@@ -73,6 +86,17 @@ public class MetaUIAppTest extends Application {
         formFieldList.add(password);
         formFieldList.add(atWork);
         formFieldList.add(memo);
+
+        ActionModel add = ActionModel.builder()
+                .displayName("新增")
+                .callback((aVoid, obj) -> {
+                    System.out.println("新增。。。。。。");
+                })
+                .build();
+
+        List<ActionModel> actionList = new ArrayList<>();
+        actionList.add(add);
+        formModel.setActions(actionList);
 
         return formModel;
     }

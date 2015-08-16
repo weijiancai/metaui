@@ -1,5 +1,6 @@
 package com.metaui.fxbase.model;
 
+import com.metaui.core.ui.IView;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -10,8 +11,21 @@ import javafx.beans.property.StringProperty;
  * @since 1.0.0
  */
 public class NavMenuModel {
+    private StringProperty id = new SimpleStringProperty();
     private StringProperty title = new SimpleStringProperty();
-    private IViewModel viewModel;
+    private IView view;
+
+    public String getId() {
+        return id.get();
+    }
+
+    public StringProperty idProperty() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id.set(id);
+    }
 
     public String getTitle() {
         return title.get();
@@ -25,12 +39,12 @@ public class NavMenuModel {
         this.title.set(title);
     }
 
-    public IViewModel getViewModel() {
-        return viewModel;
+    public IView getView() {
+        return view;
     }
 
-    public void setViewModel(IViewModel viewModel) {
-        this.viewModel = viewModel;
+    public void setView(IView view) {
+        this.view = view;
     }
 
     @Override

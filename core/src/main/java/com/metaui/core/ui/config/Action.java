@@ -1,6 +1,6 @@
 package com.metaui.core.ui.config;
 
-import com.metaui.core.ui.IActionConfig;
+import com.metaui.core.ui.IAction;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -14,15 +14,15 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement(name = "Action")
 @XmlType(propOrder = {"id", "name", "displayName", "sortNum"})
-public class ActionConfig implements IActionConfig {
+public class Action implements IAction {
     private String id;
     private String name;
     private String displayName;
     private int sortNum;
 
-    public ActionConfig() {}
+    public Action() {}
 
-    public ActionConfig(String name, String displayName) {
+    public Action(String name, String displayName) {
         this.name = name;
         this.displayName = displayName;
     }
@@ -68,12 +68,17 @@ public class ActionConfig implements IActionConfig {
     }
 
     @Override
-    public IActionConfig clone() {
+    public IAction clone() {
         try {
-            return (IActionConfig) super.clone();
+            return (IAction) super.clone();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public void callback() {
+
     }
 }

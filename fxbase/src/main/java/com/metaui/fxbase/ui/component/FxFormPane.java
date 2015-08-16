@@ -3,7 +3,7 @@ package com.metaui.fxbase.ui.component;
 import com.metaui.core.meta.DisplayStyle;
 import com.metaui.core.meta.MetaDataType;
 import com.metaui.core.ui.ConfigConst;
-import com.metaui.core.ui.IActionConfig;
+import com.metaui.core.ui.IAction;
 import com.metaui.core.ui.ILayoutConfig;
 import com.metaui.core.util.UNumber;
 import com.metaui.core.util.UString;
@@ -47,7 +47,7 @@ public class FxFormPane extends FxPane {
         Region region = new Region();
         box.getChildren().add(region);
         HBox.setHgrow(region, Priority.ALWAYS);
-        for (IActionConfig action : layoutConfig.getActionConfigs()) {
+        for (IAction action : layoutConfig.getActionConfigs()) {
             Button button = new Button(action.getDisplayName());
             button.setId(action.getName());
             box.getChildren().add(button);

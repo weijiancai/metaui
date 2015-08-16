@@ -5,9 +5,13 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author wei_jc
@@ -24,6 +28,30 @@ public class FormModel {
     private IntegerProperty vgap = new SimpleIntegerProperty(5);
 
     private ObservableList<FormFieldModel> formFields = FXCollections.observableList(new ArrayList<>());
+    private ObservableList<ActionModel> actions = FXCollections.observableArrayList(new ArrayList<>());
+
+    private Map<String, FormFieldModel> nameMap = new HashMap<>();
+
+    public FormModel() {
+        formFields.addListener((ListChangeListener<FormFieldModel>) change -> {
+            if (change.next()) {
+                // 新增
+                if(change.wasAdded()) {
+                    List<? extends FormFieldModel> list = change.getAddedSubList();
+                    for (FormFieldModel field : list) {
+                        nameMap.put(field.getName(), field);
+                    }
+                }
+                // 删除
+                if (change.wasRemoved()) {
+                    List<? extends FormFieldModel> list = change.getRemoved();
+                    for (FormFieldModel field : list) {
+                        nameMap.remove(field.getName());
+                    }
+                }
+            }
+        });
+    }
 
     public String getName() {
         return name.get();
@@ -127,5 +155,17 @@ public class FormModel {
 
     public void setFormFields(ObservableList<FormFieldModel> formFields) {
         this.formFields = formFields;
+    }
+
+    public ObservableList<ActionModel> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<ActionModel> actions) {
+        this.actions.setAll(actions);
+    }
+
+    public FormFieldModel getFieldByName(String name) {
+        return nameMap.get(name);
     }
 }

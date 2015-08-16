@@ -1,10 +1,6 @@
 package com.metaui.fxbase.ui.view;
 
 import com.metaui.fxbase.BaseApp;
-import com.metaui.fxbase.ui.dialog.AbstractDialogAction;
-import com.metaui.fxbase.ui.dialog.Dialog;
-import com.metaui.fxbase.ui.dialog.Dialogs;
-import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.util.Callback;
 import org.apache.log4j.Logger;
@@ -15,11 +11,11 @@ import org.apache.log4j.Logger;
  * @author wei_jc
  * @since 1.0.0
  */
-public class MUDialog extends Dialog {
+public class MUDialog  {
     private static final Logger log = Logger.getLogger(MUDialog.class);
 
     public MUDialog(Object owner, String title) {
-        super(owner, title);
+//        super(owner, title);
     }
 
     /**
@@ -34,7 +30,7 @@ public class MUDialog extends Dialog {
             owner = BaseApp.getInstance().getStage();
         }
         final MUDialog dialog = new MUDialog(owner, title);
-        dialog.setContent(content);
+        /*dialog.setContent(content);
         dialog.getActions().add(new AbstractDialogAction("确定") {
             @Override
             public void execute(ActionEvent event) {
@@ -44,7 +40,7 @@ public class MUDialog extends Dialog {
                 dialog.hide();
             }
         });
-        dialog.show();
+        dialog.show();*/
     }
 
     /**
@@ -53,7 +49,7 @@ public class MUDialog extends Dialog {
      * @param msg 消息内容
      */
     public static void showInformation(String msg) {
-        Dialogs.create().title("信息").masthead(null).message(msg).showInformation();
+//        Dialogs.create().title("信息").masthead(null).message(msg).showInformation();
     }
 
     /**
@@ -63,6 +59,6 @@ public class MUDialog extends Dialog {
      */
     public static void showExceptionDialog(Throwable e) {
         log.error(e.getMessage(), e);
-        Dialogs.create().title("异常信息").masthead(null).message(e.getMessage()).showException(e);
+//        Dialogs.create().title("异常信息").masthead(null).message(e.getMessage()).showException(e);
     }
 }

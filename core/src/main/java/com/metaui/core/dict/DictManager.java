@@ -54,8 +54,8 @@ public class DictManager {
             system.setSystem(true);
 
             addDict(DatabaseType.class);
-            addDict(MetaDataType.class);
-            addDict(DisplayStyle.class);
+//            addDict(MetaDataType.class);
+//            addDict(DisplayStyle.class);
             addDict(EnumBoolean.class);
             addDict(PropertyType.class);
             addDict(EnumAlign.class);

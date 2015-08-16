@@ -15,6 +15,7 @@ import com.metaui.fxbase.ui.view.FxView;
 import com.metaui.fxbase.ui.view.MUDialog;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -81,8 +82,8 @@ public abstract class BaseApp extends Application {
         // 检查是否配置了项目
         if (!SystemManager.isConfigured(projectConfig)) {
 //            IView<Pane> projectConfigView = FxViewFactory.getView(ConfigInit.getProjectConfig());
-            IView<FxPane> projectConfigView = new FxView(ConfigInit.getProjectConfig());
-            MUDialog.showCustomDialog(stage, "项目信息配置", projectConfigView.layout(), new Callback<Void, Void>() {
+            IView projectConfigView = new FxView(ConfigInit.getProjectConfig());
+            MUDialog.showCustomDialog(stage, "项目信息配置", (Node)projectConfigView, new Callback<Void, Void>() {
                 @Override
                 public Void call(Void aVoid) {
                     try {

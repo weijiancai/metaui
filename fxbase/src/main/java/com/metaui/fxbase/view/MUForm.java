@@ -1,25 +1,32 @@
 package com.metaui.fxbase.view;
 
+import com.metaui.core.ui.IView;
+import com.metaui.fxbase.MuEventHandler;
+import com.metaui.fxbase.model.ActionModel;
 import com.metaui.fxbase.model.FormFieldModel;
 import com.metaui.fxbase.model.FormModel;
 import com.metaui.fxbase.view.form.BaseFormField;
+import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.text.TextFlow;
+import javafx.scene.control.Button;
+import javafx.scene.control.ToolBar;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 
 /**
+ * MetaUI 表单
+ *
  * @author wei_jc
  * @since 1.0.0
  */
-public class MUForm extends BorderPane {
+public class MUForm extends BorderPane implements IView {
     private FormModel model;
     private GridPane gridPane = new GridPane();
+    private ToolBar toolBar = new ToolBar();
 
     public MUForm(FormModel model) {
         this.model = model;
@@ -27,9 +34,28 @@ public class MUForm extends BorderPane {
         initUI();
     }
 
-    private void initUI() {
-        this.setCenter(createCenter());
+    public void initUI() {
+        this.setTop(toolBar);
+        this.setCenter(gridPane);
         this.setStyle("-fx-padding: 10");
+
+        createToolBar();
+        createCenter();
+    }
+
+    private void createToolBar() {
+        for (ActionModel action : model.getActions()) {
+            Button button = new Button();
+            button.textProperty().bindBidirectional(action.displayNameProperty());
+            button.idProperty().bindBidirectional(action.idProperty());
+            button.setOnAction(new MuEventHandler<ActionEvent>() {
+                @Override
+                public void doHandler(ActionEvent event) throws Exception {
+                    action.getCallback().call(null);
+                }
+            });
+            toolBar.getItems().add(button);
+        }
     }
 
     private Node createCenter() {
@@ -37,6 +63,7 @@ public class MUForm extends BorderPane {
         gridPane.setHgap(model.getHgap());
         gridPane.setVgap(model.getVgap());
         gridPane.setAlignment(Pos.TOP_LEFT);
+        gridPane.setPadding(new Insets(5, 0, 0, 0));
 
         Region labelGap;
         BaseFormField formField;
@@ -110,5 +137,9 @@ public class MUForm extends BorderPane {
         }
 
         return gridPane;
+    }
+
+    public FormModel getModel() {
+        return model;
     }
 }

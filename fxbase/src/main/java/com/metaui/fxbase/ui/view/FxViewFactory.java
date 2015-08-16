@@ -10,7 +10,7 @@ import static com.metaui.core.ui.ConfigConst.*;
  * @version 1.0.0
  */
 public class FxViewFactory {
-    public static IView<FxPane> getView(IViewConfig config) {
+    public static IView getView(IViewConfig config) {
         if (LAYOUT_FORM.equals(config.getLayoutConfig().getName())) {
             return new FxFormView(config);
         }

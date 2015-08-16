@@ -17,7 +17,7 @@ import javafx.scene.input.MouseEvent;
  * @author wei_jc
  * @since 1.0.0
  */
-public class FxView implements IView<FxPane> {
+public class FxView implements IView {
     protected IViewConfig viewConfig;
     protected FxPane pane;
     protected boolean isDesign; // 是否设计模式
@@ -59,12 +59,10 @@ public class FxView implements IView<FxPane> {
         });
     }
 
-    @Override
     public IViewConfig getViewConfig() {
         return viewConfig;
     }
 
-    @Override
     public FxPane layout() {
         return pane;
     }

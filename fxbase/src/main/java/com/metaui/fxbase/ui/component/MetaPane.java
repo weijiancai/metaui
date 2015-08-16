@@ -12,6 +12,7 @@ import com.metaui.fxbase.ui.view.MUDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
@@ -37,12 +38,12 @@ public class MetaPane extends BorderPane {
         addBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                final IView<FxPane> view = FxViewFactory.getView(ViewConfigFactory.createFormConfig(MetaManager.getMeta(MetaField.class)));
+                final IView view = FxViewFactory.getView(ViewConfigFactory.createFormConfig(MetaManager.getMeta(MetaField.class)));
 
-                MUDialog.showCustomDialog(BaseApp.getInstance().getStage(), "添加数据源", view.layout(), new Callback<Void, Void>() {
+                MUDialog.showCustomDialog(BaseApp.getInstance().getStage(), "添加数据源", (Node)view, new Callback<Void, Void>() {
                     @Override
                     public Void call(Void aVoid) {
-                        FxPane pane = view.layout();
+                        /*FxPane pane = view.layout();
                         Map<String, String> map = pane.getValueMap();
                         MetaField metaField = new MetaField();
                         String displayName = map.get("DisplayName");
@@ -55,7 +56,7 @@ public class MetaPane extends BorderPane {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        initTableData();
+                        initTableData();*/
                         return null;
                     }
                 });

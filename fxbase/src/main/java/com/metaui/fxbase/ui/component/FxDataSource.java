@@ -124,8 +124,8 @@ public class FxDataSource extends FxFormField {
 
         @Override
         public void handle(ActionEvent actionEvent) {
-            IView<FxPane> view = FxViewFactory.getView(ViewConfigFactory.createFormConfig(MetaManager.getMeta(DBDataSource.class)));
-            MUDialog.showCustomDialog(BaseApp.getInstance().getStage(), "数据源配置", view.layout(), null);
+            IView view = FxViewFactory.getView(ViewConfigFactory.createFormConfig(MetaManager.getMeta(DBDataSource.class)));
+//            MUDialog.showCustomDialog(BaseApp.getInstance().getStage(), "数据源配置", view.layout(), null);
         }
     }
 

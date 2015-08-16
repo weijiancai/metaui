@@ -1,15 +1,10 @@
 package com.metaui.fxbase.view.form;
 
-import com.metaui.core.dict.FormType;
 import com.metaui.core.meta.DisplayStyle;
 import com.metaui.core.meta.MetaDataType;
 import com.metaui.core.util.UString;
 import com.metaui.fxbase.model.FormFieldModel;
-import com.metaui.fxbase.ui.component.form.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -83,7 +78,14 @@ public abstract class BaseFormField extends HBox {
             return new MUPasswordField(model);
         } else if (DisplayStyle.COMBO_BOX == displayStyle || DisplayStyle.BOOLEAN == displayStyle) {
             return new MUComboBox(model);
-        }/* else if (DisplayStyle.DATA_SOURCE == displayStyle) {
+        } else if (DisplayStyle.FILE_CHOOSER == displayStyle) {
+            return new MUFileChooser(model);
+        } else if (DisplayStyle.DIRECTORY_CHOOSER == displayStyle) {
+            return new MUDirectoryChooser(model);
+        } else if (DisplayStyle.TEXT == displayStyle) {
+            return new MUText(model);
+        }
+        /* else if (DisplayStyle.DATA_SOURCE == displayStyle) {
             node = new MuDataSource(field);
         } else if (DisplayStyle.DATE == displayStyle) {
             if (formConfig.getFormType() == FormType.QUERY) {

@@ -14,7 +14,7 @@ import javafx.scene.layout.Pane;
  * @author wei_jc
  * @version 1.0.0
  */
-public class FxTreeView implements IView<Pane> {
+public class FxTreeView implements IView {
     private IViewConfig viewConfig;
     private BorderPane borderPane = new BorderPane();
     private TreeView<ITreeNode> treeView = new TreeView<ITreeNode>();
@@ -29,12 +29,10 @@ public class FxTreeView implements IView<Pane> {
         borderPane.setCenter(treeView);
     }
 
-    @Override
     public IViewConfig getViewConfig() {
         return viewConfig;
     }
 
-    @Override
     public Pane layout() {
         return borderPane;
     }

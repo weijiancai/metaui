@@ -25,6 +25,7 @@ public class MUTextArea extends BaseFormField {
 
         // 双向绑定值
         textArea.textProperty().bindBidirectional(model.valueProperty());
+        textArea.promptTextProperty().bindBidirectional(model.placeholderProperty());
     }
 
     @Override

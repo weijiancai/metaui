@@ -37,12 +37,24 @@ public enum DisplayStyle {
     /**
      * 6. 日期
      */
-    DATE("日期")
+    DATE("日期"),
+    /**
+     * 7. 文件选择
+     */
+    FILE_CHOOSER("文件选择"),
+    /**
+     * 8. 目录选择
+     */
+    DIRECTORY_CHOOSER("目录选择"),
+    /**
+     * 9. 文本
+     */
+    TEXT("文本")
     ;
 
     private String displayName;
 
-    private DisplayStyle(String displayName) {
+    DisplayStyle(String displayName) {
         this.displayName = displayName;
     }
 
@@ -65,6 +77,8 @@ public enum DisplayStyle {
             return BOOLEAN;
         } else if (DATE.name().equalsIgnoreCase(styleStr)) {
             return DATE;
+        } else if (FILE_CHOOSER.name().equalsIgnoreCase(styleStr)) {
+            return FILE_CHOOSER;
         }
 
         return TEXT_FIELD;

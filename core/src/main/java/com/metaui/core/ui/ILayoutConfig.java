@@ -72,7 +72,7 @@ public interface ILayoutConfig extends ConfigConst, Cloneable {
      *
      * @return 返回布局的Actions
      */
-    List<IActionConfig> getActionConfigs();
+    List<IAction> getActionConfigs();
 
     /**
      * 获得布局属性
