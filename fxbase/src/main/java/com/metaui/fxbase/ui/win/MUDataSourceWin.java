@@ -184,9 +184,9 @@ public class MUDataSourceWin extends BorderPane {
                                         });
                                         ds.load();
                                         BaseTreeNode dsNode = new BaseTreeNode(ds.getDisplayName());
-                                        for (ITreeNode node : ds.getNavTree().getChildren()) {
+                                        /*for (ITreeNode node : ds.getNavTree().getChildren()) {
                                             dsNode.getChildren().add(node);
-                                        }
+                                        }*/
                                         result.add(dsNode);
 
                                         return result;

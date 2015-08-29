@@ -300,7 +300,6 @@ public class MetaManager {
                 if (template != null) {
                     template.save(MetaPDBFactory.getMetaField(metaField));
                 }
-                fieldList.add(metaField);
 //            classFieldIdMap.put(field.getId(), field);
                 // 加入缓存
                 fieldIdMap.put(metaField.getId(), metaField);

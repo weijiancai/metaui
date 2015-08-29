@@ -136,6 +136,11 @@ public class BaseTreeNode implements ITreeNode {
     }
 
     @Override
+    public boolean isLeaf() {
+        return false;
+    }
+
+    @Override
     public Subject<EventData> getPresentableTextSubject() {
         return presentableTextSubject;
     }

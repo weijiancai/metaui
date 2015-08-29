@@ -10,7 +10,7 @@ import java.util.List;
  * @author wei_jc
  * @since  1.0.0
  */
-public interface ITreeNode {
+public interface ITreeNode<T extends ITreeNode> {
     /**
      * 获得树形节点ID
      *
@@ -30,21 +30,21 @@ public interface ITreeNode {
      *
      * @return 返回父树形节点
      */
-    ITreeNode getParent();
+    T getParent();
 
     /**
      * 设置父节点
      *
      * @param parent 父节点
      */
-    void setParent(ITreeNode parent);
+    void setParent(T parent);
 
     /**
      * 获得孩子节点
      *
      * @return 返回孩子节点
      */
-    List<ITreeNode> getChildren();
+    List<T> getChildren();
 
     /**
      * 获得名称
@@ -94,6 +94,13 @@ public interface ITreeNode {
      * @since 1.0.0
      */
     boolean isVirtual();
+
+    /**
+     * 是否叶子节点
+     *
+     * @return 如果是叶子节点，返回true，否则false。
+     */
+    boolean isLeaf();
 
     /**
      * 获得此节点的PresentableText主题

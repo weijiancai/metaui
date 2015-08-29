@@ -264,6 +264,11 @@ public class DBObjectImpl implements DBObject {
     }
 
     @Override
+    public boolean isLeaf() {
+        return false;
+    }
+
+    @Override
     public Subject<EventData> getPresentableTextSubject() {
         return presentableTextSubject;
     }

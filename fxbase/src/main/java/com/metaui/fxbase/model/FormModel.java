@@ -1,5 +1,6 @@
 package com.metaui.fxbase.model;
 
+import com.metaui.core.meta.model.Meta;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -31,8 +32,20 @@ public class FormModel {
     private ObservableList<ActionModel> actions = FXCollections.observableArrayList(new ArrayList<>());
 
     private Map<String, FormFieldModel> nameMap = new HashMap<>();
+    private Meta meta;
 
     public FormModel() {
+        init();
+    }
+
+    public FormModel(Meta meta) {
+        this.meta = meta;
+        ModelFactory.convert(meta, this);
+
+        init();
+    }
+
+    private void init() {
         formFields.addListener((ListChangeListener<FormFieldModel>) change -> {
             if (change.next()) {
                 // 新增
@@ -153,8 +166,8 @@ public class FormModel {
         return formFields;
     }
 
-    public void setFormFields(ObservableList<FormFieldModel> formFields) {
-        this.formFields = formFields;
+    public void setFormFields(List<FormFieldModel> formFields) {
+        this.formFields.addAll(formFields);
     }
 
     public ObservableList<ActionModel> getActions() {

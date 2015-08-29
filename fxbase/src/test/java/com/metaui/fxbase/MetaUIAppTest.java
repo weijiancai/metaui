@@ -1,11 +1,15 @@
 package com.metaui.fxbase;
 
+import com.metaui.core.datasource.db.DBDataSource;
 import com.metaui.core.dict.DictManager;
 import com.metaui.core.dict.EnumBoolean;
 import com.metaui.core.meta.DisplayStyle;
-import com.metaui.fxbase.desktop.MUListViewTabsDesktop;
+import com.metaui.core.meta.MetaManager;
+import com.metaui.fxbase.view.desktop.MUListViewTabsDesktop;
 import com.metaui.fxbase.model.*;
 import com.metaui.fxbase.view.MUForm;
+import com.metaui.fxbase.view.tree.MUTree;
+import com.metaui.fxbase.view.tree.TreeNodeModel;
 import com.metaui.fxbase.win.ApkToolWin;
 import com.metaui.fxbase.win.ConsoleWin;
 import javafx.application.Application;
@@ -45,7 +49,20 @@ public class MetaUIAppTest extends Application {
         console.setTitle("控制台");
         console.setView(new ConsoleWin());
 
-        viewModel.getNavMenus().addAll(menu1, menu2, console);
+        NavMenuModel dataSource = new NavMenuModel();
+        dataSource.setId("DATA_SOURCE");
+        dataSource.setTitle("数据源");
+        MetaManager.addMeta(DBDataSource.class, null);
+        dataSource.setView(new MUForm(new FormModel(MetaManager.getMeta(DBDataSource.class))));
+
+        NavMenuModel tree = new NavMenuModel();
+        tree.setId("TREE");
+        tree.setTitle("树测试");
+        TreeNodeModel treeNodeModel = getTreeNodeModel();
+        tree.setView(new MUTree(treeNodeModel));
+        treeNodeModel.getChildren().add(new TreeNodeModel("yhbis_mobile", "database"));
+
+        viewModel.getNavMenus().addAll(menu1, menu2, console, dataSource, tree);
 
         MUListViewTabsDesktop desktop = new MUListViewTabsDesktop(viewModel);
 
@@ -99,6 +116,12 @@ public class MetaUIAppTest extends Application {
         formModel.setActions(actionList);
 
         return formModel;
+    }
+
+    public TreeNodeModel getTreeNodeModel() {
+        TreeNodeModel model = new TreeNodeModel("根节点");
+        model.getChildren().add(new TreeNodeModel("yhbis"));
+        return model;
     }
 
     public static void main(String[] args) {

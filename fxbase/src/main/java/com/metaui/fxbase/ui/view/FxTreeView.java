@@ -85,9 +85,9 @@ public class FxTreeView implements IView {
                 if (item != null && item.getChildren() != null && item.getChildren().size() > 0) {
                     ObservableList<TreeItem<ITreeNode>> children = FXCollections.observableArrayList();
 
-                    for (ITreeNode child : item.getChildren()) {
+                    /*for (ITreeNode child : item.getChildren()) {
                         children.add(createNode(child));
-                    }
+                    }*/
 
                     return children;
                 }
