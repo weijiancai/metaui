@@ -28,6 +28,15 @@ public interface DBConnection {
     List<DataMap> getResultSet(String sql);
 
     /**
+     * 获得结果集
+     *
+     * @param sql sql语句
+     * @param keyToLower DataMap的key值，是否转换为小写
+     * @return 返回查询结果集
+     */
+    List<DataMap> getResultSet(String sql, boolean keyToLower);
+
+    /**
      * 获得数据库加载器
      *
      * @return 返回数据库加载器

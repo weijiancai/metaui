@@ -28,6 +28,11 @@ public class FormFieldModelBuilder {
         return this;
     }
 
+    public FormFieldModelBuilder queryName(String queryName) {
+        model.setQueryName(queryName);
+        return this;
+    }
+
     public FormFieldModelBuilder display(boolean isDisplay) {
         model.setDisplay(isDisplay);
         return this;
@@ -35,6 +40,11 @@ public class FormFieldModelBuilder {
 
     public FormFieldModelBuilder require(boolean isRequire) {
         model.setRequire(isRequire);
+        return this;
+    }
+
+    public FormFieldModelBuilder readonly(boolean isReadonly) {
+        model.setReadonly(isReadonly);
         return this;
     }
 
@@ -95,6 +105,11 @@ public class FormFieldModelBuilder {
 
     public FormFieldModelBuilder placeholder(String placeholder) {
         model.setPlaceholder(placeholder);
+        return this;
+    }
+
+    public FormFieldModelBuilder formModel(FormModel formModel) {
+        model.setFormModel(formModel);
         return this;
     }
 

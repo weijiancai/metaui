@@ -1,6 +1,7 @@
 package com.metaui.fxbase.view.form;
 
 import com.metaui.fxbase.model.FormFieldModel;
+import javafx.beans.property.StringProperty;
 import javafx.scene.control.PasswordField;
 
 /**
@@ -22,12 +23,16 @@ public class MUPasswordField extends BaseFormField {
         this.getChildren().add(passwordField);
 
         // 双向绑定值
-        passwordField.textProperty().bindBidirectional(model.valueProperty());
         passwordField.promptTextProperty().bindBidirectional(model.placeholderProperty());
     }
 
     @Override
     protected void setValue(String value) {
         passwordField.setText(value);
+    }
+
+    @Override
+    protected StringProperty valueProperty() {
+        return passwordField.textProperty();
     }
 }

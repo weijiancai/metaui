@@ -4,6 +4,8 @@ import com.metaui.core.datasource.DataSourceManager;
 import com.metaui.core.datasource.db.DBDataSource;
 import com.metaui.core.datasource.db.DBIcons;
 import com.metaui.core.datasource.db.object.DBSchema;
+import com.metaui.core.datasource.db.object.enums.DBObjectType;
+import com.metaui.core.datasource.db.object.impl.DBObjectImpl;
 import com.metaui.fxbase.view.dialog.MUDialog;
 
 /**
@@ -12,21 +14,34 @@ import com.metaui.fxbase.view.dialog.MUDialog;
  */
 public class DBNavTreeModel {
     private DBTreeNodeModel root;
+
     public DBNavTreeModel() {
         init();
     }
 
     private void init() {
         root = new DBTreeNodeModel("数据源");
+        root.setLeaf(false);
         for (DBDataSource ds : DataSourceManager.getAvailableDbDataSource()) {
-            DBTreeNodeModel dsModel = new DBTreeNodeModel();
-            dsModel.setDisplayName(ds.getDisplayName());
+            DBObjectImpl navTree = new DBObjectImpl();
+            navTree.setId(ds.getId());
+            navTree.setObjectType(DBObjectType.DATABASE);
+            navTree.setName(ds.getDisplayName());
+            navTree.setComment(ds.getDisplayName());
+            try {
+                navTree.setDataSource(ds);
+            } catch (Exception e) {
+                MUDialog.showException(e);
+            }
+
+            DBTreeNodeModel dsModel = new DBTreeNodeModel(navTree);
+            /*dsModel.setDisplayName(ds.getDisplayName());
             dsModel.setIcon(DBIcons.DBO_DATABASE);
-            dsModel.setLeaf(false);
+            dsModel.setLeaf(false);*/
 
             root.getChildren().add(dsModel);
 
-            try {
+            /*try {
                 for (DBSchema schema : ds.getSchemas()) {
                     DBTreeNodeModel model = new DBTreeNodeModel(schema);
                     model.setDisplayName(schema.getDisplayName());
@@ -37,7 +52,7 @@ public class DBNavTreeModel {
                 }
             } catch (Exception e) {
                 MUDialog.showException(e);
-            }
+            }*/
         }
     }
 

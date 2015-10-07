@@ -14,5 +14,5 @@ dependencies {
     compile group: 'org.hsqldb', name: 'hsqldb', version: '2.3.0'
     compile group: 'org.jsoup', name: 'jsoup', version: '1.7.2'
     compile group: 'org.controlsfx', name: 'controlsfx', version: '8.40.9'
-    compile fileTree(dir: 'libs', include: '*.jar')
+    compile fileTree(dir: '../libs', include: '*.jar')
 }

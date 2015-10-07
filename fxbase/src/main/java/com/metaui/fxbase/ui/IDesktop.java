@@ -1,6 +1,7 @@
 package com.metaui.fxbase.ui;
 
-import com.metaui.fxbase.ui.view.MUTree;
+import com.metaui.core.ui.IView;
+import com.metaui.fxbase.view.tree.MUTree;
 import javafx.scene.Parent;
 
 /**
@@ -9,14 +10,7 @@ import javafx.scene.Parent;
  * @author wei_jc
  * @since 1.0.0
  */
-public interface IDesktop {
-    /**
-     * 初始化UI控件
-     *
-     * @since 1.0.0
-     */
-    void initUI();
-
+public interface IDesktop extends IView {
     /**
      * 初始化UI之后调用
      */

@@ -13,6 +13,7 @@ public class EctongsDBApp extends DBApp {
 
     private static void initDataSource() throws Exception {
         DBDataSource ds = new DBDataSource();
+        ds.setId("java_dev");
         ds.setName("java_dev");
         ds.setDisplayName("开发服务器");
         ds.setDatabaseType(DatabaseType.SQLSERVER);

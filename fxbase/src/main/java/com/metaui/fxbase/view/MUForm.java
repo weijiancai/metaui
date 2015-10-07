@@ -1,11 +1,14 @@
 package com.metaui.fxbase.view;
 
+import com.metaui.core.dict.FormType;
+import com.metaui.core.ui.ICanQuery;
 import com.metaui.core.ui.IView;
 import com.metaui.fxbase.MuEventHandler;
 import com.metaui.fxbase.model.ActionModel;
 import com.metaui.fxbase.model.FormFieldModel;
 import com.metaui.fxbase.model.FormModel;
 import com.metaui.fxbase.view.form.BaseFormField;
+import com.metaui.fxbase.view.form.MUTextArea;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,6 +19,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * MetaUI 表单
@@ -28,6 +34,8 @@ public class MUForm extends BorderPane implements IView {
     private GridPane gridPane = new GridPane();
     private ToolBar toolBar = new ToolBar();
 
+    private List<ICanQuery> queryList = new ArrayList<>();
+
     public MUForm(FormModel model) {
         this.model = model;
 
@@ -35,7 +43,9 @@ public class MUForm extends BorderPane implements IView {
     }
 
     public void initUI() {
-        this.setTop(toolBar);
+        if (model.getActions().size() > 0) {
+            this.setTop(toolBar);
+        }
         this.setCenter(gridPane);
         this.setStyle("-fx-padding: 10");
 
@@ -81,22 +91,22 @@ public class MUForm extends BorderPane implements IView {
             }*/
 
             formField = BaseFormField.getInstance(field);
+            queryList.add(formField);
             // 查询表单
-            /*if (FormType.QUERY == model.getFormType()) {
+            if (FormType.QUERY == model.getFormType()) {
                 // TextArea不显示
-                if ((formField instanceof MuTextArea || field.getMaxLength() > 200)) {
+                if ((formField instanceof MUTextArea || field.getMaxLength() > 200)) {
                     continue;
                 }
                 // 查询表单，查询条件，至显示3行
                 if (idxRow > 3) {
                     break;
                 }
-            }*/
+            }
 
             // 单行
             if (field.isSingleLine()) {
                 idxRow++;
-//                label = new Label(field.getDisplayName());
                 gridPane.add(formField.getLabelNode(), 0, idxRow);
 
                 labelGap = new Region();
@@ -112,7 +122,6 @@ public class MUForm extends BorderPane implements IView {
                 continue;
             }
 
-//            label = new Label(field.getDisplayName());
             gridPane.add(formField.getLabelNode(), idxCol++, idxRow);
 
             labelGap = new Region();
@@ -141,5 +150,9 @@ public class MUForm extends BorderPane implements IView {
 
     public FormModel getModel() {
         return model;
+    }
+
+    public List<ICanQuery> getQueryList() {
+        return queryList;
     }
 }

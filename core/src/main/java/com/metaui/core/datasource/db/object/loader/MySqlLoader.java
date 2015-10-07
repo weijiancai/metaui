@@ -160,6 +160,24 @@ public class MySqlLoader extends BaseDBLoader {
     }
 
     @Override
+    protected String getIndexesSql(String schema, String table) {
+        return "select distinct\n" +
+                "                INDEX_NAME INDEX_NAME,\n" +
+                "                TABLE_NAME TABLE_NAME,\n" +
+                "                COLUMN_NAME COLUMN_NAME,\n" +
+                "                if (NON_UNIQUE = 'YES', 'N', 'Y') as IS_UNIQUE,\n" +
+                "                (CASE WHEN COLLATION = 'A' THEN 'Y' ELSE 'N' END) as IS_ASC,\n" +
+                "                'Y' as IS_VALID\n" +
+                "            from INFORMATION_SCHEMA.STATISTICS\n" +
+                "            where \n" +
+                "               TABLE_SCHEMA = '" + schema + "' and " +
+                "               TABLE_NAME = '" + table +"'\n" +
+                "            order by\n" +
+                "                TABLE_NAME,\n" +
+                "                INDEX_NAME asc";
+    }
+
+    @Override
     protected String getIndexSql(String schema, String tableName, String indexName) {
         return String.format("select distinct\n" +
                 "                INDEX_NAME,\n" +
@@ -190,6 +208,25 @@ public class MySqlLoader extends BaseDBLoader {
                 "                'Y' as IS_FOR_EACH_ROW\n" +
                 "            from INFORMATION_SCHEMA.TRIGGERS\n" +
                 "            where EVENT_OBJECT_SCHEMA = '%s'\n" +
+                "            order by\n" +
+                "                EVENT_OBJECT_TABLE,\n" +
+                "                TRIGGER_NAME asc";
+    }
+
+    @Override
+    protected String getTriggersSql(String schema, String table) {
+        return "select\n" +
+                "                EVENT_OBJECT_TABLE as DATASET_NAME,\n" +
+                "                TRIGGER_NAME TRIGGER_NAME,\n" +
+                "                ACTION_TIMING as TRIGGER_TYPE,\n" +
+                "                EVENT_MANIPULATION as TRIGGERING_EVENT,\n" +
+                "                'Y' as IS_ENABLED,\n" +
+                "                'Y' as IS_VALID,\n" +
+                "                'N' as IS_DEBUG,\n" +
+                "                'Y' as IS_FOR_EACH_ROW\n" +
+                "            from INFORMATION_SCHEMA.TRIGGERS\n" +
+                "            where EVENT_OBJECT_SCHEMA = '" + schema + "'\n and" +
+                "               EVENT_OBJECT_TABLE = '" + table + "'" +
                 "            order by\n" +
                 "                EVENT_OBJECT_TABLE,\n" +
                 "                TRIGGER_NAME asc";
@@ -258,5 +295,10 @@ public class MySqlLoader extends BaseDBLoader {
                 "  referenced_column_name\n" +
                 "FROM information_schema.KEY_COLUMN_USAGE\n" +
                 "WHERE table_schema = '%1$s' AND referenced_table_name IS NOT NULL AND referenced_column_name IS NOT NULL";
+    }
+
+    @Override
+    protected String getSearchSql(String value, String[] schemas, String filter) {
+        return null;
     }
 }

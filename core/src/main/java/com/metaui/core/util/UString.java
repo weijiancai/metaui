@@ -237,12 +237,24 @@ public class UString {
      * @since 1.0.0
      */
     public static String convert(List list) {
+        return convert(list, ",");
+    }
+
+    /**
+     * 将字符串List转化为逗号分隔的字符串
+     *
+     * @param list 需要转化的字符串List
+     * @param split 分隔符
+     * @return 返回逗号分隔的字符串
+     * @since 1.0.0
+     */
+    public static String convert(List list, String split) {
         StringBuilder sb = new StringBuilder();
         for (Object obj : list) {
-            sb.append(UObject.toString(obj)).append(",");
+            sb.append(UObject.toString(obj)).append(split);
         }
-        if (sb.toString().endsWith(",")) {
-            sb.deleteCharAt(sb.length() - 1);
+        if (sb.toString().endsWith(split)) {
+            sb.delete(sb.length() - split.length(), sb.length());
         }
         return sb.toString();
     }

@@ -2,6 +2,7 @@ package com.metaui.core.datasource.db.util;
 
 import com.metaui.core.datasource.*;
 import com.metaui.core.datasource.db.DBDataSource;
+import com.metaui.core.datasource.db.DatabaseType;
 import com.metaui.core.datasource.db.QueryResult;
 import com.metaui.core.datasource.db.RowMapper;
 import com.metaui.core.datasource.db.connection.ConnectionUtil;
@@ -26,6 +27,7 @@ public class JdbcTemplate {
     private static final Logger log = Logger.getLogger(JdbcTemplate.class);
     private DBDataSource dataSource;
     private Connection conn;
+    private DatabaseType databaseType;
 
     public JdbcTemplate() {
         this(DataSourceManager.getSysDataSource());
@@ -46,6 +48,7 @@ public class JdbcTemplate {
             DBConnection dbConn = dataSource.getDbConnection();
             conn = dbConn.getConnection();
             conn.setAutoCommit(false);
+            databaseType = dbConn.getDatabaseType();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -136,6 +139,9 @@ public class JdbcTemplate {
             map = new DataMap();
             for (int i = 1; i <= columnCount; i++) {
                 Object obj = rs.getObject(i);
+                if (databaseType != null && DatabaseType.HSQLDB == databaseType) {
+                    map.setUpperKey(true);
+                }
                 map.put(md.getColumnLabel(i), obj);
             }
             list.add(map);

@@ -38,12 +38,14 @@ public class ApkToolWin extends BorderPane implements IView {
         FormModel model = new FormModel();
 
         FormFieldModel apkToolVersion = FormFieldModel.builder()
+                .formModel(model)
                 .displayName("apktool版本")
                 .displayStyle(DisplayStyle.TEXT)
                 .value(apkTool.getVersion())
                 .build();
 
         FormFieldModel apkFile = FormFieldModel.builder()
+                .formModel(model)
                 .displayName("选择apk文件")
                 .name("apkFilePath")
                 .displayStyle(DisplayStyle.FILE_CHOOSER)
@@ -51,6 +53,7 @@ public class ApkToolWin extends BorderPane implements IView {
                 .build();
 
         FormFieldModel outputDir = FormFieldModel.builder()
+                .formModel(model)
                 .displayName("选择输出目录")
                 .displayStyle(DisplayStyle.DIRECTORY_CHOOSER)
                 .singleLine(true)

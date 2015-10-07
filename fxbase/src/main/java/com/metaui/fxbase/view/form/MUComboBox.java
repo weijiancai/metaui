@@ -7,11 +7,11 @@ import com.metaui.fxbase.BaseApp;
 import com.metaui.fxbase.model.FormFieldModel;
 import com.metaui.fxbase.ui.component.FxLookDictPane;
 import com.metaui.fxbase.ui.view.MUDialog;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
@@ -25,14 +25,26 @@ import java.util.List;
 public class MUComboBox extends BaseFormField {
     private DictCategory category;
     private ComboBox<DictCode> comboBox;
+    private StringProperty value;
+
+    public MUComboBox() {
+    }
 
     public MUComboBox(FormFieldModel model) {
         super(model);
     }
 
+    public MUComboBox(DictCategory category) {
+        this.category = category;
+        initPrep();
+    }
+
     @Override
     protected void initPrep() {
-        this.category = model.getDict();
+        value = new SimpleStringProperty();
+        if (model != null) {
+            this.category = model.getDict();
+        }
 
         comboBox = new ComboBox<>();
         comboBox.setEditable(true);
@@ -78,21 +90,63 @@ public class MUComboBox extends BaseFormField {
         comboBox.setContextMenu(contextMenu);
 
         comboBox.prefWidthProperty().bind(this.widthProperty());
-        comboBox.valueProperty().addListener(new ChangeListener<DictCode>() {
-            @Override
-            public void changed(ObservableValue<? extends DictCode> observable, DictCode oldValue, DictCode newValue) {
-                if (newValue != null) {
-//                    valueProperty().set(newValue.getName());
-                }
+        comboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                value.set(newValue.getName());
             }
         });
 
         this.getChildren().add(comboBox);
+
+        // 值改变时，下拉框的值也要一起变
+        value.addListener((observable, oldValue, newValue) -> {
+            setValue(newValue);
+        });
+    }
+
+    public DictCode getSelectedItem() {
+        return comboBox.getSelectionModel().getSelectedItem();
+    }
+
+    public SingleSelectionModel<DictCode> getSelectionModel() {
+        return comboBox.getSelectionModel();
+    }
+
+    public List<DictCode> getItems() {
+        return comboBox.getItems();
+    }
+
+    public void setEditable(boolean editable) {
+        comboBox.setEditable(editable);
     }
 
     @Override
     protected void setValue(String value) {
+        if (category != null) {
+            // Boolean类型
+            if ("EnumBoolean".equals(category.getId())) {
+                if (UString.toBoolean(value)) {
+                    comboBox.getSelectionModel().select(category.getDictCodeByName("T"));
+                } else {
+                    comboBox.getSelectionModel().select(category.getDictCodeByName("F"));
+                }
+            } else {
+                for (DictCode code : comboBox.getItems()) {
+                    if (code.getName().equalsIgnoreCase(value)) {
+                        comboBox.getSelectionModel().select(code);
+                    }
+                }
+            }
+        }
+        // 清空值
+        if (value == null) {
+            comboBox.getSelectionModel().clearSelection();
+        }
+    }
 
+    @Override
+    protected StringProperty valueProperty() {
+        return value;
     }
 
     class DictCodeConverter extends StringConverter<DictCode> {

@@ -38,4 +38,8 @@ public class DBNavView extends BorderPane implements IView {
         this.setCenter(navTree);
         navTree.initUI();
     }
+
+    public DBNavTree getNavTree() {
+        return navTree;
+    }
 }

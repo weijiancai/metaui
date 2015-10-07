@@ -26,7 +26,7 @@ public class ClassPathResourceItem extends ResourceItem {
 
     @Override
     public String getContent() throws Exception {
-        if ("jar".equals(type)) {
+        if ("jar".equals(type) || "classpath".equals(type)) {
             InputStream is = UIO.getInputStream("/" + getId(), UIO.FROM.CP);
             return UFile.readString(is, "UTF-8");
         } else if ("file".equals(type)) {

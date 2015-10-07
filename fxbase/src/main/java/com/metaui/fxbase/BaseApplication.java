@@ -39,13 +39,14 @@ public abstract class BaseApplication extends Application {
 
     protected Scene scene;
     private Stage stage;
-    protected MUTabsDesktop desktop;
+    protected IDesktop desktop;
 
     public BaseApplication() {
         // 设置日志目录属性
         System.setProperty("logs_dir", PathManager.getLogPath().getAbsolutePath());
         try {
             PropertyConfigurator.configure(UIO.getInputStream("/log4j.properties", UIO.FROM.CP));
+            SystemManager.getInstance().init();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -77,7 +78,7 @@ public abstract class BaseApplication extends Application {
         stage.setHeight(primaryScreenBonds.getHeight());
 
         desktop = getDesktop();
-        scene = new Scene(desktop);
+        scene = new Scene(desktop.getDesktop());
 
         setSkin(R.skin.DEFAULT);
         // show stage
@@ -93,7 +94,7 @@ public abstract class BaseApplication extends Application {
 
     protected abstract void onStart();
 
-    public MUTabsDesktop getDesktop() {
+    public IDesktop getDesktop() {
         if (desktop == null) {
             desktop = new MUTabsDesktop(model);
         }

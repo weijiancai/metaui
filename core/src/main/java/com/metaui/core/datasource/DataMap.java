@@ -25,6 +25,7 @@ public class DataMap extends HashMap<String,Object> {
     private STATUS status = STATUS.NOT_MODIFY;
     private String uid; // 标识此DataMap的唯一值
     private DataMapMetaData metaData;
+    private boolean isUpperKey; // 是否使用大写key值
 
     public DataMap() {
         uid = UUIDUtil.getUUID();
@@ -45,6 +46,14 @@ public class DataMap extends HashMap<String,Object> {
 
     public String getUid() {
         return uid;
+    }
+
+    public boolean isUpperKey() {
+        return isUpperKey;
+    }
+
+    public void setUpperKey(boolean upperKey) {
+        isUpperKey = upperKey;
     }
 
     /**
@@ -71,6 +80,9 @@ public class DataMap extends HashMap<String,Object> {
         if (UString.isEmpty(key)) {
             return null;
         }
+        if (isUpperKey) {
+            key = key.toUpperCase();
+        }
         return super.put(key, value);
     }
 
@@ -83,6 +95,9 @@ public class DataMap extends HashMap<String,Object> {
      * @since 1.0.0
      */
     public Object get(String key) {
+        if (isUpperKey) {
+            key = key.toUpperCase();
+        }
         return super.get(key);
     }
 

@@ -1,6 +1,7 @@
 package com.metaui.fxbase.view.form;
 
 import com.metaui.fxbase.model.FormFieldModel;
+import javafx.beans.property.StringProperty;
 import javafx.scene.text.Text;
 
 /**
@@ -20,13 +21,15 @@ public class MUText extends BaseFormField {
     protected void initPrep() {
         text = new Text();
         this.getChildren().add(text);
-
-        // 双向绑定值
-        text.textProperty().bindBidirectional(model.valueProperty());
     }
 
     @Override
     protected void setValue(String value) {
         text.setText(value);
+    }
+
+    @Override
+    protected StringProperty valueProperty() {
+        return text.textProperty();
     }
 }

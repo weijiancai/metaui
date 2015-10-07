@@ -1,10 +1,8 @@
 package com.metaui.fxbase.model;
 
+import com.metaui.core.dict.FormType;
 import com.metaui.core.meta.model.Meta;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -27,6 +25,7 @@ public class FormModel {
     private IntegerProperty fieldGap = new SimpleIntegerProperty(15);
     private IntegerProperty hgap = new SimpleIntegerProperty(3);
     private IntegerProperty vgap = new SimpleIntegerProperty(5);
+    private ObjectProperty<FormType> formType = new SimpleObjectProperty<>(FormType.EDIT);
 
     private ObservableList<FormFieldModel> formFields = FXCollections.observableList(new ArrayList<>());
     private ObservableList<ActionModel> actions = FXCollections.observableArrayList(new ArrayList<>());
@@ -160,6 +159,18 @@ public class FormModel {
 
     public void setVgap(int vgap) {
         this.vgap.set(vgap);
+    }
+
+    public FormType getFormType() {
+        return formType.get();
+    }
+
+    public ObjectProperty<FormType> formTypeProperty() {
+        return formType;
+    }
+
+    public void setFormType(FormType formType) {
+        this.formType.set(formType);
     }
 
     public ObservableList<FormFieldModel> getFormFields() {

@@ -4,6 +4,7 @@ import com.metaui.core.setting.PreferenceSettings;
 import com.metaui.core.util.UString;
 import com.metaui.fxbase.MuEventHandler;
 import com.metaui.fxbase.model.FormFieldModel;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -53,7 +54,6 @@ public class MUFileChooser extends BaseFormField {
         });
 
         // 双向绑定值
-        textField.textProperty().bindBidirectional(model.valueProperty());
         textField.promptTextProperty().bindBidirectional(model.placeholderProperty());
 
         this.getChildren().addAll(textField, button);
@@ -62,5 +62,10 @@ public class MUFileChooser extends BaseFormField {
     @Override
     protected void setValue(String value) {
         textField.setText(value);
+    }
+
+    @Override
+    protected StringProperty valueProperty() {
+        return textField.textProperty();
     }
 }

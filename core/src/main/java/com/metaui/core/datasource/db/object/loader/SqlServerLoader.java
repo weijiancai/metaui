@@ -1,6 +1,13 @@
 package com.metaui.core.datasource.db.object.loader;
 
+import com.metaui.core.datasource.db.DatabaseType;
 import com.metaui.core.datasource.db.object.impl.DBConnectionImpl;
+import com.metaui.core.datasource.db.sql.SqlBuilder;
+import com.metaui.core.util.UString;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * SqlServer 加载器
@@ -120,7 +127,6 @@ public class SqlServerLoader extends BaseDBLoader {
 
     @Override
     protected String getIndexesSql() {
-        // TODO index columns
         return "select\n" +
                 "                name as INDEX_NAME,\n" +
                 "                (select name from dbo.sysobjects where id=object_id) as TABLE_NAME,\n" +
@@ -131,6 +137,22 @@ public class SqlServerLoader extends BaseDBLoader {
                 "            from [%1$s].sys.indexes\n" +
                 "            where\n" +
                 "                name is not null\n" +
+                "            order by name asc";
+    }
+
+    @Override
+    protected String getIndexesSql(String schema, String table) {
+        return "select\n" +
+                "                name as INDEX_NAME,\n" +
+                "                (select name from dbo.sysobjects where id=object_id) as TABLE_NAME,\n" +
+                "                '' as COLUMN_NAME,\n" +
+                "                (case when is_unique = 0 then 'N' else 'Y' end) as IS_UNIQUE,\n" +
+                "                'Y' as IS_ASC,\n" +
+                "                (case when is_disabled = 0 then 'N' else 'Y' end) as IS_VALID\n" +
+                "            from [" + schema + "].sys.indexes\n" +
+                "            where\n" +
+                "                name is not null and\n" +
+                "                object_id = (select id from [" + schema + "].dbo.sysobjects where name='" + table + "' and xtype='U')\n" +
                 "            order by name asc";
     }
 
@@ -151,6 +173,23 @@ public class SqlServerLoader extends BaseDBLoader {
                 "                'N' as IS_DEBUG,\n" +
                 "                'Y' as IS_FOR_EACH_ROW\n" +
                 "            from [%1$s].sys.TRIGGERS t\n" +
+                "            order by parent_id, name asc";
+    }
+
+    @Override
+    protected String getTriggersSql(String schema, String table) {
+        return "select\n" +
+                "                (select top 1 name from [" + schema + "].sys.tables where object_id = t.parent_id) as DATASET_NAME,\n" +
+                "                t.name TRIGGER_NAME,\n" +
+                "                '' as TRIGGER_TYPE,\n" +
+                "                '' as TRIGGERING_EVENT,\n" +
+                "                'Y' as IS_ENABLED,\n" +
+                "                'Y' as IS_VALID,\n" +
+                "                'N' as IS_DEBUG,\n" +
+                "                'Y' as IS_FOR_EACH_ROW\n" +
+                "            from [" + schema + "].sys.TRIGGERS t\n" +
+                "            where\n" +
+                "               object_id = (select id from [" + schema + "].dbo.sysobjects where name='" + table + "' and xtype='U')\n " +
                 "            order by parent_id, name asc";
     }
 
@@ -218,5 +257,61 @@ public class SqlServerLoader extends BaseDBLoader {
                 "  (select name from dbo.sysobjects where id=rkeyid) referenced_table_name,\n" +
                 "  (select name from sys.columns where OBJECT_ID= rkeyid and column_id=rkey) referenced_column_name\n" +
                 "FROM SYSFOREIGNKEYS b";
+    }
+
+    @Override
+    protected String getSearchSql(String value, String[] schemas, String filter) {
+        String sql = "";
+        for(int i = 0; i < schemas.length; i++) {
+            String schema = schemas[i];
+            SqlBuilder objSql = SqlBuilder.create()
+                    .query("'" + schema + "' id, name, '' comment, (case when (type in ('AF','FN', 'FS', 'FT', 'IF', 'TF')) then 'FUNCTION' when (type in ('F', 'PK', 'UQ')) then 'CONSTRAINT' when (type in ('IT', 'S', 'U', 'TT')) then 'TABLE' when (type in ('P', 'PC', 'X')) then 'PROCEDURE' when (type in ('TA', 'TR')) then 'TRIGGER' when type='V' then 'VIEW' else '' end) dbType")
+                    .from("[" + schema + "].sys.objects");
+            if(filter != null) {
+//                objSql.where();
+                String[] array = filter.split(",");
+                List<String> list = new ArrayList<String>();
+                if(Arrays.binarySearch(array, "TABLE") > -1) {
+                    list.add("type in ('IT', 'S', 'U', 'TT')");
+                }
+                if(Arrays.binarySearch(array, "VIEW") > -1) {
+                    list.add("type in ('V')");
+                }
+                if(Arrays.binarySearch(array, "TRIGGER") > -1) {
+                    list.add("type in ('TA', 'TR')");
+                }
+                if(Arrays.binarySearch(array, "PROCEDURE") > -1) {
+                    list.add("type in ('P', 'PC', 'X')");
+                }
+                if(Arrays.binarySearch(array, "FUNCTION") > -1) {
+                    list.add("type in ('AF','FN', 'FS', 'FT', 'IF', 'TF')");
+                }
+                if(Arrays.binarySearch(array, "CONSTRAINT") > -1 || Arrays.binarySearch(array, "INDEX") > -1) {
+                    list.add("type in ('F', 'PK', 'UQ')");
+                }
+                if (list.size() > 0) {
+                    objSql.and(String.format("(%s)", UString.convert(list, " OR ")));
+                }
+            } else {
+                objSql.where("type in ('IT', 'S', 'U', 'TT', 'V', 'TA', 'TR', 'P', 'PC', 'X', 'AF', 'FN', 'FS', 'FT', 'IF', 'TF', 'F', 'PK', 'UQ')");
+            }
+            objSql.like("name", value);
+            sql += objSql.build(DatabaseType.SQLSERVER);
+
+            if(filter == null || (Arrays.binarySearch(filter.split(","), "'COLUMN'") > -1)) {
+                String columnSql = SqlBuilder.create()
+                        .query("'" + schema + "'+'.'+(select name from dbo.sysobjects where id=col.object_id) id,col.name as name,(select top 1 convert(varchar, value) from [" + schema + "].sys.extended_properties where major_id = col.object_id and minor_id = col.column_id) comment, 'COLUMN' dbType")
+                        .from("[" + schema + "].sys.columns col")
+                        .like("col.name", value)
+                        .build(DatabaseType.SQLSERVER);
+
+                sql += "\n UNION ALL \n" + columnSql;
+            }
+
+            if(i < schemas.length - 1) {
+                sql += "\n UNION ALL \n";
+            }
+        }
+        return "SELECT * FROM (" + sql + ") t ORDER BY t.dbType desc";
     }
 }

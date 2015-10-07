@@ -15,6 +15,7 @@ import com.metaui.core.ui.ILayoutProperty;
 import com.metaui.core.ui.model.Layout;
 import com.metaui.core.ui.model.LayoutProperty;
 import com.metaui.core.util.UString;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +30,8 @@ import static com.metaui.core.ui.ConfigConst.*;
  * @since 1.0.0
  */
 public class LayoutManager {
+    private static Logger log = Logger.getLogger(LayoutManager.class);
+
     private static Map<String, ILayoutConfig> cache = new HashMap<String, ILayoutConfig>();
     private static Map<String, Layout> layoutIdMap = new HashMap<String, Layout>();
     private static Map<String, Layout> layoutNameMap = new HashMap<String, Layout>();
@@ -45,6 +48,7 @@ public class LayoutManager {
         JdbcTemplate template = new JdbcTemplate();
 
         if (isInit) {
+            log.info("加载Layout......");
             // 查询布局
             /*String sql = "SELECT * FROM sys_layout";
             List<Layout> layoutList = template.query(sql, MetaRowMapperFactory.getLayout());
@@ -76,6 +80,7 @@ public class LayoutManager {
                 propMap.put(property.getId(), property);
             }
         } else { // 初始化Layout
+            log.info("初始化Layout......");
             /*if (root == null) {
                 root = new Layout();
                 root.load();

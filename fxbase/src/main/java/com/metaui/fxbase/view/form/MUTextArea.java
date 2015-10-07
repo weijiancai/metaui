@@ -1,6 +1,7 @@
 package com.metaui.fxbase.view.form;
 
 import com.metaui.fxbase.model.FormFieldModel;
+import javafx.beans.property.StringProperty;
 import javafx.scene.control.TextArea;
 
 /**
@@ -24,12 +25,16 @@ public class MUTextArea extends BaseFormField {
         this.getChildren().add(textArea);
 
         // 双向绑定值
-        textArea.textProperty().bindBidirectional(model.valueProperty());
         textArea.promptTextProperty().bindBidirectional(model.placeholderProperty());
     }
 
     @Override
     protected void setValue(String value) {
         textArea.setText(value);
+    }
+
+    @Override
+    protected StringProperty valueProperty() {
+        return textArea.textProperty();
     }
 }

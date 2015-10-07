@@ -4,6 +4,7 @@ import com.metaui.core.datasource.DataSource;
 import com.metaui.core.datasource.DataSourceManager;
 import com.metaui.core.datasource.ResourceItem;
 import com.metaui.core.datasource.classpath.ClassPathDataSource;
+import com.metaui.core.datasource.classpath.ClassPathResourceItem;
 import com.metaui.core.datasource.db.DBDataSource;
 import com.metaui.core.datasource.db.DatabaseType;
 import com.metaui.core.datasource.db.util.JdbcTemplate;
@@ -17,6 +18,7 @@ import com.metaui.core.project.ProjectManager;
 import com.metaui.core.ui.ViewManager;
 import com.metaui.core.ui.config.LayoutConfig;
 import com.metaui.core.ui.layout.LayoutManager;
+import com.metaui.core.util.HSqlDBServer;
 import com.metaui.core.util.UFile;
 import com.metaui.core.util.UIO;
 import com.metaui.core.util.jaxb.JAXBUtil;
@@ -87,10 +89,14 @@ public class SystemManager {
      * 初始化系统
      */
     public void init() throws Exception {
+        log.info("正在初始化系统...................");
+        // 启动数据库
+//        HSqlDBServer.getInstance().start();
+
         // 加载系统数据源
         DataSourceManager.getSysDataSource();
         // 检查数据库版本
-//        checkDbVersion();
+        checkDbVersion();
         // 加载参数配置
         loadProfileSetting();
         // 加载数据源
@@ -104,13 +110,10 @@ public class SystemManager {
         // 加载视图
         ViewManager.load();
         // 加载项目
-        ProjectManager.load();
+//        ProjectManager.load();
 
         switch (SystemConfig.SYSTEM_TYPE) {
             case DESKTOP: {
-                // 启动数据库
-                // HSqlDBServer.getInstance().start();
-
                 // 注册Action
                 // MUActionConfig.getInstance().addAction(new MUAction(MetaManager.getMeta("MobileNumber"), "downloadMobileNumber", "下载手机号", MobileNumberAction.class, "fetchMobileNumber"));
 //                MetaManager.getMeta("MobileNumber").addAction(new MUAction(MetaManager.getMeta("MobileNumber"), "downloadMobileNumber", "下载手机号", MobileNumberAction.class, "fetchMobileNumber"));
@@ -120,6 +123,7 @@ public class SystemManager {
 
             }
         }
+        log.info("初始化系统成功！");
     }
 
     private static void loadProjectConfig() throws Exception {
@@ -169,11 +173,13 @@ public class SystemManager {
         JdbcTemplate template = new JdbcTemplate();
         List<DataSource> list = template.query("select * from mu_db_datasource", MetaRowMapperFactory.getDataSource());
         for (DataSource ds : list) {
+            log.info("添加数据源【" + ds.getName() + "】");
             DataSourceManager.addDataSource(ds);
         }
     }
 
     private void loadProfileSetting() throws Exception{
+        log.info("加载参数配置......");
         JdbcTemplate template = new JdbcTemplate();
         settingList = template.query("select * from mu_profile_setting", MetaRowMapperFactory.getProfileSetting());
         for (ProfileSetting setting : settingList) {
@@ -181,52 +187,70 @@ public class SystemManager {
         }
     }
 
-    private void checkDbVersion() throws Exception {
-        DBDataSource dataSource = DataSourceManager.getSysDataSource();
-        // 获得数据库当前系统的最大版本号
-        String maxVersion = dataSource.getMaxVersion(SystemConfig.SYSTEM_NAME);
-        DatabaseType dbType = dataSource.getDatabaseType();
-        log.info("当前系统版本为：" + maxVersion + ", 数据库为：" + dbType.getDisplayName());
-        // 获得升级目录下升级脚本
-        URL url = getClass().getResource("/");
-        System.out.println(url);
-        ClassPathDataSource cpDataSource = DataSourceManager.getClassPathDataSource();
-        ResourceItem dbUpgrade = cpDataSource.getResource("db_upgrade/");
-        if (dbUpgrade == null) {
-            System.err.println(String.format("没有数据库升级脚本目录【%s】，系统将退出！", cpDataSource.toString() + "\\db_upgrade"));
-            System.exit(0);
-        }
-        for (ITreeNode node : dbUpgrade.getChildren()) {
-            final String version = node.getName();
-            if(maxVersion.compareTo(version) < 0 && node.getChildren().size() > 0) {
-                log.info("检测到新版本需要升级：" + version);
-                ResourceItem item;
-                if ("0.0.0".equals(maxVersion)) {
-                    item = cpDataSource.getResource("db_upgrade/init_" + dbType.getName().toLowerCase() + ".sql");
-                    if (item != null) {
-                        dataSource.getDbConnection().execSqlScript(item.getContent(), "\\$\\$");
+    private void checkDbVersion() {
+        try {
+            DBDataSource dataSource = DataSourceManager.getSysDataSource();
+            // 获得数据库当前系统的最大版本号
+            String maxVersion = dataSource.getMaxVersion(SystemConfig.SYSTEM_NAME);
+            DatabaseType dbType = dataSource.getDatabaseType();
+            log.info("当前系统版本为：" + maxVersion + ", 数据库为：" + dbType.getDisplayName());
+            // 获得升级目录下升级脚本
+            URL url = getClass().getResource("/db_upgrade");
+            if (url == null) {
+                System.err.println(String.format("没有数据库升级脚本目录【%s】，系统将退出！", "\\db_upgrade"));
+                System.exit(0);
+            }
+            File upgradeDir = new File(url.getPath());
+            File[] files = upgradeDir.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    // 如果是文件，则继续
+                    if (file.isFile()) {
+                        continue;
+                    }
+                    // 取目录，目录名是版本号
+                    final String version = file.getName();
+                    if (maxVersion.compareTo(version) < 0) {
+                        log.info("检测到新版本需要升级：" + version);
+                        String path;
+                        String sql;
+                        if ("0.0.0".equals(maxVersion)) {
+                            path = "/db_upgrade/init_" + dbType.getName().toLowerCase() + ".sql";
+                            sql = UFile.readStringFromCP(path);
+                            if (sql != null) {
+                                dataSource.getDbConnection().execSqlScript(sql, "\\$\\$");
+                            }
+                        }
+                        path = "/db_upgrade/" + version + "/" + SYSTEM_NAME + "_" + dbType.getName().toLowerCase() + ".sql";
+                        log.info("升级脚本路径：" + path);
+                        sql = UFile.readStringFromCP(path);
+                        if (sql == null) {
+                            System.err.println(String.format("升级文件【%s】不存在，请检查！", path));
+                            System.exit(0);
+                        }
+                        log.info("开始升级......");
+                        dataSource.getDbConnection().execSqlScript(sql, ";");
+                        // 插入新的数据库版本
+                        dataSource.save(new IPDB() {
+                            @Override
+                            public Map<String, ? extends Map<String, Object>> getPDBMap() {
+                                Map<String, Map<String, Object>> result = new HashMap<String, Map<String, Object>>();
+                                Map<String, Object> map = new HashMap<String, Object>();
+                                map.put("sys_name", SYSTEM_NAME);
+                                map.put("db_version", version);
+                                map.put("input_date", new Date());
+                                map.put("memo", "系统自动升级到" + version);
+                                result.put(SYS_DB_VERSION_TABLE_NAME, map);
+                                return result;
+                            }
+                        });
+                        log.info("升级完成");
                     }
                 }
-                String path = "db_upgrade/" + version + "/" + SYSTEM_NAME + "_" + dbType.getName().toLowerCase() + ".sql";
-                log.info("升级脚本路径：" + path);
-                item = cpDataSource.getResource(path);
-                dataSource.getDbConnection().execSqlScript(item.getContent(), ";");
-                // 插入新的数据库版本
-                dataSource.save(new IPDB() {
-                    @Override
-                    public Map<String, ? extends Map<String, Object>> getPDBMap() {
-                        Map<String, Map<String, Object>> result = new HashMap<String, Map<String, Object>>();
-                        Map<String, Object> map = new HashMap<String, Object>();
-                        map.put("sys_name", SYSTEM_NAME);
-                        map.put("db_version", version);
-                        map.put("input_date", new Date());
-                        map.put("memo", "系统自动升级到" + version);
-                        result.put(SYS_DB_VERSION_TABLE_NAME, map);
-                        return result;
-                    }
-                });
-                log.info("升级完成");
             }
+        } catch (Exception e) {
+            log.error("检查数据库失败！", e);
+            System.exit(0);
         }
     }
 

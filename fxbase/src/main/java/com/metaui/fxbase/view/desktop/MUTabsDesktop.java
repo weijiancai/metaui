@@ -1,16 +1,18 @@
 package com.metaui.fxbase.view.desktop;
 
-import com.metaui.core.ui.IView;
 import com.metaui.fxbase.model.AppModel;
 import com.metaui.fxbase.model.NavMenuModel;
+import com.metaui.fxbase.ui.IDesktop;
 import com.metaui.fxbase.ui.view.MUTabPane;
 import com.metaui.fxbase.view.tree.MUTree;
-import com.metaui.fxbase.view.tree.TreeNodeModel;
 import javafx.collections.ListChangeListener;
+import javafx.geometry.Side;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.BorderPane;
+import org.controlsfx.control.MasterDetailPane;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,11 +24,12 @@ import java.util.Map;
  * @author wei_jc
  * @since 1.0.0
  */
-public class MUTabsDesktop extends BorderPane implements IView {
+public class MUTabsDesktop extends BorderPane implements IDesktop {
     private AppModel app;
     private Map<String, Tab> tabCache = new HashMap<>();
     protected MUTabPane tabPane;
     private MUTree navTree;
+    private MasterDetailPane masterDetailPane;
 
     public MUTabsDesktop(AppModel app) {
         this.app = app;
@@ -34,12 +37,27 @@ public class MUTabsDesktop extends BorderPane implements IView {
 
     @Override
     public void initUI() {
-        createLeft();
+        masterDetailPane = new MasterDetailPane(Side.LEFT);
+        masterDetailPane.setShowDetailNode(true);
+        // 左边
+        masterDetailPane.setDetailNode(getLeftNode());
+        // 右边
         createTabPane();
+        setCenter(masterDetailPane);
     }
 
-    public void createLeft() {
-        this.setLeft(getNavTree());
+    public Node getLeftNode() {
+        return getNavTree();
+    }
+
+    @Override
+    public void initAfter() {
+
+    }
+
+    @Override
+    public Parent getDesktop() {
+        return this;
     }
 
     public MUTree getNavTree() {
@@ -91,6 +109,16 @@ public class MUTabsDesktop extends BorderPane implements IView {
             }
         });
 
-        this.setCenter(tabPane);
+        masterDetailPane.setMasterNode(tabPane);
+    }
+
+    public void addTab(Tab tab) {
+        if (tabCache.get(tab.getId()) == null) {
+            tabPane.getTabs().add(tab);
+            tabCache.put(tab.getId(), tab);
+        }
+
+        // 选择当前
+        tabPane.getSelectionModel().select(tab);
     }
 }

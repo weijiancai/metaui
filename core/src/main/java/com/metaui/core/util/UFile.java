@@ -42,6 +42,9 @@ public class UFile {
 
     public static String readStringFromCP(String path) throws IOException {
         InputStream is = UFile.class.getResourceAsStream(path);
+        if (is == null) {
+            return null;
+        }
         return readString(is, "UTF-8");
     }
 

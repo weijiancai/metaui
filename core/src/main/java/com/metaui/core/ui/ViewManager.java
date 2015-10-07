@@ -9,11 +9,13 @@ import com.metaui.core.datasource.persist.MetaPDBFactory;
 import com.metaui.core.datasource.persist.MetaRowMapperFactory;
 import com.metaui.core.meta.model.Meta;
 import com.metaui.core.meta.model.MetaField;
+import com.metaui.core.ui.layout.property.CrudProperty;
 import com.metaui.core.ui.layout.property.FormProperty;
 import com.metaui.core.ui.layout.property.TableProperty;
 import com.metaui.core.ui.model.*;
 import com.metaui.core.util.UString;
 import com.metaui.core.util.UUIDUtil;
+import org.apache.log4j.Logger;
 
 import java.util.*;
 
@@ -24,6 +26,8 @@ import java.util.*;
  * @since  1.0.0
  */
 public class ViewManager {
+    private static Logger log = Logger.getLogger(ViewManager.class);
+
     private static List<View> viewList = new ArrayList<View>();
     private static Map<String, View> viewIdMap = new HashMap<String, View>();
     private static Map<String, View> viewNameMap = new HashMap<String, View>();
@@ -38,6 +42,7 @@ public class ViewManager {
 
         // 从数据库中加载视图
         if (sysInfo.isViewInit()) {
+            log.info("加载视图......");
             String sql = "SELECT * FROM mu_view";
             viewList = template.query(sql, MetaRowMapperFactory.getView());
             for (final View view : viewList) {
@@ -112,7 +117,7 @@ public class ViewManager {
         addView(formView, template);
 
         for (ViewProperty property : formView.getViewProperties()) {
-//            template.save(MetaPDBFactory.getViewProperty(property));
+            template.save(MetaPDBFactory.getViewProperty(property));
         }
 
         System.out.println(String.format("创建%sTableView", meta.getName()));
@@ -121,7 +126,7 @@ public class ViewManager {
         addView(tableView, template);
 
         for (ViewProperty property : tableView.getViewProperties()) {
-//            template.save(MetaPDBFactory.getViewProperty(property));
+            template.save(MetaPDBFactory.getViewProperty(property));
         }
 
         System.out.println(String.format("创建%sQueryView", meta.getName()));
@@ -130,17 +135,17 @@ public class ViewManager {
         addView(queryView, template);
 
         for (ViewProperty property : queryView.getViewProperties()) {
-//            template.save(MetaPDBFactory.getViewProperty(property));
+            template.save(MetaPDBFactory.getViewProperty(property));
         }
 
-        /*System.out.println(String.format("创建%sCrudView", meta.getName()));
+        System.out.println(String.format("创建%sCrudView", meta.getName()));
         View crudView = CrudProperty.createCrudView(meta, formView, tableView, queryView);
         crudView.setMeta(meta);
         addView(crudView, template);
 
         for (ViewProperty property : crudView.getViewProperties()) {
-//            template.save(MetaPDBFactory.getViewProperty(property));
-        }*/
+            template.save(MetaPDBFactory.getViewProperty(property));
+        }
 
         System.out.println(String.format("创建视图完成"));
         System.out.println("--------------------------------------------------------------------------------");
@@ -243,6 +248,28 @@ public class ViewManager {
      */
     public static View getFormView(Meta meta) {
         return getViewByName(meta.getName() + "FormView");
+    }
+
+    /**
+     * 根据元数据，获得表单视图信息
+     *
+     * @param meta 元数据
+     * @return 返回视图信息
+     * @since 1.0.0
+     */
+    public static View getQueryFormView(Meta meta) {
+        return getViewByName(meta.getName() + "QueryView");
+    }
+
+    /**
+     * 根据元数据，获得表格视图信息
+     *
+     * @param meta 元数据
+     * @return 返回视图信息
+     * @since 1.0.0
+     */
+    public static View getTableView(Meta meta) {
+        return getViewByName(meta.getName() + "TableView");
     }
 
     /**

@@ -21,6 +21,7 @@ import com.metaui.core.util.UFile;
 import com.metaui.core.util.UString;
 import com.metaui.core.util.dom.DomUtil;
 import com.metaui.core.util.jaxb.JAXBUtil;
+import org.apache.log4j.Logger;
 
 import java.io.InputStream;
 import java.lang.reflect.Method;
@@ -36,6 +37,8 @@ import static com.metaui.core.config.SystemConfig.FILE_NAME_META_FIELD_CONFIG;
  * @version 1.0.0
  */
 public class MetaManager {
+    private static Logger log = Logger.getLogger(MetaManager.class);
+
     private static Map<String, Meta> metaMap = new HashMap<String, Meta>();
     private static Map<String, Meta> metaIdMap = new HashMap<String, Meta>();
     private static Map<String, MetaField> fieldIdMap = new HashMap<String, MetaField>();
@@ -60,6 +63,7 @@ public class MetaManager {
         JdbcTemplate template = new JdbcTemplate();
         try {
             if (isInit) { // ClassDef 已经初始化
+                log.info("加载元数据......");
                 String sql = "SELECT * FROM mu_meta left join mu_meta_sql on (id=meta_id) order by sort_num";
                 List<Meta> metaList = template.query(sql, MetaRowMapperFactory.getMeta());
                 for (final Meta meta : metaList) {
@@ -87,6 +91,7 @@ public class MetaManager {
                     reference.getFkMeta().getReferences().add(reference);
                 }
             } else {
+                log.info("初始化元数据......");
                 metaSortNum = 10;
                 // 清空表mu_view_config, mu_view_layout, mu_view, mu_meta
                 template.clearTable("mu_meta_reference", "mu_view_config", "mu_view", "mu_meta");

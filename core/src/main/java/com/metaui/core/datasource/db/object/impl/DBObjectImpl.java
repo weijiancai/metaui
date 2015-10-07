@@ -32,6 +32,7 @@ import java.util.List;
 public class DBObjectImpl implements DBObject {
     private static final Logger log = Logger.getLogger(DBObjectImpl.class);
 
+    private String id;
     private String name;
     private String comment;
     private DBSchema schema;
@@ -50,6 +51,10 @@ public class DBObjectImpl implements DBObject {
         setName(name);
         this.comment = comment;
         setChildren(children);
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override
@@ -210,10 +215,20 @@ public class DBObjectImpl implements DBObject {
             List<DBView> views = getDataSource().getDbConnection().getLoader().loadViews(schema);
             children.addAll(views);
         } else if (DBObjectType.INDEXES == dbType) {
-            List<DBIndex> indexes = getDataSource().getDbConnection().getLoader().loadIndexes(schema);
+            List<DBIndex> indexes;
+            if (getParent() instanceof DBTable) {
+                indexes = getDataSource().getDbConnection().getLoader().loadIndexes(schema, (DBTable) getParent());
+            } else {
+                indexes = getDataSource().getDbConnection().getLoader().loadIndexes(schema);
+            }
             children.addAll(indexes);
         } else if (DBObjectType.TRIGGERS == dbType) {
-            List<DBTrigger> triggers = getDataSource().getDbConnection().getLoader().loadTriggers(schema);
+            List<DBTrigger> triggers;
+            if (getParent() instanceof DBTable) {
+                triggers = getDataSource().getDbConnection().getLoader().loadTriggers(schema, (DBTable) getParent());
+            } else {
+                triggers = getDataSource().getDbConnection().getLoader().loadTriggers(schema);
+            }
             children.addAll(triggers);
         } else if (DBObjectType.PROCEDURES == dbType) {
             List<DBProcedure> procedures = getDataSource().getDbConnection().getLoader().loadProcedures(schema);
@@ -275,7 +290,7 @@ public class DBObjectImpl implements DBObject {
 
     @Override
     public String getId() {
-        return getFullName();
+        return id;
     }
 
     @Override

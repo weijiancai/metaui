@@ -8,7 +8,9 @@ package com.metaui.core.ui;
  */
 public interface IView {
     /**
-     * 初始化
+     * 初始化UI控件
+     *
+     * @since 1.0.0
      */
     void initUI();
 }

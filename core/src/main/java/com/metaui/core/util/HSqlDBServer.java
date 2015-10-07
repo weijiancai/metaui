@@ -1,5 +1,7 @@
 package com.metaui.core.util;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.spi.LoggerFactory;
 import org.hsqldb.Server;
 
 import java.util.HashMap;
@@ -10,6 +12,7 @@ import java.util.Map;
  * @version 1.0
  */
 public class HSqlDBServer {
+    private static Logger log = Logger.getLogger(HSqlDBServer.class);
     private static HSqlDBServer instance;
 
     private Server server;
@@ -36,6 +39,7 @@ public class HSqlDBServer {
      * 启动数据库
      */
     public void start() {
+        log.info("启动内存数据库HsqlDB......");
         Server.main(new String[]{
                 "-help"
         });
@@ -50,7 +54,12 @@ public class HSqlDBServer {
             i++;
         }
 
-        server.start();
+        if (i > 0) {
+            server.start();
+            log.info("启动完成.");
+        } else {
+            log.info("没有要启动的数据库文件!");
+        }
     }
 
     /**

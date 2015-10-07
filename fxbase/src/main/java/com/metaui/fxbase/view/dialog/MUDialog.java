@@ -1,13 +1,21 @@
 package com.metaui.fxbase.view.dialog;
 
 import com.metaui.fxbase.BaseApplication;
+import com.metaui.fxbase.MuEventHandler;
+import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
+import javafx.util.Callback;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.function.Consumer;
 
 /**
  * 对话框
@@ -16,10 +24,10 @@ import java.io.StringWriter;
  * @since 1.0
  */
 public class MUDialog {
-    private Alert createAlert(Alert.AlertType type) {
+    public static Alert createAlert(Alert.AlertType type) {
         Alert alert = new Alert(type, "");
         alert.initModality(Modality.APPLICATION_MODAL);
-        alert.initOwner(BaseApplication.getInstance().getStage());
+//        alert.initOwner(BaseApplication.getInstance().getStage());
         alert.getDialogPane().setContentText(type + " text.");
         alert.getDialogPane().setHeaderText(null);
         alert.showAndWait()
@@ -29,9 +37,10 @@ public class MUDialog {
     }
 
     public static Dialog<ButtonType> showException(Throwable th) {
-        Dialog<ButtonType> dialog = new Dialog<ButtonType>();
+        th.printStackTrace();
 
-        dialog.setTitle("Program exception");
+        Dialog<ButtonType> dialog = new Dialog<ButtonType>();
+        dialog.setTitle("程序异常");
 
         final DialogPane dialogPane = dialog.getDialogPane();
         dialogPane.setContentText("Details of the problem:");
@@ -39,7 +48,7 @@ public class MUDialog {
         dialogPane.setContentText(th.getMessage());
         dialog.initModality(Modality.APPLICATION_MODAL);
 
-        Label label = new Label("Exception stacktrace:");
+        Label label = new Label("异常堆栈:");
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         th.printStackTrace(pw);
@@ -64,5 +73,24 @@ public class MUDialog {
                 .filter(response -> response == ButtonType.OK)
                 .ifPresent(response -> System.out.println("The exception was approved"));
         return dialog;
+    }
+
+    /**
+     * 显示自定义对话框
+     *
+     * @param title 对话框标题
+     * @param content 对话框内容节点
+     */
+    public static void showCustomDialog(String title, Node content, final Callback<Void, Void> callback) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setGraphic(null);
+        alert.getDialogPane().setContent(content);
+        alert.showAndWait()
+                .filter(response -> response == ButtonType.OK)
+                .ifPresent(response -> {
+                    if(callback != null) callback.call(null);
+                });
     }
 }

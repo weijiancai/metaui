@@ -23,7 +23,11 @@ public interface DBLoader extends ILoader {
 
     List<DBIndex> loadIndexes(DBSchema schema) throws Exception;
 
+    List<DBIndex> loadIndexes(DBSchema schema, DBTable table) throws Exception;
+
     List<DBTrigger> loadTriggers(DBSchema schema) throws Exception;
+
+    List<DBTrigger> loadTriggers(DBSchema schema, DBTable table) throws Exception;
 
     List<DBProcedure> loadProcedures(DBSchema schema);
 
@@ -73,4 +77,14 @@ public interface DBLoader extends ILoader {
      * @throws Exception
      */
     void renameTable(String oldName, String newName) throws Exception;
+
+    /**
+     * 搜索数据库对象
+     *
+     * @param value 对象名
+     * @param schemas schema
+     * @param filter 过滤器，例如Table View Column等，以逗号分隔
+     * @return
+     */
+    List<DBObject> search(String value, String[] schemas, String filter) throws Exception;
 }

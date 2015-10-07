@@ -1,0 +1,105 @@
+package com.metaui.fxbase.view.table.cell;
+
+import com.metaui.core.datasource.DataMap;
+import com.metaui.core.dict.DictCategory;
+import com.metaui.core.dict.DictCode;
+import com.metaui.core.dict.DictManager;
+import com.metaui.core.util.UString;
+import com.metaui.fxbase.view.table.model.TableFieldModel;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.layout.StackPane;
+
+/**
+ * 数据字典Table Cell
+ *
+ * @author wei_jc
+ * @since 1.0.0
+ */
+public class DictTableCell extends BaseTableCell {
+    private StackPane box;
+    private Label label;
+    private ComboBox<DictCode> comboBox;
+    private final ObservableList<DictCode> items;
+
+    private DictCategory dictCategory;
+
+    public DictTableCell(TableColumn<DataMap, String> column, TableFieldModel model) {
+        super(column, model);
+
+        box = new StackPane();
+        label = new Label();
+
+        box.setAlignment(Pos.CENTER);
+        box.getChildren().add(label);
+
+        dictCategory = DictManager.getDict(model.getDict().getId());
+        items = FXCollections.observableArrayList(dictCategory.getCodeList());
+    }
+
+
+    /** {@inheritDoc} */
+    @Override public void startEdit() {
+        /*if (! isEditable() || ! getTableView().isEditable() || ! getTableColumn().isEditable()) {
+            return;
+        }*/
+
+        if (comboBox == null) {
+            comboBox = new ComboBox<DictCode>(items);
+//            comboBox.editableProperty().bind(comboBoxEditableProperty());
+            comboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<DictCode>() {
+                @Override
+                public void changed(ObservableValue<? extends DictCode> observable, DictCode oldValue, DictCode newValue) {
+                    isModified.set(true);
+                    if (newValue != null) {
+                        commitEdit(newValue.getName());
+                        valueProperty.set(newValue.getName());
+                    }
+                }
+            });
+        }
+
+        DictCode code = dictCategory.getDictCode(getItem());
+        if (code != null) {
+            comboBox.getSelectionModel().select(code);
+        }
+
+        super.startEdit();
+        setText(null);
+        setGraphic(comboBox);
+    }
+
+    /** {@inheritDoc} */
+    @Override public void cancelEdit() {
+        super.cancelEdit();
+
+        setGraphic(box);
+    }
+
+    /** {@inheritDoc} */
+    @Override public void updateItem(String item, boolean empty) {
+        super.updateItem(item, empty);
+
+        if (UString.isNotEmpty(item)) {
+            DictCode code = dictCategory.getDictCode(item);
+            if (code == null) {
+                code = dictCategory.getDictCodeByName(item);
+            }
+            if (code != null) {
+                label.setText(code.getDisplayName());
+            } else {
+                label.setText("");
+            }
+
+            this.setGraphic(box);
+        } else {
+            this.setGraphic(null);
+        }
+    }
+}

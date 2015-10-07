@@ -16,8 +16,10 @@ import javafx.util.Callback;
 public class FormFieldModel {
     private StringProperty name = new SimpleStringProperty();
     private StringProperty displayName = new SimpleStringProperty();
+    private StringProperty queryName = new SimpleStringProperty(); // 查询条件名称
     private BooleanProperty isDisplay = new SimpleBooleanProperty(true);
     private BooleanProperty isRequire = new SimpleBooleanProperty();
+    private BooleanProperty isReadonly = new SimpleBooleanProperty();
     private IntegerProperty width = new SimpleIntegerProperty(180);
     private IntegerProperty height = new SimpleIntegerProperty();
     private IntegerProperty maxLength = new SimpleIntegerProperty();
@@ -32,6 +34,7 @@ public class FormFieldModel {
     private ObjectProperty<MetaDataType> dataType = new SimpleObjectProperty<>(MetaDataType.STRING);
 
     private Callback callback;
+    private FormModel formModel;
 
     public FormFieldModel() {
     }
@@ -65,6 +68,18 @@ public class FormFieldModel {
         this.displayName.set(displayName);
     }
 
+    public String getQueryName() {
+        return queryName.get();
+    }
+
+    public StringProperty queryNameProperty() {
+        return queryName;
+    }
+
+    public void setQueryName(String queryName) {
+        this.queryName.set(queryName);
+    }
+
     public boolean isDisplay() {
         return isDisplay.get();
     }
@@ -87,6 +102,18 @@ public class FormFieldModel {
 
     public void setRequire(boolean isRequire) {
         this.isRequire.set(isRequire);
+    }
+
+    public boolean isReadonly() {
+        return isReadonly.get();
+    }
+
+    public BooleanProperty isReadonlyProperty() {
+        return isReadonly;
+    }
+
+    public void setReadonly(boolean isReadonly) {
+        this.isReadonly.set(isReadonly);
     }
 
     public int getWidth() {
@@ -243,5 +270,13 @@ public class FormFieldModel {
 
     public void setPlaceholder(String placeholder) {
         this.placeholder.set(placeholder);
+    }
+
+    public FormModel getFormModel() {
+        return formModel;
+    }
+
+    public void setFormModel(FormModel formModel) {
+        this.formModel = formModel;
     }
 }

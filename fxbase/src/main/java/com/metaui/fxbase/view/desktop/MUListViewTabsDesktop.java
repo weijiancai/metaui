@@ -1,10 +1,13 @@
 package com.metaui.fxbase.view.desktop;
 
+import com.metaui.fxbase.ui.IDesktop;
 import com.metaui.fxbase.ui.view.MUTabPane;
 import com.metaui.fxbase.model.AppModel;
 import com.metaui.fxbase.model.NavMenuModel;
+import com.metaui.fxbase.view.tree.MUTree;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.BorderPane;
@@ -19,7 +22,7 @@ import java.util.Map;
  * @author wei_jc
  * @since 1.0.0
  */
-public class MUListViewTabsDesktop extends BorderPane {
+public class MUListViewTabsDesktop extends BorderPane implements IDesktop {
     private AppModel app;
     private Map<String, Tab> tabCache = new HashMap<>();
     protected MUTabPane tabPane;
@@ -27,12 +30,7 @@ public class MUListViewTabsDesktop extends BorderPane {
     public MUListViewTabsDesktop(AppModel app) {
         this.app = app;
 
-        init();
-    }
-
-    private void init() {
-        createNavMenu();
-        createTabPane();
+        initUI();
     }
 
     private void createNavMenu() {
@@ -40,12 +38,15 @@ public class MUListViewTabsDesktop extends BorderPane {
         listView.itemsProperty().bind(app.navMenusProperty());
         listView.setOnMouseClicked(event -> {
             NavMenuModel model = listView.getSelectionModel().getSelectedItem();
+            if (model == null) {
+                return;
+            }
             Tab tab = tabCache.get(model.getId());
             if (tab == null) {
                 tab = new Tab();
                 tab.idProperty().bind(model.idProperty());
                 tab.textProperty().bind(model.titleProperty());
-//                tab.setClosable(false);
+                tab.setClosable(true);
                 tab.setContent((Node)model.getView());
 
                 tabPane.getTabs().add(tab);
@@ -75,5 +76,26 @@ public class MUListViewTabsDesktop extends BorderPane {
         });
 
         this.setCenter(tabPane);
+    }
+
+    @Override
+    public void initAfter() {
+
+    }
+
+    @Override
+    public Parent getDesktop() {
+        return this;
+    }
+
+    @Override
+    public MUTree getNavTree() {
+        return null;
+    }
+
+    @Override
+    public void initUI() {
+        createNavMenu();
+        createTabPane();
     }
 }

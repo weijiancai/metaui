@@ -132,6 +132,10 @@ public class DBConnectionImpl implements DBConnection {
             } else {
                 conn = DriverManager.getConnection(dataSource.getUrl(), dataSource.getUserName(), dataSource.getPwd());
             }*/
+            // HSQLDB设置忽略大小写
+            if (dbType == DatabaseType.HSQLDB) {
+                conn.prepareStatement("SET IGNORECASE TRUE;").executeUpdate();
+            }
             if (conn != null) {
                 isAvailable = true;
             }
@@ -166,16 +170,20 @@ public class DBConnectionImpl implements DBConnection {
         return sb.toString();
     }
 
-
     @Override
     public List<DataMap> getResultSet(String sql) {
+        return getResultSet(sql, false);
+    }
+
+    @Override
+    public List<DataMap> getResultSet(String sql, boolean keyToLower) {
         List<DataMap> list = new ArrayList<DataMap>();
         Connection conn = null;
 
         try {
             conn = getConnection();
             Statement stmt = conn.createStatement();
-//            System.out.println(sql);
+            System.out.println(sql);
             ResultSet rs = stmt.executeQuery(sql);
             ResultSetMetaData metaData = rs.getMetaData();
 
@@ -183,7 +191,8 @@ public class DBConnectionImpl implements DBConnection {
                 DataMap map = new DataMap();
 
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    map.put(metaData.getColumnLabel(i), rs.getObject(i));
+                    String label = metaData.getColumnLabel(i);
+                    map.put(keyToLower ? label.toLowerCase() : label, rs.getObject(i));
                 }
 
                 list.add(map);

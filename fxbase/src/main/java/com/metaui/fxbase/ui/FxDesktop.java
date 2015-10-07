@@ -9,6 +9,8 @@ import com.metaui.core.ui.layout.property.FormProperty;
 import com.metaui.core.ui.model.View;
 import com.metaui.fxbase.ui.component.MetaPane;
 import com.metaui.fxbase.ui.view.*;
+import com.metaui.fxbase.ui.view.MUTree;
+import com.metaui.fxbase.view.tree.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -119,11 +121,11 @@ public class FxDesktop extends BorderPane implements IDesktop {
     }
 
     @Override
-    public MUTree getNavTree() {
+    public com.metaui.fxbase.view.tree.MUTree getNavTree() {
         return null;
     }
 
-    /*public void showDialog(Dialog dialog) {
+/*public void showDialog(Dialog dialog) {
         if (workbench.getChildren().contains(dialog)) {
             return;
         }

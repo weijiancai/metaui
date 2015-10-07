@@ -26,6 +26,9 @@ public class ResourceManager {
         if (!path.startsWith("/")) {
             path = "/" + path;
         }
+        if (ds == null) {
+            return null;
+        }
 
         return ds.findResourceByPath(path);
     }

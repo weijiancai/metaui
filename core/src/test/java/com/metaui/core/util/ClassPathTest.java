@@ -42,5 +42,7 @@ public class ClassPathTest {
         // 第五种：  获取所有的类路径 包括jar包的路径
         System.out.println(System.getProperty("java.class.path"));
 
+        System.out.println(getClass().getResource("/com/metaui/core/datasource/db/upgrade/1.0.0/metaui_hsqldb.sql"));
+        System.out.println(getClass().getResource("/db_upgrade/1.0.0/metaui_hsqldb.sql"));
     }
 }

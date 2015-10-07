@@ -287,7 +287,12 @@ public class MUTabsDesktop extends BorderPane implements IDesktop {
     }
 
     @Override
+    public com.metaui.fxbase.view.tree.MUTree getNavTree() {
+        return null;
+    }
+
+    /*@Override
     public MUTree getNavTree() {
         return tree;
-    }
+    }*/
 }

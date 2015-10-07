@@ -55,10 +55,14 @@ public abstract class BaseDBLoader implements DBLoader {
     protected abstract String getConstraintsSql();
     // 获得Indexes Sql语句
     protected abstract String getIndexesSql();
+    // 获得Indexes Sql语句
+    protected abstract String getIndexesSql(String schema, String tableName);
     // 获得Index Sql语句
     protected abstract String getIndexSql(String schema, String tableName, String indexName);
     // 获得Triggers Sql语句
     protected abstract String getTriggersSql();
+    // 获得Triggers Sql语句
+    protected abstract String getTriggersSql(String schema, String tableName);
     // 获得Procedures Sql语句
     protected abstract String getProceduresSql();
     // 获得Functions Sql语句
@@ -67,6 +71,8 @@ public abstract class BaseDBLoader implements DBLoader {
     protected abstract String getParametersSql();
     // 获得FK Constraints Columns Sql语句
     protected abstract String getFKConstraintsColumnsSql();
+    // 获得Search Sql语句
+    protected abstract String getSearchSql(String value, String[] schemas, String filter);
 
     private ITreeNode navTree;
 
@@ -303,6 +309,40 @@ public abstract class BaseDBLoader implements DBLoader {
     }
 
     @Override
+    public List<DBIndex> loadIndexes(DBSchema schema, DBTable table) throws Exception {
+        List<DBIndex> result = new ArrayList<DBIndex>();
+        List<DataMap> list = dbConn.getResultSet(String.format(getIndexesSql(schema.getName(), table.getName()), schema.getName()));
+        Map<String, DBIndexImpl> indexMap = new HashMap<String, DBIndexImpl>();
+
+        for (DataMap map : list) {
+            String indexName = map.getString("INDEX_NAME");
+            DBIndexImpl index = indexMap.get(indexName);
+            if (index == null) {
+                index = new DBIndexImpl();
+                index.setSchema(schema);
+                index.setName(indexName);
+                index.setComment(indexName);
+                index.setAsc(map.getBoolean("IS_ASC"));
+                index.setUnique(map.getBoolean("IS_UNIQUE"));
+                index.setTableName(map.getString("TABLE_NAME"));
+                index.setColumns(new ArrayList<DBColumn>());
+
+                indexMap.put(indexName, index);
+
+                result.add(index);
+                notifyMessage("加载Index：" + index.getName());
+            }
+            if (index.getTable() != null) {
+                index.getColumns().add(index.getTable().getColumn(map.getString("COLUMN_NAME")));
+            }
+
+            index.getColumnNames().add(map.getString("COLUMN_NAME"));
+        }
+
+        return result;
+    }
+
+    @Override
     public List<DBTrigger> loadTriggers(DBSchema schema) throws Exception {
         List<DBTrigger> result = new ArrayList<DBTrigger>();
         List<DataMap> list = dbConn.getResultSet(String.format(getTriggersSql(), schema.getName()));
@@ -322,6 +362,30 @@ public abstract class BaseDBLoader implements DBLoader {
 
             result.add(trigger);
             notifyMessage(String.format("加载Trigger：" + trigger.getName()));
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<DBTrigger> loadTriggers(DBSchema schema, DBTable table) throws Exception {
+        List<DBTrigger> result = new ArrayList<DBTrigger>();
+        List<DataMap> list = dbConn.getResultSet(String.format(getTriggersSql(schema.getName(), table.getName()), schema.getName()));
+
+        for (DataMap map : list) {
+            DBTriggerImpl trigger = new DBTriggerImpl();
+            trigger.setSchema(schema);
+            trigger.setName(map.getString("TRIGGER_NAME"));
+            trigger.setComment(trigger.getName());
+            trigger.setForEachRow(map.getBoolean("IS_FOR_EACH_ROW"));
+            trigger.setTriggerType(DBTriggerType.convert(map.getString("TRIGGER_TYPE")));
+            trigger.setTriggerEvents(DBTriggerEvent.convertToList(map.getString("TRIGGERING_EVENT")));
+
+            table.getTriggers().add(trigger);
+            trigger.setTable(table);
+
+            result.add(trigger);
+            notifyMessage("加载Trigger：" + trigger.getName());
         }
 
         return result;
@@ -426,6 +490,7 @@ public abstract class BaseDBLoader implements DBLoader {
             table.setDataSource(dbConn.getDataSource());
             table.setName(UObject.toString(map.get("TABLE_NAME")));
             table.setComment(UObject.toString(map.get("TABLE_COMMENT")));
+            table.setId(dbConn.getDataSource().getId() + "." + schema.getName() + "." + table.getName());
 
             result.add(table);
 
@@ -439,9 +504,19 @@ public abstract class BaseDBLoader implements DBLoader {
             DBObjectList constraints = new DBObjectList("Constraints", DBIcons.DBO_CONSTRAINTS, DBObjectType.CONSTRAINTS);
             constraints.setParent(table);
             constraints.setSchema(schema);
+            // 索引
+            DBObjectList indexes = new DBObjectList("Indexes", DBIcons.DBO_INDEXES, DBObjectType.INDEXES);
+            indexes.setParent(table);
+            indexes.setSchema(schema);
+            // 触发器
+            DBObjectList triggers = new DBObjectList("Triggers", DBIcons.DBO_TRIGGERS, DBObjectType.TRIGGERS);
+            triggers.setParent(table);
+            triggers.setSchema(schema);
 
             children.add(columns);
             children.add(constraints);
+            children.add(indexes);
+            children.add(triggers);
             table.setChildren(children);
             notifyMessage(String.format("加载Table：" + table.getName()));
         }
@@ -461,6 +536,7 @@ public abstract class BaseDBLoader implements DBLoader {
             view.setName(UObject.toString(map.get("VIEW_NAME")));
             view.setComment(UObject.toString(map.get("VIEW_COMMENT")));
             view.setSchema(schema);
+            view.setId(dbConn.getDataSource().getId() + "." + schema.getName() + "." + view.getName());
             // 加载列
             view.setColumns(loadColumns(view));
             result.add(view);
@@ -717,6 +793,33 @@ public abstract class BaseDBLoader implements DBLoader {
         } finally {
             template.close();
         }
+    }
+
+    @Override
+    public List<DBObject> search(String value, String[] schemas, String filter) throws Exception {
+        List<DBObject> result = new ArrayList<DBObject>();
+
+        if (schemas == null) {
+            schemas = new String[dbConn.getSchemas().size()];
+            for(int i = 0; i < dbConn.getSchemas().size(); i++) {
+                schemas[i] = dbConn.getSchemas().get(i).getName();
+            }
+        }
+        List<DataMap> list = dbConn.getResultSet(getSearchSql(value, schemas, filter));
+        for (DataMap map : list) {
+            String id = map.getString("id");
+            String name = map.getString("name");
+            String comment = map.getString("comment");
+            String dbType = map.getString("dbType");
+
+            DBObjectImpl object = new DBObjectImpl();
+            object.setName(name);
+            object.setComment(comment);
+            object.setObjectType(DBObjectType.valueOf(dbType));
+            result.add(object);
+        }
+
+        return result;
     }
 
     private void notifyMessage(String message) {

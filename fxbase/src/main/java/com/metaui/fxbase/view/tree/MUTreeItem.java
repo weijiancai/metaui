@@ -1,18 +1,14 @@
 package com.metaui.fxbase.view.tree;
 
-import com.metaui.core.model.ITreeNode;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author wei_jc
@@ -60,10 +56,10 @@ public class MUTreeItem extends TreeItem<TreeNodeModel> {
         return super.getChildren();
     }
 
-    /*@Override
+    @Override
     public boolean isLeaf() {
         return model.isLeaf();
-    }*/
+    }
 
     public void addChildren(List<? extends TreeNodeModel> list) {
         for (TreeNodeModel child : list) {

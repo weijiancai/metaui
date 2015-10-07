@@ -170,6 +170,11 @@ public class DBSchemaImpl extends DBObjectImpl implements DBSchema {
         }
     }
 
+    @Override
+    public DBSchema getSchema() {
+        return this;
+    }
+
     public void setViews(List<DBView> views) {
         this.views = views;
     }

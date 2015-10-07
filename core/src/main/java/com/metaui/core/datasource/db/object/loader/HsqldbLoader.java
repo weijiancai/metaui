@@ -154,6 +154,22 @@ public class HsqldbLoader extends BaseDBLoader {
     }
 
     @Override
+    protected String getIndexesSql(String schema, String tableName) {
+        return "select distinct\n" +
+                "  INDEX_NAME,\n" +
+                "  TABLE_NAME,\n" +
+                "  COLUMN_NAME,\n" +
+                "  (CASE WHEN NON_UNIQUE THEN 'N' ELSE 'Y' END) as IS_UNIQUE,\n" +
+                "  (CASE WHEN ASC_OR_DESC = 'A' THEN 'Y' ELSE 'N' END) as IS_ASC,\n" +
+                "  'Y' as IS_VALID\n" +
+                "from INFORMATION_SCHEMA.SYSTEM_INDEXINFO\n" +
+                "where TABLE_SCHEM = '" + schema + "'\n AND TABLE_NAME='" + tableName + "'" +
+                "order by\n" +
+                "  TABLE_NAME,\n" +
+                "  INDEX_NAME asc";
+    }
+
+    @Override
     protected String getIndexSql(String schema, String tableName, String indexName) {
         return null;
     }
@@ -171,6 +187,24 @@ public class HsqldbLoader extends BaseDBLoader {
                 "  'Y' as IS_FOR_EACH_ROW\n" +
                 "from INFORMATION_SCHEMA.TRIGGERS\n" +
                 "where EVENT_OBJECT_SCHEMA = '%1$s'\n" +
+                "order by\n" +
+                "  EVENT_OBJECT_TABLE,\n" +
+                "  TRIGGER_NAME asc";
+    }
+
+    @Override
+    protected String getTriggersSql(String schema, String tableName) {
+        return "select\n" +
+                "  EVENT_OBJECT_TABLE as DATASET_NAME,\n" +
+                "  TRIGGER_NAME,\n" +
+                "  ACTION_TIMING as TRIGGER_TYPE,\n" +
+                "  EVENT_MANIPULATION as TRIGGERING_EVENT,\n" +
+                "  'Y' as IS_ENABLED,\n" +
+                "  'Y' as IS_VALID,\n" +
+                "  'N' as IS_DEBUG,\n" +
+                "  'Y' as IS_FOR_EACH_ROW\n" +
+                "from INFORMATION_SCHEMA.TRIGGERS\n" +
+                "where EVENT_OBJECT_SCHEMA = '" + schema + "' and EVENT_OBJECT_TABLE = '" + tableName + "'\n" +
                 "order by\n" +
                 "  EVENT_OBJECT_TABLE,\n" +
                 "  TRIGGER_NAME asc";
@@ -239,5 +273,10 @@ public class HsqldbLoader extends BaseDBLoader {
                 "  pkcolumn_name AS referenced_column_name\n" +
                 "FROM information_schema.system_crossreference\n" +
                 "WHERE pktable_schem = '%1$S'";
+    }
+
+    @Override
+    protected String getSearchSql(String value, String[] schemas, String filter) {
+        return null;
     }
 }

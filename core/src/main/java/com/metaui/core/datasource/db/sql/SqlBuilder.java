@@ -367,6 +367,20 @@ public class SqlBuilder {
     }
 
     /**
+     * 添加 like 条件
+     *
+     * @param name
+     * @param value
+     * @return
+     */
+    public SqlBuilder like(String name, String value) {
+        if (UString.isNotEmpty(name) && UString.isNotEmpty(value)) {
+            where += " AND " + name + " LIKE '%" + value + "%' ";
+        }
+        return this;
+    }
+
+    /**
      * 使用降序排序
      *
      * @param desc 排序字段

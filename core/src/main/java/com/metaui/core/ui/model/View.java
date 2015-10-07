@@ -228,6 +228,22 @@ public class View {
         return result == null ? new HashMap<String, ViewProperty>() : result;
     }
 
+    public String getStringProperty(MetaField field, String propId) {
+        ViewProperty property = getMetaFieldConfig(field).get(propId);
+        if (property != null) {
+            return property.getValue();
+        }
+        return "";
+    }
+
+    public boolean getBooleanProperty(MetaField field, String propId) {
+        return UString.toBoolean(getStringProperty(field, propId));
+    }
+
+    public int getIntProperty(MetaField field, String propId) {
+        return UNumber.toInt(getStringProperty(field, propId));
+    }
+
     @XmlTransient
     @JSONField(serialize = false)
     public List<MetaField> getMetaFieldList() {

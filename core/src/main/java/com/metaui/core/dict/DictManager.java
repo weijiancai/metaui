@@ -54,8 +54,8 @@ public class DictManager {
             system.setSystem(true);
 
             addDict(DatabaseType.class);
-//            addDict(MetaDataType.class);
-//            addDict(DisplayStyle.class);
+            addDict(MetaDataType.class);
+            addDict(DisplayStyle.class);
             addDict(EnumBoolean.class);
             addDict(PropertyType.class);
             addDict(EnumAlign.class);
@@ -112,7 +112,7 @@ public class DictManager {
 
             // 保存字典分类到数据库
             for (DictCategory category : getDictList()) {
-                if ("ROOT".equals(category.getId())) {
+                if ("ROOT".equals(category.getId()) || category.isSystem()) {
                     continue;
                 }
                 categoryMap.put(category.getId(), category);
@@ -204,6 +204,7 @@ public class DictManager {
                     code.setName(em.ordinal() + "");
                 }
                 Method codeValueMethod = clazz.getMethod(dict.codeValueMethod());
+                code.setId(code.getName());
                 code.setDisplayName(UObject.toString(codeValueMethod.invoke(em)));
                 code.setSortNum(sortNum++);
                 code.setValid(true);
@@ -213,6 +214,7 @@ public class DictManager {
                 codeList.add(code);
             }
             category.setCodeList(codeList);
+            category.setSystem(true);
 
             categoryMap.put(category.getId(), category);
             // 添加到系统字典
@@ -237,6 +239,9 @@ public class DictManager {
      * @return 返回数据字典
      */
     public static DictCategory getDict(String dictId) {
+        if (DICT_DB_DATA_SOURCE.equals(dictId) && categoryMap.get(dictId) == null) {
+            addDBDataSource();
+        }
         return categoryMap.get(dictId);
     }
 

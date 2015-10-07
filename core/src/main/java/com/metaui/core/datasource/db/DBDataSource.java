@@ -454,11 +454,9 @@ public class DBDataSource extends DataSource {
                 .build(getDatabaseType());
 
         DBConnection conn = getDbConnection();
-        if(this.findResourceByPath("metaui://schema/metaui/table/" + SystemConfig.SYS_DB_VERSION_TABLE_NAME) != null) {
-            List<DataMap> result = conn.getResultSet(sql);
-            if (result.size() > 0) {
-                return result.get(0).getString("max_db_version");
-            }
+        List<DataMap> result = conn.getResultSet(sql, true);
+        if (result.size() > 0) {
+            return result.get(0).getString("max_db_version");
         }
 
         return "0.0.0";

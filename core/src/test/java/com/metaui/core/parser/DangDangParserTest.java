@@ -3,6 +3,9 @@ package com.metaui.core.parser;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.util.HashMap;
@@ -11,7 +14,10 @@ import java.util.Map;
 
 import com.metaui.core.parser.book.DangDangParser;
 import com.metaui.core.parser.book.IWebProduct;
+import com.metaui.core.parser.http.FetchWebSite;
 import com.metaui.core.parser.mobile.*;
+import com.metaui.core.util.UUIDUtil;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
@@ -153,5 +159,62 @@ public class DangDangParserTest {
         });
 
         fetchMobileNumber.fetch();*/
+    }
+
+    @Test
+    public void test1() throws IOException {
+        FetchWebSite fetch = new FetchWebSite(new File("d:/fetch/baic"));
+        fetch.fetch("http://file.ws.126.net/quotes/pdf/sz/2014/2014-4/2014-04-11/1355058.pdf", 1);
+    }
+
+    @Test
+    public void test2() throws IOException {
+        Map<String, String> data = new HashMap<String, String>();
+        Map<String, String> cookies = new HashMap<String, String>();
+        cookies.put("JSESSIONID", "XWnKV2TKh1Jcr2yS9QJhMv08wTnLpQ8qhKQGmhQcLgKSHhn3qQrW!-793484074");
+        cookies.put("BIGipServerpool_xy3_web", "1108715712.17183.0000");
+        Connection conn = Jsoup.connect("http://qyxy.baic.gov.cn/gjjbj/gjjQueryCreditAction!openEntInfo.dhtml?entId=20e38b8b490e0fc0014917c7f80228a7&entNo=110000000031223&type=jyycDiv");
+        conn.cookies(cookies);
+        Document doc = conn.data(data)
+                .timeout(10 * 1000)
+                .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                .post();
+        PrintWriter ps = new PrintWriter("D:/1.html");
+        ps.write(new String(doc.html().getBytes(), "UTF-8"));
+        ps.close();
+        System.out.println(doc);
+    }
+
+    @Test
+    public void test3() {
+        System.out.println(UUIDUtil.getUUID());
+    }
+
+    public static void main(String[] args) throws IOException {
+        Map<String, String> data = new HashMap<String, String>();
+        Map<String, String> cookies = new HashMap<String, String>();
+        cookies.put("JSESSIONID", "XWnKV2TKh1Jcr2yS9QJhMv08wTnLpQ8qhKQGmhQcLgKSHhn3qQrW!-793484074");
+        cookies.put("BIGipServerpool_xy3_web", "1108715712.17183.0000");
+        Connection conn = Jsoup.connect("http://qyxy.baic.gov.cn/gjjbj/gjjQueryCreditAction!openEntInfo.dhtml?entId=28D0C3B5ED424938BB626D6EB6E77A53&credit_ticket=160F93E34E6D55C208CE208CC5F29183&entNo=110000000031223&timeStamp=1442715417135");
+        conn.cookies(cookies);
+        Document doc = conn.data(data)
+                .timeout(10 * 1000)
+                .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                .post();
+        PrintWriter ps = new PrintWriter("D:/1.html");
+//        ps.write(doc.html());
+//        ps.close();
+//        System.out.println(doc.html());
+
+        data = new HashMap<String, String>();
+        data.put("currentTimeMillis", "1442716846491");
+        data.put("credit_ticket", "B92E6B206E688B9454077292E9E5A6FE");
+        data.put("checkcode", "");
+        data.put("keyword", "keyword");
+
+        doc = Jsoup.connect("http://qyxy.baic.gov.cn/gjjbj/gjjQueryCreditAction!getBjQyList.dhtml").data(data).post();
+        ps.write(new String(doc.html().getBytes(), "UTF-8"));
+        ps.close();
+        System.out.println(doc);
     }
 }
