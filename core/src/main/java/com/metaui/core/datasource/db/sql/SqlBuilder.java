@@ -545,7 +545,9 @@ public class SqlBuilder {
                     SQLSelectStatement sqlSelectStatement = (SQLSelectStatement) stmt;
                     SQLSelectQueryBlock query = (SQLSelectQueryBlock) sqlSelectStatement.getSelect().getQuery();
                     query.getFrom().accept(fromVisitor);
-                    query.getWhere().accept(whereVisitor);
+                    if (query.getWhere() != null) {
+                        query.getWhere().accept(whereVisitor);
+                    }
                 }
                 return "SELECT count(1) FROM " + from.toString() + " WHERE " + where.toString();
             }

@@ -27,8 +27,8 @@ public class FormModel {
     private IntegerProperty vgap = new SimpleIntegerProperty(5);
     private ObjectProperty<FormType> formType = new SimpleObjectProperty<>(FormType.EDIT);
 
-    private ObservableList<FormFieldModel> formFields = FXCollections.observableList(new ArrayList<>());
-    private ObservableList<ActionModel> actions = FXCollections.observableArrayList(new ArrayList<>());
+    private ObservableList<FormFieldModel> formFields = FXCollections.observableArrayList();
+    private ObservableList<ActionModel> actions = FXCollections.observableArrayList();
 
     private Map<String, FormFieldModel> nameMap = new HashMap<>();
     private Meta meta;

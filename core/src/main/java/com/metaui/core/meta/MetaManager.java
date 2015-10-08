@@ -115,6 +115,9 @@ public class MetaManager {
                 for (DBConstraint constraint : schema.getFkConstraints()) {
                     MetaReference metaRef = new MetaReference();
                     Meta pkMeta = rsIdMap.get(dataSource.getName() + "://schema/" + dataSource.getDbConnection().getSchema().getName() + "/table/" + constraint.getPkTableName());
+                    if (pkMeta == null) {
+                        continue;
+                    }
                     metaRef.setPkMeta(pkMeta);
                     metaRef.setPkMetaField(pkMeta.getFieldByOriginalName(constraint.getPkTableName() + "." + constraint.getPkColumnName()));
                     Meta fkMeta = rsIdMap.get(dataSource.getName() + "://schema/" + dataSource.getDbConnection().getSchema().getName() + "/table/" + constraint.getFkTableName());

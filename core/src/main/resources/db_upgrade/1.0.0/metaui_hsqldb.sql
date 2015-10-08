@@ -1,4 +1,8 @@
+drop table if exists mu_code_tpl;
+drop table if exists mu_dbms_object;
 drop table if exists mu_db_datasource;
+drop table if exists mu_db_mobile_number;
+drop table if exists mu_db_version;
 drop table if exists mu_dz_category;
 drop table if exists mu_dz_code;
 drop table if exists mu_layout;
@@ -22,6 +26,80 @@ drop table if exists mu_view_prop;
 drop index iux_dzCategory_name if exists;
 drop index idx_view_config_prop if exists;
 drop index iux_view_prop if exists;
+
+/*==============================================================*/
+/* Table: mu_code_tpl                                      */
+/*==============================================================*/
+create table mu_code_tpl
+(
+    id                               varchar(32)     not null,
+    name                             varchar(64)     not null,
+    display_name                     varchar(128)    not null,
+    description                      varchar(1024)   ,
+    project_id                       varchar(32)     not null,
+    file_name                        varchar(128)    not null,
+    file_path                        varchar(256)    ,
+    tpl_file                         varchar(256)    ,
+    tpl_content                      clob            ,
+    is_valid                         char(1)         not null,
+    sort_num                         int             not null,
+    input_date                       date            not null,
+    primary key (id)
+);
+comment on table mu_code_tpl is 'mu_code_tpl';
+comment on column mu_code_tpl.id is 'id';
+comment on column mu_code_tpl.name is 'name';
+comment on column mu_code_tpl.display_name is 'display_name';
+comment on column mu_code_tpl.description is 'description';
+comment on column mu_code_tpl.project_id is 'project_id';
+comment on column mu_code_tpl.file_name is 'file_name';
+comment on column mu_code_tpl.file_path is 'file_path';
+comment on column mu_code_tpl.tpl_file is 'tpl_file';
+comment on column mu_code_tpl.tpl_content is 'tpl_content';
+comment on column mu_code_tpl.is_valid is 'is_valid';
+comment on column mu_code_tpl.sort_num is 'sort_num';
+comment on column mu_code_tpl.input_date is 'input_date';
+
+/*==============================================================*/
+/* Table: mu_dbms_object                                      */
+/*==============================================================*/
+create table mu_dbms_object
+(
+    id                               varchar(32)     not null,
+    name                             varchar(128)    not null,
+    db_comment                       varchar(1024)   ,
+    db_obj_type                      varchar(64)     not null,
+    pid                              varchar(32)     ,
+    data_type                        varchar(64)     ,
+    position                         int             ,
+    default_value                    varchar(128)    ,
+    is_nullable                      char(1)         ,
+    max_length                       int             ,
+    numeric_precision                int             ,
+    numeric_scale                    int             ,
+    is_pk                            char(1)         not null,
+    is_fk                            char(1)         not null,
+    fk_column_id                     varchar(32)     ,
+    input_date                       date            not null,
+    primary key (id)
+);
+comment on table mu_dbms_object is 'mu_dbms_object';
+comment on column mu_dbms_object.id is 'id';
+comment on column mu_dbms_object.name is 'name';
+comment on column mu_dbms_object.db_comment is 'db_comment';
+comment on column mu_dbms_object.db_obj_type is 'db_obj_type';
+comment on column mu_dbms_object.pid is 'pid';
+comment on column mu_dbms_object.data_type is 'data_type';
+comment on column mu_dbms_object.position is 'position';
+comment on column mu_dbms_object.default_value is 'default_value';
+comment on column mu_dbms_object.is_nullable is 'is_nullable';
+comment on column mu_dbms_object.max_length is 'max_length';
+comment on column mu_dbms_object.numeric_precision is 'numeric_precision';
+comment on column mu_dbms_object.numeric_scale is 'numeric_scale';
+comment on column mu_dbms_object.is_pk is 'is_pk';
+comment on column mu_dbms_object.is_fk is 'is_fk';
+comment on column mu_dbms_object.fk_column_id is 'fk_column_id';
+comment on column mu_dbms_object.input_date is 'input_date';
 
 /*==============================================================*/
 /* Table: mu_db_datasource                                      */
@@ -57,6 +135,44 @@ comment on column mu_db_datasource.pwd is 'pwd';
 comment on column mu_db_datasource.is_valid is 'is_valid';
 comment on column mu_db_datasource.sort_num is 'sort_num';
 comment on column mu_db_datasource.input_date is 'input_date';
+
+/*==============================================================*/
+/* Table: mu_db_mobile_number                                      */
+/*==============================================================*/
+create table mu_db_mobile_number
+(
+    code                             char(11)        not null,
+    province                         varchar(64)     ,
+    city                             varchar(64)     ,
+    card_type                        varchar(64)     ,
+    operators                        varchar(64)     ,
+    code_segment                     varchar(11)     ,
+    primary key (code)
+);
+comment on table mu_db_mobile_number is 'mu_db_mobile_number';
+comment on column mu_db_mobile_number.code is 'code';
+comment on column mu_db_mobile_number.province is 'province';
+comment on column mu_db_mobile_number.city is 'city';
+comment on column mu_db_mobile_number.card_type is 'card_type';
+comment on column mu_db_mobile_number.operators is 'operators';
+comment on column mu_db_mobile_number.code_segment is 'code_segment';
+
+/*==============================================================*/
+/* Table: mu_db_version                                      */
+/*==============================================================*/
+create table mu_db_version
+(
+    sys_name                         varchar(64)     not null,
+    db_version                       varchar(11)     ,
+    input_date                       date            not null,
+    memo                             varchar(1024)   ,
+    primary key (sys_name)
+);
+comment on table mu_db_version is 'mu_db_version';
+comment on column mu_db_version.sys_name is 'sys_name';
+comment on column mu_db_version.db_version is 'db_version';
+comment on column mu_db_version.input_date is 'input_date';
+comment on column mu_db_version.memo is 'memo';
 
 /*==============================================================*/
 /* Table: mu_dz_category                                      */
@@ -516,6 +632,69 @@ comment on column mu_view_prop.layout_prop_id is 'layout_prop_id';
 comment on column mu_view_prop.meta_field_id is 'meta_field_id';
 comment on column mu_view_prop.value is 'value';
 
+
+alter table mu_code_tpl add constraint FK_code_tpl_projectId foreign key (project_id)
+    references mu_project_define (id) on delete cascade on update cascade;
+
+alter table mu_dz_code add constraint FK_code_categoryId foreign key (category_id)
+    references mu_dz_category (id) on delete cascade on update cascade;
+
+alter table mu_layout_prop add constraint FK_layout_prop_layoutId foreign key (layout_id)
+    references mu_layout (id) on delete cascade on update cascade;
+
+alter table mu_meta_field add constraint FK_meta_field_metaId foreign key (meta_id)
+    references mu_meta (id) on delete cascade on update cascade;
+
+alter table mu_meta_field add constraint FK_metaField_metaItem foreign key (meta_item_id)
+    references mu_meta_item (id) on delete cascade on update cascade;
+
+alter table mu_meta_obj add constraint FK_meta_obj_metaId foreign key (meta_id)
+    references mu_meta (id) on delete cascade on update cascade;
+
+alter table mu_meta_obj_value add constraint FK_meta_obj_value_metaObjId foreign key (meta_obj_id)
+    references mu_meta_obj (id) on delete cascade on update cascade;
+
+alter table mu_meta_obj_value add constraint FK_meta_field_value_metaField foreign key (meta_field_id)
+    references mu_meta_field (id) on delete cascade on update cascade;
+
+alter table mu_meta_reference add constraint FK_meta_reference_pkMetaId foreign key (pk_meta_id)
+    references mu_meta (id) on delete cascade on update cascade;
+
+alter table mu_meta_reference add constraint FK_meta_reference_fkMetaFieldId foreign key (fk_meta_field_id)
+    references mu_meta_field (id) on delete cascade on update cascade;
+
+alter table mu_meta_reference add constraint FK_meta_reference_fkMetaId foreign key (fk_meta_id)
+    references mu_meta (id) on delete cascade on update cascade;
+
+alter table mu_meta_reference add constraint FK_meta_reference_pkMetaFieldId foreign key (pk_meta_field_id)
+    references mu_meta_field (id) on delete cascade on update cascade;
+
+alter table mu_meta_sql add constraint FK_meta_sql_metaId foreign key (meta_id)
+    references mu_meta (id) on delete cascade on update cascade;
+
+alter table mu_module add constraint FK_module_viewId foreign key (view_id)
+    references mu_view (id) on delete cascade on update cascade;
+
+alter table mu_nav_menu add constraint FK_nav_menu_projectId foreign key (project_id)
+    references mu_project_define (id) on delete cascade on update cascade;
+
+alter table mu_view add constraint FK_view_metaId foreign key (meta_id)
+    references mu_meta (id) on delete cascade on update cascade;
+
+alter table mu_view_config add constraint FK_view_config_metaFieldId foreign key (meta_field_id)
+    references mu_meta_field (id) on delete cascade on update cascade;
+
+alter table mu_view_config add constraint FK_view_config_layoutPropId foreign key (prop_id)
+    references mu_layout_prop (id) on delete cascade on update cascade;
+
+alter table mu_view_prop add constraint FK_view_prop_viewId foreign key (view_id)
+    references mu_view (id) on delete cascade on update cascade;
+
+alter table mu_view_prop add constraint FK_view_prop_layoutPropId foreign key (layout_prop_id)
+    references mu_layout_prop (id) on delete cascade on update cascade;
+
+alter table mu_view_prop add constraint FK_view_prop_metaFieldId foreign key (meta_field_id)
+    references mu_meta_field (id) on delete cascade on update cascade;
 
 
 create  index iux_dzCategory_name on mu_dz_category

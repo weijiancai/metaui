@@ -96,9 +96,13 @@ public class SqlFormat {
                         dataMap.put(VALUE, "");
                         dataMap.put(VALUE_LENGTH, "0");
                     }
-                    DBColumn column = table.getColumn(colName);
-                    dataMap.put(DB_DATA_TYPE, column.getDataTypeString());
-                    dataMap.put(MAX_LENGTH, column.getMaxLength());
+                    if (table != null) {
+                        DBColumn column = table.getColumn(colName);
+                        if (column != null) {
+                            dataMap.put(DB_DATA_TYPE, column.getDataTypeString());
+                            dataMap.put(MAX_LENGTH, column.getMaxLength());
+                        }
+                    }
 
                     dataList.add(dataMap);
                 }

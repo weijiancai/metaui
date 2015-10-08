@@ -14,7 +14,7 @@ import java.util.Iterator;
  */
 public class TestService {
     public static void main(String[] args) throws MalformedURLException {
-        /*URL url = new URL("http://117.34.87.29/wllgs/pr2lg.cfc?wsdl");
+        URL url = new URL("http://117.34.87.29/wllgs/pr2lg.cfc?wsdl");
         // 第一个参数是服务的URI
         // 第二个参数是在WSDL发布的服务名
         QName qname = new QName("http://wllgs","pr2lgService");
@@ -28,9 +28,9 @@ public class TestService {
             System.out.println(qName);
         }
         YYWebService eif = service.getPort(qName, YYWebService.class);
-        System.out.println(eif.wsCargo(getXml()));*/
+        System.out.println(eif.wsCargo(getXml()));
 
-
+/*
         URL url = new URL("http://115.29.163.55:9186/service/yunying/wsCargo?wsdl");
         // 第一个参数是服务的URI
         // 第二个参数是在WSDL发布的服务名
@@ -45,7 +45,7 @@ public class TestService {
             System.out.println(qName);
         }
         YunYinWebServiceOutImpl eif = service.getPort(qName, YunYinWebServiceOutImpl.class);
-        System.out.println(eif.wsCargo(getParam(getXml())));
+        System.out.println(eif.wsCargo(getParam(getXml())));*/
     }
 
     public static String getXml() {

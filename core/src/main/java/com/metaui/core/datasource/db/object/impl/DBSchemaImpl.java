@@ -26,7 +26,8 @@ public class DBSchemaImpl extends DBObjectImpl implements DBSchema {
     private List<DBFunction> functions;
     private List<DBConstraint> constraints;
     private List<DBConstraint> fkConstraints;
-    private Map<String, DBTable> tableMap = new HashMap<String, DBTable>();
+    private Map<String, DBTable> tableMap = new HashMap<>();
+    private Map<String, DBView> viewMap = new HashMap<>();
     private Map<String, DBFunction> functionMap = new HashMap<String, DBFunction>();
     private Map<String, DBProcedure> procedureMap = new HashMap<String, DBProcedure>();
     private Map<String, DBConstraint> constraintMap = new HashMap<String, DBConstraint>();
@@ -48,6 +49,10 @@ public class DBSchemaImpl extends DBObjectImpl implements DBSchema {
     public List<DBTable> getTables() throws Exception {
         if (tables == null) {
             tables = loader.loadTables(this);
+            // 放入map
+            for (DBTable table : tables) {
+                tableMap.put(table.getName(), table);
+            }
         }
         return tables;
     }
@@ -58,6 +63,10 @@ public class DBSchemaImpl extends DBObjectImpl implements DBSchema {
     public List<DBView> getViews() throws Exception {
         if (views == null) {
             views = loader.loadViews(this);
+            // 放入map
+            for (DBView view : views) {
+                viewMap.put(view.getName(), view);
+            }
         }
         return views;
     }
@@ -91,7 +100,7 @@ public class DBSchemaImpl extends DBObjectImpl implements DBSchema {
 
     @Override
     public DBView getView(String name) {
-        return null;
+        return viewMap.get(name);
     }
 
     @Override
