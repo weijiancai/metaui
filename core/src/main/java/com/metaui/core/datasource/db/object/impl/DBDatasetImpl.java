@@ -25,7 +25,11 @@ public abstract class DBDatasetImpl extends DBObjectImpl implements DBDataset {
     @Override
     public DBColumn getColumn(String columnName) throws Exception {
         initColumns();
-        return columnMap.get(columnName.toLowerCase());
+        if (columnName.contains(".")) {
+            String[] strs = columnName.split("\\.");
+            columnName = strs[strs.length - 1];
+        }
+        return columnMap.get(columnName);
     }
 
     @Override
