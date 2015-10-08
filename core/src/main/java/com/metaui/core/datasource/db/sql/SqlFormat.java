@@ -90,6 +90,7 @@ public class SqlFormat {
                     dataMap.put(COL_NAME, colName);
                     if (i < insertStatement.getValues().getValues().size()) {
                         String value = trimQuote(insertStatement.getValues().getValues().get(i).toString());
+                        value = "NULL".equalsIgnoreCase(value) ? "" : value;
                         dataMap.put(VALUE, value);
                         dataMap.put(VALUE_LENGTH, value.length());
                     } else {

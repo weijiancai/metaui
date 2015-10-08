@@ -5,6 +5,7 @@ import com.metaui.core.dict.DictCategory;
 import com.metaui.core.dict.DictCode;
 import com.metaui.core.dict.DictManager;
 import com.metaui.core.util.UString;
+import com.metaui.fxbase.view.table.column.BaseTableColumn;
 import com.metaui.fxbase.view.table.model.TableFieldModel;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -30,7 +31,7 @@ public class DictTableCell extends BaseTableCell {
 
     private DictCategory dictCategory;
 
-    public DictTableCell(TableColumn<DataMap, String> column, TableFieldModel model) {
+    public DictTableCell(BaseTableColumn column, TableFieldModel model) {
         super(column, model);
 
         box = new StackPane();

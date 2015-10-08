@@ -6,11 +6,14 @@ import com.metaui.core.meta.model.Meta;
 import com.metaui.core.ui.IView;
 import com.metaui.core.ui.ViewManager;
 import com.metaui.core.ui.model.View;
+import com.metaui.core.util.Callback;
 import com.metaui.core.util.UClipboard;
 import com.metaui.fxbase.MuEventHandler;
 import com.metaui.fxbase.model.FormModel;
 import com.metaui.fxbase.model.ModelFactory;
+import com.metaui.fxbase.ui.component.table.event.TableCellRenderEvent;
 import com.metaui.fxbase.view.MUForm;
+import com.metaui.fxbase.view.table.cell.BaseTableCell;
 import com.metaui.fxbase.view.table.cell.SortNumTableCell;
 import com.metaui.fxbase.view.table.column.BaseTableColumn;
 import com.metaui.fxbase.view.table.model.TableFieldModel;
@@ -44,6 +47,7 @@ public class MUTable extends StackPane implements IView {
     private BorderPane tablePane = new BorderPane(); // 表格面板
 
     private TableColumnChangeListener tableColumnChangeListener;
+    private Callback<TableCellRenderEvent> onCellRender;
 
     public MUTable() {
         this.model = new TableModel();
@@ -171,7 +175,7 @@ public class MUTable extends StackPane implements IView {
 
         // 创建其他列
         for (TableFieldModel fieldModel : model.getTableFields()) {
-            table.getColumns().add(new BaseTableColumn(fieldModel));
+            table.getColumns().add(new BaseTableColumn(this, fieldModel));
         }
         // 列顺序改变
         table.getColumns().addListener(tableColumnChangeListener);
@@ -191,5 +195,13 @@ public class MUTable extends StackPane implements IView {
 
     public MUForm getQueryForm() {
         return queryForm;
+    }
+
+    public Callback<TableCellRenderEvent> getOnCellRender() {
+        return onCellRender;
+    }
+
+    public void setOnCellRender(Callback<TableCellRenderEvent> onCellRender) {
+        this.onCellRender = onCellRender;
     }
 }

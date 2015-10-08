@@ -5,6 +5,7 @@ import com.metaui.core.meta.DisplayStyle;
 import com.metaui.core.meta.MetaDataType;
 import com.metaui.core.util.UDate;
 import com.metaui.core.util.UObject;
+import com.metaui.fxbase.view.table.MUTable;
 import com.metaui.fxbase.view.table.cell.BooleanTableCell;
 import com.metaui.fxbase.view.table.cell.DictTableCell;
 import com.metaui.fxbase.view.table.cell.HyperlinkTableCell;
@@ -25,13 +26,16 @@ import java.util.Date;
  * @since 1.0.0
  */
 public class BaseTableColumn extends TableColumn<DataMap, String> {
+    protected MUTable table;
     protected TableFieldModel model;
 
-    public BaseTableColumn(final TableFieldModel model) {
+    public BaseTableColumn(MUTable table, final TableFieldModel model) {
+        this.table = table;
         this.model = model;
 //        this.setText(property.getDisplayName());
 //        this.setPrefWidth(property.getWidth());
         this.setMinWidth(60);
+        this.idProperty().bindBidirectional(model.nameProperty());
         this.textProperty().bindBidirectional(model.displayNameProperty());
         this.prefWidthProperty().bind(model.widthProperty());
         this.visibleProperty().bind(model.displayProperty());
@@ -55,11 +59,11 @@ public class BaseTableColumn extends TableColumn<DataMap, String> {
 
     private TableCell<DataMap, String> getTableCell(TableColumn<DataMap, String> param) {
         if (MetaDataType.BOOLEAN == model.getDataType() || DisplayStyle.BOOLEAN == model.getDisplayStyle()) {
-            return new BooleanTableCell(param, model);
+            return new BooleanTableCell(this, model);
         }
 
         if(DisplayStyle.COMBO_BOX == model.getDisplayStyle()) {
-            return new DictTableCell(param, model);
+            return new DictTableCell(this, model);
         }
 
         /*if (DisplayStyle.DATE == model.getDisplayStyle()) {
@@ -67,10 +71,14 @@ public class BaseTableColumn extends TableColumn<DataMap, String> {
         }*/
 
         if (model.isFk()) {
-            return new HyperlinkTableCell(param, model);
+            return new HyperlinkTableCell(this, model);
         }
 
-        return new TextTableCell(param, model);
+        return new TextTableCell(this, model);
+    }
+
+    public MUTable getTable() {
+        return table;
     }
 
     public TableFieldModel getModel() {

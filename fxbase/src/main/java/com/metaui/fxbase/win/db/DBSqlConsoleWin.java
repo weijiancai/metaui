@@ -18,12 +18,16 @@ import com.metaui.core.model.impl.BaseTreeNode;
 import com.metaui.core.observer.Observer;
 import com.metaui.core.ui.IView;
 import com.metaui.core.ui.model.View;
+import com.metaui.core.util.Callback;
 import com.metaui.core.util.UFile;
+import com.metaui.core.util.UNumber;
 import com.metaui.core.util.UString;
 import com.metaui.fxbase.MuEventHandler;
+import com.metaui.fxbase.ui.component.table.event.TableCellRenderEvent;
 import com.metaui.fxbase.ui.view.MUDialog;
 import com.metaui.fxbase.view.form.MUComboBox;
 import com.metaui.fxbase.view.table.MUTable;
+import com.metaui.fxbase.view.table.column.BaseTableColumn;
 import com.metaui.fxbase.view.table.model.TableFieldModel;
 import com.metaui.fxbase.view.table.model.TableModel;
 import com.sun.javafx.webkit.Accessor;
@@ -151,6 +155,45 @@ public class DBSqlConsoleWin extends BorderPane implements IView {
         Tab formatTab = new Tab("格式化");
         formatTab.setClosable(false);
         formatTable = new MUTable(getSqlFormatTableModel());
+        formatTable.setOnCellRender((event, obj) -> {
+            BaseTableColumn column = event.getColumn();
+            DataMap rowData = event.getRowData();
+            String type = rowData.getString(SqlFormat.DB_DATA_TYPE).toLowerCase();
+            String value = rowData.getString(SqlFormat.VALUE);
+
+            if (SqlFormat.VALUE_LENGTH.equals(column.getId())) {
+                int length = rowData.getInt(SqlFormat.VALUE_LENGTH);
+                int maxLength = rowData.getInt(SqlFormat.MAX_LENGTH);
+                // 检查长度是否超出最大限度
+                if (length > 0 && maxLength > 0 && length > maxLength && !"NULL".equalsIgnoreCase(value) && !type.contains("date")) {
+                    event.getCell().setStyle("-fx-padding: 3;-fx-background-color:#ff0000;-fx-text-fill: #ffffff");
+                } else {
+                    event.getCell().setStyle(null);
+                }
+
+            } else if (SqlFormat.VALUE.equals(column.getId())) {
+                event.getCell().setStyle(null);
+
+                // 检查数据类型
+                if(UString.isNotEmpty(value)) {
+                    if(type.contains("int")) {
+                        try {
+                            Integer.parseInt(value);
+                        } catch (Exception e) {
+                            event.getCell().setStyle("-fx-padding: 3;-fx-background-color:#ff0000;-fx-text-fill: #ffffff");
+                        }
+                    } else if (type.contains("decimal")) {
+                        try {
+                            Double.parseDouble(value);
+                        } catch (Exception e) {
+                            event.getCell().setStyle("-fx-padding: 3;-fx-background-color:#ff0000;-fx-text-fill: #ffffff");
+                        }
+                    }
+                }
+
+            }
+
+        });
         formatTab.setContent(formatTable);
 
         tabPane.getTabs().addAll(messageTab, resultTab, formatTab);

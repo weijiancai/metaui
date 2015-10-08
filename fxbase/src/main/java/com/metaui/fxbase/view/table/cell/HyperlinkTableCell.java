@@ -3,6 +3,7 @@ package com.metaui.fxbase.view.table.cell;
 import com.metaui.core.datasource.DataMap;
 import com.metaui.core.util.UString;
 import com.metaui.fxbase.MuEventHandler;
+import com.metaui.fxbase.view.table.column.BaseTableColumn;
 import com.metaui.fxbase.view.table.model.TableFieldModel;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -23,7 +24,7 @@ public class HyperlinkTableCell extends BaseTableCell {
     private boolean isInit;
     private Paint originalTextFile;
 
-    public HyperlinkTableCell(final TableColumn<DataMap, String> column, final TableFieldModel model) {
+    public HyperlinkTableCell(BaseTableColumn column, final TableFieldModel model) {
         super(column, model);
 
         hyperlink = new Hyperlink("");

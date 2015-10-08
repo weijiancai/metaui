@@ -6,6 +6,7 @@ import com.metaui.core.dict.DictCode;
 import com.metaui.core.dict.DictManager;
 import com.metaui.core.dict.EnumBoolean;
 import com.metaui.core.util.UString;
+import com.metaui.fxbase.view.table.column.BaseTableColumn;
 import com.metaui.fxbase.view.table.model.TableFieldModel;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -29,7 +30,7 @@ public class BooleanTableCell extends BaseTableCell {
 
     private DictCategory dictCategory = DictManager.getDict(EnumBoolean.class);
 
-    public BooleanTableCell(TableColumn<DataMap, String> column, TableFieldModel model) {
+    public BooleanTableCell(BaseTableColumn column, TableFieldModel model) {
         super(column, model);
 
         box = new StackPane();

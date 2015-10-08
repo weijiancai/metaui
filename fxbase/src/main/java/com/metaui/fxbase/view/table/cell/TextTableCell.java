@@ -1,14 +1,12 @@
 package com.metaui.fxbase.view.table.cell;
 
-import com.metaui.core.datasource.DataMap;
 import com.metaui.core.dict.EnumAlign;
-import com.metaui.core.meta.DisplayStyle;
 import com.metaui.core.meta.MetaDataType;
+import com.metaui.fxbase.view.table.column.BaseTableColumn;
 import com.metaui.fxbase.view.table.model.TableFieldModel;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -25,7 +23,7 @@ public class TextTableCell extends BaseTableCell {
 
     private String oldValue;
 
-    public TextTableCell(TableColumn<DataMap, String> column, TableFieldModel model) {
+    public TextTableCell(BaseTableColumn column, TableFieldModel model) {
         super(column, model);
         label = new Label();
         if (EnumAlign.CENTER == model.getAlign() || MetaDataType.INTEGER == model.getDataType()) {

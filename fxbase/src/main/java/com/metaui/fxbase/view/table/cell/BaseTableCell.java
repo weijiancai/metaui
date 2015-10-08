@@ -3,7 +3,13 @@ package com.metaui.fxbase.view.table.cell;
 import com.metaui.core.datasource.DataMap;
 import com.metaui.core.dict.EnumAlign;
 import com.metaui.core.ui.layout.property.TableFieldProperty;
+import com.metaui.core.util.Callback;
+import com.metaui.core.util.UString;
+import com.metaui.fxbase.ui.component.table.event.TableCellRenderEvent;
 import com.metaui.fxbase.ui.event.DataChangeEvent;
+import com.metaui.fxbase.view.dialog.MUDialog;
+import com.metaui.fxbase.view.table.MUTable;
+import com.metaui.fxbase.view.table.column.BaseTableColumn;
 import com.metaui.fxbase.view.table.model.TableFieldModel;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -21,12 +27,12 @@ import javafx.scene.control.TableColumn;
  * @since 1.0.0
  */
 public class BaseTableCell extends TableCell<DataMap, String> {
-    protected TableColumn<DataMap, String> tableColumn;
+    protected BaseTableColumn tableColumn;
     protected TableFieldModel model;
     protected BooleanProperty isModified = new SimpleBooleanProperty(false);
     protected StringProperty valueProperty = new SimpleStringProperty();
 
-    public BaseTableCell(TableColumn<DataMap, String> column, final TableFieldModel model) {
+    public BaseTableCell(BaseTableColumn column, final TableFieldModel model) {
         this.tableColumn = column;
         this.model = model;
 
@@ -58,5 +64,27 @@ public class BaseTableCell extends TableCell<DataMap, String> {
 
     public BaseTableCell() {
         super();
+    }
+
+    @Override
+    protected void updateItem(String item, boolean empty) {
+        super.updateItem(item, empty);
+        if (tableColumn != null && !empty) {
+            Callback<TableCellRenderEvent> onCellRender = tableColumn.getTable().getOnCellRender();
+            if (onCellRender != null) {
+                MUTable table = tableColumn.getTable();
+                TableCellRenderEvent event = new TableCellRenderEvent();
+                event.setTable(table);
+                event.setColumn(tableColumn);
+                event.setCell(this);
+                event.setValue(item);
+                event.setRowData(table.getItems().get(this.getTableRow().getIndex()));
+                try {
+                    onCellRender.call(event);
+                } catch (Exception e) {
+                    MUDialog.showException(e);
+                }
+            }
+        }
     }
 }

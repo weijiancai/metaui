@@ -26,8 +26,8 @@ public class DBSchemaImpl extends DBObjectImpl implements DBSchema {
     private List<DBFunction> functions;
     private List<DBConstraint> constraints;
     private List<DBConstraint> fkConstraints;
-    private Map<String, DBTable> tableMap = new HashMap<>();
-    private Map<String, DBView> viewMap = new HashMap<>();
+    private Map<String, DBTable> tableMap = new HashMap<String, DBTable>();
+    private Map<String, DBView> viewMap = new HashMap<String, DBView>();
     private Map<String, DBFunction> functionMap = new HashMap<String, DBFunction>();
     private Map<String, DBProcedure> procedureMap = new HashMap<String, DBProcedure>();
     private Map<String, DBConstraint> constraintMap = new HashMap<String, DBConstraint>();
