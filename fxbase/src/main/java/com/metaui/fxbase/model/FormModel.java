@@ -192,4 +192,11 @@ public class FormModel {
     public FormFieldModel getFieldByName(String name) {
         return nameMap.get(name);
     }
+
+    public void addAll(FormFieldModel... fieldModels) {
+        for (FormFieldModel field : fieldModels) {
+            field.setFormModel(this);
+        }
+        getFormFields().addAll(fieldModels);
+    }
 }

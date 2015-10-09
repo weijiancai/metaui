@@ -156,4 +156,10 @@ public class DataMap extends HashMap<String,Object> {
     public void setMetaData(DataMapMetaData metaData) {
         this.metaData = metaData;
     }
+
+    public static DataMap insert() {
+        DataMap dataMap = new DataMap();
+        dataMap.setStatus(STATUS.NEW);
+        return dataMap;
+    }
 }

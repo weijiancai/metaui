@@ -26,6 +26,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -155,6 +156,36 @@ public class MUTable extends StackPane implements IView {
         // 添加到StackPane
         if (this.getChildren().size() == 0) {
             this.getChildren().addAll(tablePane);
+        }
+
+        // 监听可编辑属性
+        model.editableProperty().addListener((observable, oldValue, newValue) -> {
+            setEditable(newValue);
+        });
+        setEditable(model.getEditable());
+    }
+
+    /**
+     * 设置table可编辑
+     */
+    public void setEditable(boolean editable) {
+        if (editable) {
+            table.setOnMouseClicked(new MuEventHandler<MouseEvent>() {
+                @Override
+                public void doHandler(MouseEvent event) throws Exception {
+                    // 查询最后一行数据，是否新增状态，如果不是新增状态，在新加一样数据
+                    int size = getItems().size();
+                    if (size == 0 || getItems().get(size - 1).getStatus() != DataMap.STATUS.NEW) {
+                        DataMap data = DataMap.insert();
+                        for (TableFieldModel field : model.getTableFields()) {
+                            data.put(field.getName(), "");
+                        }
+                        getItems().add(data);
+                    }
+                }
+            });
+        } else {
+            table.setOnMouseClicked(null);
         }
     }
 

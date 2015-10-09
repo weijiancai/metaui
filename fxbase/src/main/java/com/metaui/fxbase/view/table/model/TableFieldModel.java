@@ -29,6 +29,7 @@ public class TableFieldModel {
     private ObjectProperty<DictCategory> dict = new SimpleObjectProperty<>();
     private ObjectProperty<MetaDataType> dataType = new SimpleObjectProperty<>(MetaDataType.STRING);
 
+    private TableModel tableModel;
     private Callback callback;
 
     public TableFieldModel() {
@@ -219,5 +220,13 @@ public class TableFieldModel {
 
     public static TableFieldModelBuilder builder() {
         return TableFieldModelBuilder.create();
+    }
+
+    public TableModel getTableModel() {
+        return tableModel;
+    }
+
+    public void setTableModel(TableModel tableModel) {
+        this.tableModel = tableModel;
     }
 }

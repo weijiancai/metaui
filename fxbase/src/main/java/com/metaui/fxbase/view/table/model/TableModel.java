@@ -4,8 +4,6 @@ import com.metaui.core.datasource.DataMap;
 import com.metaui.core.datasource.DataMapMetaData;
 import com.metaui.core.dict.EnumAlign;
 import com.metaui.core.meta.model.Meta;
-import com.metaui.core.ui.layout.property.TableFieldProperty;
-import com.metaui.core.ui.layout.property.TableProperty;
 import com.metaui.core.util.UList;
 import com.metaui.fxbase.model.ActionModel;
 import com.metaui.fxbase.model.ModelFactory;
@@ -16,7 +14,6 @@ import javafx.collections.ObservableList;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -24,7 +21,7 @@ import java.util.List;
  * @since 1.0.0
  */
 public class TableModel {
-    private BooleanProperty isEditable = new SimpleBooleanProperty();
+    private BooleanProperty editable = new SimpleBooleanProperty();
     private BooleanProperty showToolbar = new SimpleBooleanProperty(true);
     private BooleanProperty ShowPaging = new SimpleBooleanProperty(true);
     private BooleanProperty ShowQueryForm = new SimpleBooleanProperty(true);
@@ -54,16 +51,16 @@ public class TableModel {
 
     }
 
-    public boolean isEditable() {
-        return isEditable.get();
+    public boolean getEditable() {
+        return editable.get();
     }
 
     public BooleanProperty editableProperty() {
-        return isEditable;
+        return editable;
     }
 
     public void setEditable(boolean isEditable) {
-        this.isEditable.set(isEditable);
+        this.editable.set(isEditable);
     }
 
     public boolean getShowToolbar() {
@@ -247,5 +244,12 @@ public class TableModel {
         }
 
         setTableFields(FXCollections.observableArrayList(fieldModelList));
+    }
+
+    public void addAll(TableFieldModel... fieldModels) {
+        for (TableFieldModel field : fieldModels) {
+            field.setTableModel(this);
+        }
+        getTableFields().addAll(fieldModels);
     }
 }

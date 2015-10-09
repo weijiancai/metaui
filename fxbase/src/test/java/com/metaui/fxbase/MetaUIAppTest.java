@@ -103,6 +103,7 @@ public class MetaUIAppTest extends BaseApplication {
 
     private MUTable createTable() {
         TableModel model = new TableModel();
+        model.setEditable(true);
         model.getTableFields().add(new TableFieldModel("name", "名称"));
         model.getTableFields().add(new TableFieldModel("age", "年龄", MetaDataType.INTEGER));
         model.getTableFields().add(new TableFieldModel("pwd", "密码", DisplayStyle.PASSWORD));

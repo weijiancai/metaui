@@ -47,17 +47,14 @@ public class TextTableCell extends BaseTableCell {
         }
         if (textField == null) {
             textField = new TextField();
-            textField.setOnKeyReleased(new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent event) {
-                    if (event.getCode() == KeyCode.ENTER) {
-                        isModified.set(true);
-                        commitEdit(textField.getText());
-                        valueProperty.set(textField.getText());
-                    } else if (event.getCode() == KeyCode.ESCAPE) {
-                        isModified.set(false);
-                        cancelEdit();
-                    }
+            textField.setOnKeyReleased(event -> {
+                if (event.getCode() == KeyCode.ENTER) {
+                    isModified.set(true);
+                    commitEdit(textField.getText());
+                    valueProperty.set(textField.getText());
+                } else if (event.getCode() == KeyCode.ESCAPE) {
+                    isModified.set(false);
+                    cancelEdit();
                 }
             });
         }

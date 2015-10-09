@@ -50,11 +50,12 @@ public class BaseTableCell extends TableCell<DataMap, String> {
         valueProperty.addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                /*if (oldValue == null || !oldValue.equals(newValue)) {
-                    DataChangeEvent event = new DataChangeEvent(model, model.getName(), getItem());
+                if (oldValue == null || !oldValue.equals(newValue)) {
+                    /*DataChangeEvent event = new DataChangeEvent(model, model.getName(), getItem());
                     event.setRowData((DataMap) getTableRow().getItem());
-                    fireEvent(event);
-                }*/
+                    fireEvent(event);*/
+                    ((DataMap) getTableRow().getItem()).put(model.getName(), newValue);
+                }
             }
         });
         this.setTextOverrun(OverrunStyle.ELLIPSIS);
