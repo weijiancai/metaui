@@ -1,4 +1,4 @@
-package com.metaui.fxbase.ui.component.table.event;
+package com.metaui.fxbase.view.table.event;
 
 import com.metaui.core.datasource.DataMap;
 import com.metaui.fxbase.view.table.MUTable;

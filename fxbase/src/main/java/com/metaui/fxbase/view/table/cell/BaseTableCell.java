@@ -2,14 +2,12 @@ package com.metaui.fxbase.view.table.cell;
 
 import com.metaui.core.datasource.DataMap;
 import com.metaui.core.dict.EnumAlign;
-import com.metaui.core.ui.layout.property.TableFieldProperty;
 import com.metaui.core.util.Callback;
-import com.metaui.core.util.UString;
-import com.metaui.fxbase.ui.component.table.event.TableCellRenderEvent;
-import com.metaui.fxbase.ui.event.DataChangeEvent;
+import com.metaui.fxbase.view.table.event.TableCellRenderEvent;
 import com.metaui.fxbase.view.dialog.MUDialog;
 import com.metaui.fxbase.view.table.MUTable;
 import com.metaui.fxbase.view.table.column.BaseTableColumn;
+import com.metaui.fxbase.view.table.event.TableDataChangeEvent;
 import com.metaui.fxbase.view.table.model.TableFieldModel;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -20,7 +18,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.control.OverrunStyle;
 import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
 
 /**
  * @author wei_jc
@@ -51,9 +48,9 @@ public class BaseTableCell extends TableCell<DataMap, String> {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 if (oldValue == null || !oldValue.equals(newValue)) {
-                    /*DataChangeEvent event = new DataChangeEvent(model, model.getName(), getItem());
+                    TableDataChangeEvent event = new TableDataChangeEvent(model, model.getName(), getItem());
                     event.setRowData((DataMap) getTableRow().getItem());
-                    fireEvent(event);*/
+                    fireEvent(event);
                     ((DataMap) getTableRow().getItem()).put(model.getName(), newValue);
                 }
             }

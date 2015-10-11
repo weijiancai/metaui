@@ -3,6 +3,8 @@ package com.metaui.fxbase.view.table;
 import com.metaui.core.datasource.DataMap;
 import com.metaui.core.datasource.db.object.DBDataset;
 import com.metaui.core.meta.model.Meta;
+import com.metaui.core.meta.model.MetaField;
+import com.metaui.core.ui.IValue;
 import com.metaui.core.ui.IView;
 import com.metaui.core.ui.ViewManager;
 import com.metaui.core.ui.model.View;
@@ -11,15 +13,14 @@ import com.metaui.core.util.UClipboard;
 import com.metaui.fxbase.MuEventHandler;
 import com.metaui.fxbase.model.FormModel;
 import com.metaui.fxbase.model.ModelFactory;
-import com.metaui.fxbase.ui.component.table.event.TableCellRenderEvent;
+import com.metaui.fxbase.view.table.event.TableCellRenderEvent;
 import com.metaui.fxbase.view.MUForm;
-import com.metaui.fxbase.view.table.cell.BaseTableCell;
 import com.metaui.fxbase.view.table.cell.SortNumTableCell;
 import com.metaui.fxbase.view.table.column.BaseTableColumn;
+import com.metaui.fxbase.view.table.event.TableDataChangeEvent;
 import com.metaui.fxbase.view.table.model.TableFieldModel;
 import com.metaui.fxbase.view.table.model.TableModel;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ContextMenu;
@@ -29,7 +30,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author wei_jc
@@ -49,6 +52,7 @@ public class MUTable extends StackPane implements IView {
 
     private TableColumnChangeListener tableColumnChangeListener;
     private Callback<TableCellRenderEvent> onCellRender;
+    private Callback<TableDataChangeEvent> onDataChange;
 
     public MUTable() {
         this.model = new TableModel();
@@ -163,6 +167,53 @@ public class MUTable extends StackPane implements IView {
             setEditable(newValue);
         });
         setEditable(model.getEditable());
+        // 数据改变
+        table.addEventHandler(TableDataChangeEvent.EVENT_TYPE, new MuEventHandler<TableDataChangeEvent>() {
+            @Override
+            public void doHandler(TableDataChangeEvent event) throws Exception {
+                if (onDataChange != null) {
+                    onDataChange.call(event);
+                } else {
+                    // 保存数据
+                    if (meta != null) {
+                        Map<String, IValue> map = new HashMap<>();
+                        TableFieldModel fieldModel = event.getModel();
+                        map.put(fieldModel.getName(), new IValue() {
+                            @Override
+                            public String value() {
+                                return event.getNewValue();
+                            }
+
+                            @Override
+                            public void setValue(String value) {
+
+                            }
+
+                            @Override
+                            public StringProperty valueProperty() {
+                                return null;
+                            }
+
+                            @Override
+                            public String getName() {
+                                return fieldModel.getName();
+                            }
+
+                            @Override
+                            public MetaField getMetaField() {
+                                return null;
+                            }
+
+                            @Override
+                            public String getDefaultValue() {
+                                return null;
+                            }
+                        });
+                        meta.update(map, event.getRowData());
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -234,5 +285,13 @@ public class MUTable extends StackPane implements IView {
 
     public void setOnCellRender(Callback<TableCellRenderEvent> onCellRender) {
         this.onCellRender = onCellRender;
+    }
+
+    public Callback<TableDataChangeEvent> getOnDataChange() {
+        return onDataChange;
+    }
+
+    public void setOnDataChange(Callback<TableDataChangeEvent> onDataChange) {
+        this.onDataChange = onDataChange;
     }
 }

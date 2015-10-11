@@ -26,6 +26,7 @@ public class DataMap extends HashMap<String,Object> {
     private String uid; // 标识此DataMap的唯一值
     private DataMapMetaData metaData;
     private boolean isUpperKey; // 是否使用大写key值
+    private Map<String, Object> modifiedData = new HashMap<String, Object>(); // 已修改的数据
 
     public DataMap() {
         uid = UUIDUtil.getUUID();
@@ -82,6 +83,14 @@ public class DataMap extends HashMap<String,Object> {
         }
         if (isUpperKey) {
             key = key.toUpperCase();
+        }
+        // 判断是否修改了值
+        if (STATUS.NEW != status) {
+            Object old = get(key);
+            if (!(value != null && value.equals(old))) {
+                status = STATUS.MODIFY;
+                modifiedData.put(key, value);
+            }
         }
         return super.put(key, value);
     }
@@ -161,5 +170,9 @@ public class DataMap extends HashMap<String,Object> {
         DataMap dataMap = new DataMap();
         dataMap.setStatus(STATUS.NEW);
         return dataMap;
+    }
+
+    public Map<String, Object> getModifiedData() {
+        return modifiedData;
     }
 }

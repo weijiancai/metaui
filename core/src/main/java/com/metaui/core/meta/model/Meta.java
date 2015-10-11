@@ -553,7 +553,8 @@ public class Meta {
 
         Map<String, Object> valueMap = new HashMap<String, Object>();
         for (IValue value : modifiedValueMap.values()) {
-            valueMap.put(value.getMetaField().getOriginalName(), value.value());
+            valueMap.put(getFieldByName(value.getName()).getOriginalName(), value.value());
+//            valueMap.put(value.getMetaField().getOriginalName(), value.value());
         }
 
         Map<String, Object> conditionMap = new HashMap<String, Object>();
@@ -561,6 +562,9 @@ public class Meta {
             if (field.isPk()) {
                 conditionMap.put(field.getOriginalName(), rowData.get(field.getName()));
             }
+        }
+        if (this.getPkFields().size() == 0) {
+            throw new RuntimeException("没有主键！");
         }
 
         resource.update(valueMap, conditionMap, resource.getName());

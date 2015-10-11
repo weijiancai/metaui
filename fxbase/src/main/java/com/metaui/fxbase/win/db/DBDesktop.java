@@ -3,6 +3,7 @@ package com.metaui.fxbase.win.db;
 import com.metaui.core.datasource.db.object.DBObject;
 import com.metaui.core.datasource.db.object.enums.DBObjectType;
 import com.metaui.core.ui.IView;
+import com.metaui.core.ui.model.View;
 import com.metaui.fxbase.MuEventHandler;
 import com.metaui.fxbase.model.AppModel;
 import com.metaui.fxbase.view.desktop.MUTabsDesktop;
@@ -37,11 +38,7 @@ public class DBDesktop extends MUTabsDesktop implements IView {
 
         // 搜索框
         searchBox = new DBSearchBox(view -> {
-            String name = view.getMeta().getResource().getName();
-            Tab tab = new Tab(name);
-            tab.setId(view.getId());
-            tab.setContent(new MUTable(view.getMeta()));
-            addTab(tab);
+            openTab(view);
             return null;
         });
         // 注册键盘按键事件
@@ -83,19 +80,23 @@ public class DBDesktop extends MUTabsDesktop implements IView {
             public void doHandler(MouseEvent event) throws Exception {
                 if (event.getClickCount() == 2) {
                     DBTreeNodeModel model = (DBTreeNodeModel) navView.getNavTree().getSelectionModel().getSelectedItem().getValue();
-                    openTab(model);
+                    DBObject object = model.getDbObject();
+                    if (object.getObjectType() == DBObjectType.VIEW || object.getObjectType() == DBObjectType.TABLE) {
+                        openTab(object.getView());
+                    }
                 }
             }
         });
     }
 
-    public void openTab(DBTreeNodeModel model) {
-        DBObject object = model.getDbObject();
-        if (object.getObjectType() == DBObjectType.VIEW || object.getObjectType() == DBObjectType.TABLE) {
-            Tab tab = new Tab(object.getName());
-            tab.setId(object.getId());
-            tab.setContent(new MUTable(object.getView().getMeta()));
-            addTab(tab);
-        }
+    public void openTab(View view) {
+        MUTable table = new MUTable(view.getMeta());
+        table.getModel().setEditable(true);
+        String name = view.getMeta().getResource().getName();
+
+        Tab tab = new Tab(name);
+        tab.setId(view.getId());
+        tab.setContent(table);
+        addTab(tab);
     }
 }
