@@ -5,41 +5,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ´òÓ¡¹ÜÀíÆ÷
+ * æ‰“å°ç®¡ç†å™¨
  *
  * @author wei_jc
  * @since 1.0
  */
 public class PrintManager {
     public static void print(PrintParams params, List<PackInfo> packInfos) {
-        // Í¨Ë×Àí½â¾ÍÊÇÊé¡¢ÎÄµµ
+        // é€šä¿—ç†è§£å°±æ˜¯ä¹¦ã€æ–‡æ¡£
         Book book = new Book();
-        // ÉèÖÃ³ÉÊú´ò
+        // è®¾ç½®æˆç«–æ‰“
         PageFormat pf = new PageFormat();
         pf.setOrientation(PageFormat.PORTRAIT);
-        // Í¨¹ıPaperÉèÖÃÒ³ÃæµÄ¿Õ°×±ß¾àºÍ¿É´òÓ¡ÇøÓò¡£±ØĞëÓëÊµ¼Ê´òÓ¡Ö½ÕÅ´óĞ¡Ïà·û¡£
+        // é€šè¿‡Paperè®¾ç½®é¡µé¢çš„ç©ºç™½è¾¹è·å’Œå¯æ‰“å°åŒºåŸŸã€‚å¿…é¡»ä¸å®é™…æ‰“å°çº¸å¼ å¤§å°ç›¸ç¬¦ã€‚
         Paper p = new Paper();
-        p.setSize(params.getPageWidth(), params.getPageHeight()); // Ö½ÕÅ´óĞ¡
+        p.setSize(params.getPageWidth(), params.getPageHeight()); // çº¸å¼ å¤§å°
         int x = params.getLeftMargin() == null ? 0 : params.getLeftMargin();
         int y = params.getTopMargin() == null ? 0 : params.getTopMargin();
         int width = params.getRightMargin() == null ? params.getPageWidth() - x : params.getPageWidth() - params.getRightMargin() - x;
         int height = params.getBottomMargin() == null ? params.getPageHeight() - y : params.getPageHeight() - params.getBottomMargin() - y;
-        p.setImageableArea(x, y, width, height); // A4(595 * 842) ÉèÖÃ´òÓ¡ÇøÓò£¬ÆäÊµ0£¬0Ó¦¸ÃÊÇ72£¬72£¬ÒòÎªA4Ö½µÄÄ¬ÈÏX,Y±ß¾àÊÇ72
+        p.setImageableArea(x, y, width, height); // A4(595 * 842) è®¾ç½®æ‰“å°åŒºåŸŸï¼Œå…¶å®0ï¼Œ0åº”è¯¥æ˜¯72ï¼Œ72ï¼Œå› ä¸ºA4çº¸çš„é»˜è®¤X,Yè¾¹è·æ˜¯72
         pf.setPaper(p);
-        // °ÑPageFormatºÍPrintableÌí¼Óµ½ÊéÖĞ£¬×é³ÉÒ»¸öÒ³Ãæ
+        // æŠŠPageFormatå’ŒPrintableæ·»åŠ åˆ°ä¹¦ä¸­ï¼Œç»„æˆä¸€ä¸ªé¡µé¢
         params.setPageSize(packInfos.size());
         for (PackInfo packInfo : packInfos) {
             book.append(new PackPrintable(packInfo, params), pf);
         }
-//        book.append(new PrintTest("Í¨¹ıPaperÉèÖÃÒ³ÃæµÄ¿Õ°×±ß¾àºÍ¿É´òÓ¡ÇøÓò¡£±ØĞë"), pf);
+//        book.append(new PrintTest("é€šè¿‡Paperè®¾ç½®é¡µé¢çš„ç©ºç™½è¾¹è·å’Œå¯æ‰“å°åŒºåŸŸã€‚å¿…é¡»"), pf);
 
-        // »ñÈ¡´òÓ¡·şÎñ¶ÔÏó
+        // è·å–æ‰“å°æœåŠ¡å¯¹è±¡
         PrinterJob job = PrinterJob.getPrinterJob();
-        // ÉèÖÃ´òÓ¡Àà
+        // è®¾ç½®æ‰“å°ç±»
         job.setPageable(book);
 
         try {
-            // ¿ÉÒÔÓÃprintDialogÏÔÊ¾´òÓ¡¶Ô»°¿ò£¬ÔÚÓÃ»§È·ÈÏºó´òÓ¡£»Ò²¿ÉÒÔÖ±½Ó´òÓ¡
+            // å¯ä»¥ç”¨printDialogæ˜¾ç¤ºæ‰“å°å¯¹è¯æ¡†ï¼Œåœ¨ç”¨æˆ·ç¡®è®¤åæ‰“å°ï¼›ä¹Ÿå¯ä»¥ç›´æ¥æ‰“å°
             boolean a = job.printDialog();
             if(a) {
                 job.print();
@@ -54,23 +54,23 @@ public class PrintManager {
         params.setPageWidth(283);
         params.setPageHeight(226);
         params.setLeftMargin(5);
-        params.setRightMargin(5);
+        params.setRightMargin(0);
         params.setTopMargin(5);
         params.setBottomMargin(5);
 
         PackInfo info = new PackInfo();
         info.setPackIdx(25);
         info.setPackCode("00254A0025");
-        info.setClientName("ÍÅÌå»áÔ±ÍÅÌå»áÔ±ÍÅÌå»áÔ±ÍÅÌå»áÔ±ÍÅÌå»áÔ±ÍÅÌå»áÔ±ÍÅÌå»áÔ±ÍÅÌå»áÔ±");
-        info.setContactMan("ÕÅÈı·á");
-        info.setClientAddr("ÉÂÎ÷Ê¡Î÷°²ÊĞÑãÕ¹Â·1ºÅÇú½­¹ú¼Ê»áÕ¹ÖĞĞÄA¹İ");
+        info.setClientName("å›¢ä½“ä¼šå‘˜å›¢ä½“ä¼šå‘˜å›¢ä½“ä¼šå‘˜å›¢ä½“ä¼šå‘˜å›¢ä½“ä¼šå‘˜å›¢ä½“ä¼šå‘˜å›¢ä½“ä¼šå‘˜å›¢ä½“ä¼šå‘˜");
+        info.setContactMan("å¼ ä¸‰ä¸°");
+        info.setClientAddr("é™•è¥¿çœè¥¿å®‰å¸‚é›å±•è·¯1å·æ›²æ±Ÿå›½é™…ä¼šå±•ä¸­å¿ƒAé¦†");
         info.setClientPhone("186292692999");
         info.setTotalCount(6);
         info.setTotalAmount(6);
         info.setSellReason("2348288232");
-        info.setSendDepartment("ÖĞ¹úÉãÓ°³ö°æÉç");
+        info.setSendDepartment("ä¸­å›½æ‘„å½±å‡ºç‰ˆç¤¾");
         info.setSendTel("233435382");
-        info.setSendContact("ÀîËÄ");
+        info.setSendContact("æå››");
         info.setProducts(createDataSource());
         List<PackInfo> list = new ArrayList<>();
         list.add(info);
@@ -80,11 +80,11 @@ public class PrintManager {
 
     private static List<Product> createDataSource() {
         List<Product> list = new ArrayList<>();
-        list.add(new Product("»­²á-ÃÀÀö½ú³Ç", 2800.00, 1));
-        list.add(new Product("»­²á-ÃÀ¼Ó·ç¹âÉãÓ°¼¯£¨Ô¬Î°·¢£©", 2980.00, 1));
-        list.add(new Product("»­²á-¶à²ÊÊÀ½ç£ºÊÀ½ç»ªÇÈ»ªÈËÉãÓ°¾«Æ·£¨Ô¬Î°·¢£©", 200, 1));
-//        list.add(new Product("»­²á-ÓŞ¹«ÒÆÉ½£¨ÖÜÕñ»ª£©", 688.00, 1));
-//        list.add(new Product("»­²á-¾²Ö®¹ÛÏñ£¨ÆîºÍÁÁ£©", 320, 1));
+        list.add(new Product("ç”»å†Œ-ç¾ä¸½æ™‹åŸ", 2800.00, 1));
+        list.add(new Product("ç”»å†Œ-ç¾åŠ é£å…‰æ‘„å½±é›†ï¼ˆè¢ä¼Ÿå‘ï¼‰", 2980.00, 1));
+        list.add(new Product("ç”»å†Œ-å¤šå½©ä¸–ç•Œï¼šä¸–ç•Œåä¾¨åäººæ‘„å½±ç²¾å“ï¼ˆè¢ä¼Ÿå‘ï¼‰", 200, 1));
+        list.add(new Product("ç”»å†Œ-æ„šå…¬ç§»å±±ï¼ˆå‘¨æŒ¯åï¼‰", 688.00, 1));
+        list.add(new Product("ç”»å†Œ-é™ä¹‹è§‚åƒï¼ˆç¥å’Œäº®ï¼‰", 320, 1));
         return list;
     }
 }

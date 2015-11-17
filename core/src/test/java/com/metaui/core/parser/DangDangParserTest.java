@@ -190,6 +190,24 @@ public class DangDangParserTest {
         System.out.println(UUIDUtil.getUUID());
     }
 
+
+    @Test
+    public void testWeiXin() throws IOException {
+        String url = "http://weixin.sogou.com/weixin?query=%E6%B9%96%E5%8D%97&fr=sgsearch&ie=utf8&type=2&w=01019900&sut=3098&sst0=1445611806603&lkt=4%2C1445611803505%2C1445611804399";
+        Connection connection = Jsoup.connect(url);
+        Connection.Response response = connection.execute();
+        Map<String, String> cookies = response.cookies();
+//        System.out.println(cookies);
+//        System.out.println(response.body());
+        url = "http://weixin.sogou.com/websearch/art.jsp?sg=xaXJ7lM8QYR_7XOqrq5C_m6vUbLtHvTELSZi1TMGyvBa3TIJh2dES5p1ZP1vJcoCAJTypjE1HX8Ox4ChZ0cnGOK1aUawqwGgU-aATq-GBOz0ycy5BK9qHUqtmU7-GUYzbPevHhqM9RMhnCWSpbO3WQ..&url=p0OVDH8R4SHyUySb8E88hkJm8GF_McJfBfynRTbN8wgNzcw5Yx9FPApqItp_ZxGWFJmAPOq06Mz6_bS1uL_CCWQ3JxMQ3374uxnQeyzhmUfjtD_gJVwrtKSwLT-OYLamZUYrlDK7J5VYy-5x5In7jJFmExjqCxhpkyjFvwP6PuGcQ64lGQ2ZDMuqxplQrsbk";
+        connection = Jsoup.connect(url);
+        connection.cookies(cookies);
+        connection.userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6");
+        System.out.println(connection.execute().headers());
+        Document doc = connection.get();
+        System.out.println(doc.html());
+    }
+
     public static void main(String[] args) throws IOException {
         Map<String, String> data = new HashMap<String, String>();
         Map<String, String> cookies = new HashMap<String, String>();
