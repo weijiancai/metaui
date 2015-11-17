@@ -35,6 +35,18 @@ public class DBColumnImpl extends DBObjectImpl implements DBColumn {
         setObjectType(DBObjectType.COLUMN);
     }
 
+    public DBColumnImpl(String name, String comment, String dbDataType) {
+        this(name, comment, dbDataType, false);
+    }
+
+    public DBColumnImpl(String name, String comment, String dbDataType, boolean isPk) {
+        setObjectType(DBObjectType.COLUMN);
+        setName(name);
+        setComment(comment);
+        setDbDataType(dbDataType);
+        setPk(isPk);
+    }
+
     @Override
     public MetaDataType getDataType() {
         if (dataType == null) {

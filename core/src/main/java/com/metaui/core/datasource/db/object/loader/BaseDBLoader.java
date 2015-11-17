@@ -490,12 +490,13 @@ public abstract class BaseDBLoader implements DBLoader {
             table.setDataSource(dbConn.getDataSource());
             table.setName(UObject.toString(map.get("TABLE_NAME")));
             table.setComment(UObject.toString(map.get("TABLE_COMMENT")));
+            table.setNumRows(map.getInt("NUM_ROWS"));
             table.setId(dbConn.getDataSource().getId() + "." + schema.getName() + "." + table.getName());
 
             result.add(table);
 
             // 设置Table子节点
-            List<ITreeNode> children = new ArrayList<ITreeNode>();
+            /*List<ITreeNode> children = new ArrayList<ITreeNode>();
             // 列
             DBObjectList columns = new DBObjectList("Columns", DBIcons.DBO_COLUMNS, DBObjectType.COLUMNS);
             columns.setParent(table);
@@ -517,7 +518,7 @@ public abstract class BaseDBLoader implements DBLoader {
             children.add(constraints);
             children.add(indexes);
             children.add(triggers);
-            table.setChildren(children);
+            table.setChildren(children);*/
             notifyMessage(String.format("加载Table：" + table.getName()));
         }
 

@@ -55,4 +55,12 @@ public interface DBDataset extends DBObject {
      * @since 1.0.0
      */
     DBConstraint getConstraint(String name);
+
+    /**
+     * 获得总数据行数
+     *
+     * @return 返回总数据行数
+     * @since 1.0.0
+     */
+    int getNumRows();
 }

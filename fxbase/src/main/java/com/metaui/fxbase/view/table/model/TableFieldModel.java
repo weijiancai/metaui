@@ -66,6 +66,14 @@ public class TableFieldModel {
         setSortNum(sortNum);
     }
 
+    public TableFieldModel(String name, String displayName, int width, int sortNum, MetaDataType dataType, EnumAlign align) {
+        setName(name);
+        setDisplayName(displayName);
+        setWidth(width);
+        setSortNum(sortNum);
+        setAlign(align);
+    }
+
     public String getName() {
         return name.get();
     }

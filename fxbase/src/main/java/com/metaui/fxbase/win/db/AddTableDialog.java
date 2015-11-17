@@ -1,5 +1,9 @@
 package com.metaui.fxbase.win.db;
 
+import com.metaui.core.datasource.DataMap;
+import com.metaui.core.datasource.db.object.DBColumn;
+import com.metaui.core.datasource.db.object.impl.DBColumnImpl;
+import com.metaui.core.datasource.db.object.impl.DBTableImpl;
 import com.metaui.core.meta.DisplayStyle;
 import com.metaui.fxbase.model.FormFieldModel;
 import com.metaui.fxbase.model.FormModel;
@@ -10,6 +14,9 @@ import com.metaui.fxbase.view.table.model.TableFieldModel;
 import com.metaui.fxbase.view.table.model.TableModel;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Callback;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 添加表对话框
@@ -68,6 +75,16 @@ public class AddTableDialog extends BorderPane {
             public Void call(Void param) {
                 FormModel formModel = dialog.getForm().getModel();
                 TableModel tableModel = dialog.getTable().getModel();
+                DBTableImpl table = new DBTableImpl();
+                table.setName(formModel.getFieldValue("name"));
+                table.setComment(formModel.getFieldValue("comment"));
+
+                List<DBColumn> columns = new ArrayList<>();
+                for (DataMap dataMap : tableModel.getValues()) {
+                    columns.add(new DBColumnImpl(dataMap.getString("name"), dataMap.getString("comment"), dataMap.getString("dataType"), dataMap.getBoolean("isPk")));
+                }
+                table.setColumns(columns);
+
                 return null;
             }
         });

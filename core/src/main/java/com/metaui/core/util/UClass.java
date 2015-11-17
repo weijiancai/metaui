@@ -235,6 +235,35 @@ public class UClass {
     }
 
     /**
+     * 根据名称，获得类类型中某个字段
+     *
+     * @param clazz
+     * @param name
+     * @return
+     */
+    public static Field getField(Class clazz, String name) {
+        for (Field field : clazz.getDeclaredFields()) {
+            if (field.getName().equals(name)) {
+                return field;
+            }
+        }
+        while (clazz.getSuperclass() != null) {
+            clazz = clazz.getSuperclass();
+            if (clazz == Object.class) {
+                break;
+            }
+
+            for (Field field : clazz.getDeclaredFields()) {
+                if (field.getName().equals(name)) {
+                    return field;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * 将DataMap转换为类实例对象
      *
      * @param clazz 类
@@ -283,6 +312,20 @@ public class UClass {
             return "set" + fieldName.substring(2);
         } else {
             return "set" + UString.firstCharToUpper(fieldName);
+        }
+    }
+
+    /**
+     * 根据类字段名，获得setter方法名
+     *
+     * @param fieldName 类字段名
+     * @return 返回setter方法名
+     */
+    public static String getGetMethodName(String fieldName) {
+        if (fieldName.startsWith("is")) {
+            return fieldName;
+        } else {
+            return "get" + UString.firstCharToUpper(fieldName);
         }
     }
 }

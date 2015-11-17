@@ -1,5 +1,7 @@
 package com.metaui.fxbase.model;
 
+import com.metaui.core.R;
+import com.metaui.core.datasource.DataMap;
 import com.metaui.core.datasource.db.object.DBColumn;
 import com.metaui.core.datasource.db.object.DBDataset;
 import com.metaui.core.dict.DictManager;
@@ -12,11 +14,14 @@ import com.metaui.core.meta.model.MetaField;
 import com.metaui.core.ui.layout.PropertyNames;
 import com.metaui.core.ui.model.View;
 import com.metaui.core.ui.model.ViewProperty;
+import com.metaui.core.util.UClass;
 import com.metaui.fxbase.view.dialog.MUDialog;
 import com.metaui.fxbase.view.table.model.TableFieldModel;
 import com.metaui.fxbase.view.table.model.TableModel;
 import javafx.collections.FXCollections;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -178,5 +183,27 @@ public class ModelFactory {
             fieldModels.add(fieldModel);
         }
         model.setTableFields(FXCollections.observableArrayList(fieldModels));
+    }
+
+    public static void convert(List data, TableModel model, TableFieldModel... fields) throws Exception {
+        List<TableFieldModel> fieldModels = new ArrayList<>();
+        List<DataMap> values = new ArrayList<>();
+
+        for (TableFieldModel fieldModel : fields) {
+            fieldModels.add(fieldModel);
+        }
+
+        for (Object obj : data) {
+            DataMap dataMap = new DataMap();
+            Class<?> clazz = obj.getClass();
+            for (TableFieldModel fieldModel : fields) {
+                Method method = clazz.getMethod(UClass.getGetMethodName(fieldModel.getName()));
+                dataMap.put(fieldModel.getName(), method == null ? null : method.invoke(obj));
+            }
+            values.add(dataMap);
+        }
+
+        model.setTableFields(FXCollections.observableArrayList(fieldModels));
+        model.setValues(values);
     }
 }

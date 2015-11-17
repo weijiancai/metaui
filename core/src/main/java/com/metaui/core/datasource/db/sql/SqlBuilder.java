@@ -9,6 +9,7 @@ import com.alibaba.druid.sql.parser.SQLStatementParser;
 import com.alibaba.druid.sql.visitor.SQLASTOutputVisitor;
 import com.metaui.core.datasource.QueryCondition;
 import com.metaui.core.datasource.db.DatabaseType;
+import com.metaui.core.datasource.db.object.DBColumn;
 import com.metaui.core.datasource.db.util.SqlUtil;
 import com.metaui.core.dict.QueryModel;
 import com.metaui.core.meta.MetaDataType;
@@ -45,9 +46,11 @@ public class SqlBuilder {
     private String with;
     private String group;
     private String querySql; // 查询Sql
+    private String insertSql = "";
     private boolean haveWith;
     private boolean isQuery = true;
     private boolean isBracket = false;
+    private boolean isInsert = false; // 是否插入语句
     private Queue<Object> paramQueue = new LinkedList<Object>();
     private List<QueryCondition> conditionList;
     private DatabaseType dbType;
@@ -59,6 +62,28 @@ public class SqlBuilder {
 
     public static SqlBuilder create() {
         return new SqlBuilder();
+    }
+
+    public SqlBuilder insert(String table, List<DBColumn> columns) {
+        isInsert = true;
+
+        insertSql += "INSERT INTO " + table + "(";
+        for (int i = 0; i < columns.size(); i++) {
+            DBColumn column = columns.get(i);
+            insertSql += column.getName();
+            if (i < columns.size() - 1) {
+                insertSql += ",";
+            }
+        }
+        insertSql += ") VALUES (";
+        for (int i = 0; i < columns.size(); i++) {
+            insertSql += "?";
+            if (i < columns.size() - 1) {
+                insertSql += ",";
+            }
+        }
+        insertSql += ")";
+        return this;
     }
 
     /**
@@ -426,6 +451,14 @@ public class SqlBuilder {
      */
     public SqlBuilder max(String column) {
         return query(String.format("MAX(%s) AS max_%1$s", column));
+    }
+
+    public String build() {
+        if(isInsert) {
+            return insertSql;
+        }
+
+        return "";
     }
 
     /**

@@ -21,6 +21,7 @@ public abstract class DBDatasetImpl extends DBObjectImpl implements DBDataset {
     private List<DBConstraint> fkConstraints;
     private Map<String, DBColumn> columnMap = new HashMap<String, DBColumn>();
     private Map<String, DBConstraint> constraintMap = new HashMap<String, DBConstraint>();
+    private int numRows;
 
     @Override
     public DBColumn getColumn(String columnName) throws Exception {
@@ -70,6 +71,15 @@ public abstract class DBDatasetImpl extends DBObjectImpl implements DBDataset {
             }
         }
         return list;
+    }
+
+    @Override
+    public int getNumRows() {
+        return numRows;
+    }
+
+    public void setNumRows(int numRows) {
+        this.numRows = numRows;
     }
 
     public void setColumns(List<DBColumn> columns) {

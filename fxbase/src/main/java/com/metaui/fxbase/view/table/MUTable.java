@@ -214,6 +214,10 @@ public class MUTable extends StackPane implements IView {
                 }
             }
         });
+        // 初始化数据
+        if (model.getValues() != null) {
+            table.getItems().setAll(model.getValues());
+        }
     }
 
     /**

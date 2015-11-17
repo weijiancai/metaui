@@ -22,6 +22,7 @@ import com.metaui.fxbase.view.tree.MUTree;
 import com.metaui.fxbase.view.tree.TreeNodeModel;
 import com.metaui.fxbase.win.ApkToolWin;
 import com.metaui.fxbase.win.ConsoleWin;
+import com.metaui.fxbase.win.db.DBCopyWin;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -82,7 +83,12 @@ public class MetaUIAppTest extends BaseApplication {
         metaTable.setTitle("Meta表格测试");
         metaTable.setView(createMetaTable());
 
-        viewModel.getNavMenus().addAll(menu1, menu2, console, dataSource, tree, table, metaTable);
+        NavMenuModel dbCopy = new NavMenuModel();
+        metaTable.setId("DB_COPY");
+        metaTable.setTitle("数据库复制");
+        metaTable.setView(new DBCopyWin());
+
+        viewModel.getNavMenus().addAll(menu1, menu2, console, dataSource, tree, table, metaTable, dbCopy);
 
         setAppModel(viewModel);
     }

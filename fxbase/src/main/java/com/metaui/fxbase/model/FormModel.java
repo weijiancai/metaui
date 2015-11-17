@@ -193,6 +193,16 @@ public class FormModel {
         return nameMap.get(name);
     }
 
+    /**
+     * 获得表单字段值
+     *
+     * @param fieldName
+     * @return
+     */
+    public String getFieldValue(String fieldName) {
+        return nameMap.get(fieldName).getValue();
+    }
+
     public void addAll(FormFieldModel... fieldModels) {
         for (FormFieldModel field : fieldModels) {
             field.setFormModel(this);

@@ -10,6 +10,7 @@ import com.metaui.core.datasource.db.object.DBLoader;
 import com.metaui.core.datasource.db.object.DBSchema;
 import com.metaui.core.datasource.db.object.loader.HsqldbLoader;
 import com.metaui.core.datasource.db.object.loader.MySqlLoader;
+import com.metaui.core.datasource.db.object.loader.OracleLoader;
 import com.metaui.core.datasource.db.object.loader.SqlServerLoader;
 import com.metaui.core.datasource.eventdata.SqlExecuteEventData;
 import com.metaui.core.observer.BaseSubject;
@@ -107,6 +108,9 @@ public class DBConnectionImpl implements DBConnection {
                 break;
             case SQLSERVER:
                 loader = new SqlServerLoader(this);
+                break;
+            case ORACLE:
+                loader = new OracleLoader(this);
                 break;
         }
 

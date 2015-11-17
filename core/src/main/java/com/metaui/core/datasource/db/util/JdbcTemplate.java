@@ -211,6 +211,57 @@ public class JdbcTemplate {
         pstmt.close();
     }
 
+    /**
+     * 使用JDBC游标查询
+     *
+     * @param sql
+     * @param callback 回掉函数
+     * @param start 开始行号
+     * @param max 最大取多少行
+     * @param values
+     * @throws Exception
+     */
+    public void query(String sql, Callback<DataMap> callback, int start, int max, Object... values) throws Exception {
+        try {
+            start = start <= 0 ? 1 : start; // 开始行号从1开始
+
+            PreparedStatement pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            //最大查询到第几条记录
+            if (max > 0) {
+                pstmt.setMaxRows(start + max - 1);
+            }
+
+            if (null != values && values.length > 0) {
+                int i = 1;
+                for (Object obj : values) {
+                    pstmt.setObject(i++, obj);
+                }
+            }
+            ResultSet rs = pstmt.executeQuery();
+            // 定位到开始行
+            rs.absolute(start);
+
+            ResultSetMetaData md = rs.getMetaData();
+            int columnCount = md.getColumnCount();
+
+            while (rs.next()) {
+                DataMap map = new DataMap();
+                for (int i = 1; i <= columnCount; i++) {
+                    Object obj = rs.getObject(i);
+                    if (databaseType != null && DatabaseType.HSQLDB == databaseType) {
+                        map.setUpperKey(true);
+                    }
+                    map.put(md.getColumnLabel(i), obj);
+                }
+                callback.call(map);
+            }
+            rs.close();
+            pstmt.close();
+        } finally {
+            close();
+        }
+    }
+
     public <T> List<T> query(String sql, RowMapper<T> rowMapper, Object... values) throws Exception {
         PreparedStatement pstmt = conn.prepareStatement(sql);
         if (null != values && values.length > 0) {
@@ -298,6 +349,32 @@ public class JdbcTemplate {
             pstmt.executeUpdate();
             pstmt.close();
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (null != conn) {
+                try {
+                    conn.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            throw e;
+        }
+    }
+
+    public void save(String sql, List<Object> values) throws Exception {
+        try {
+            if (conn == null || conn.isClosed()) {
+                conn = dataSource.getDbConnection().getConnection();
+                conn.setAutoCommit(false);
+            }
+            System.out.println(SqlUtil.toLog(sql, values.toArray()));
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            for (int i = 1; i <= values.size(); i++) {
+                pstmt.setObject(i, values.get(i - 1));
+            }
+            pstmt.executeUpdate();
+            pstmt.close();
         } catch (Exception e) {
             e.printStackTrace();
             if (null != conn) {
@@ -467,6 +544,18 @@ public class JdbcTemplate {
         try {
             template.save(pdb);
             template.commit();
+        } finally {
+            template.close();
+        }
+    }
+
+    public static void save(DBDataSource dataSource, String sql, List<Object> values) {
+        JdbcTemplate template = new JdbcTemplate(dataSource);
+        try {
+            template.save(sql, values);
+            template.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             template.close();
         }
