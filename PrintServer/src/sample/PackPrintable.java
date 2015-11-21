@@ -51,7 +51,7 @@ public class PackPrintable implements Printable {
         // 设置打印颜色为黑色
         g2.setColor(Color.black);
         // 设置打印字体（字体名称、样式和点大小）
-        Font font = new Font("楷体", Font.PLAIN, 9);
+        Font font = new Font("宋体", Font.PLAIN, 10);
         g2.setFont(font);
 
         // 打印起始点坐标
@@ -118,10 +118,11 @@ public class PackPrintable implements Printable {
         g2.drawLine(x, currentY, width, currentY);
         // 表格数据
         g2.setFont(font);
+        fontHeight = g2.getFontMetrics().getHeight();
         int i = 0;
         for (Product product : info.getProducts()) {
             currentX = x;
-            NumberFormat nf = new DecimalFormat("#,###.##");
+            NumberFormat nf = new DecimalFormat("#,###.00");
             drawString(g2, product.getName(), 190, 0, true);
             drawString(g2, nf.format(product.getPrice()), 48, 2, true);
             drawString(g2, product.getAmount() + "", width - 190 - 48, 1, true);
@@ -137,11 +138,25 @@ public class PackPrintable implements Printable {
             currentX = x;
             Font itaFont = new Font("楷体", Font.BOLD | Font.ITALIC, 11);
             g2.setFont(itaFont);
+            fontHeight = g2.getFontMetrics().getHeight();
             drawString(g2, "等共" + info.getTotalCount() + "个品种" + info.getTotalAmount() + "册拼包", width, 0, true);
             g2.drawLine(width, currentY - fontHeight, width, currentY + fontHeight);
             currentY += fontHeight;
             g2.drawLine(x, currentY, width, currentY);
         }
+        // 订单依据，品种，码洋
+        currentX = x;
+        g2.setFont(font);
+        fontHeight = g2.getFontMetrics().getHeight();
+        drawString(g2, "依据：" + info.getSellReason(), 190, 0, true);
+        drawString(g2, "品种:" + info.getTotalCount()+ " 册数:" + info.getTotalAmount(), width - 190, 0, true);
+        g2.drawLine(width, currentY - fontHeight, width, currentY + fontHeight);
+        currentY += fontHeight;
+        g2.drawLine(x, currentY, width, currentY);
+        // 货主信息
+        currentX = x;
+        drawString(g2, info.getSendDepartment() + " " + info.getSendTel() + " " + info.getSendContact(), width, 0, false);
+
 
 //        g2.drawLine((int)x, (int)y, (int)x, (int)height);
 //        g2.drawLine((int)x, (int)height, (int)width, (int)height);
@@ -164,12 +179,12 @@ public class PackPrintable implements Printable {
                 break;
             }
             case 2: { // 居右对齐
-                g2.drawString(string, currentX + fontWidth, currentY + g2.getFontMetrics().getAscent());
+                g2.drawString(string, currentX + (width - fontWidth) - 3, currentY + g2.getFontMetrics().getAscent());
             }
         }
 
         if (leftLine) {
-            g2.drawLine(currentX, currentY, currentX, currentY + fontHeight + 2);
+            g2.drawLine(currentX, currentY, currentX, currentY + fontHeight);
         }
 
         currentX += width;

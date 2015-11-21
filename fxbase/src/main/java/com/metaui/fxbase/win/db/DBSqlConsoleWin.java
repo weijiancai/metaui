@@ -205,9 +205,11 @@ public class DBSqlConsoleWin extends BorderPane implements IView {
                     DictCode code = dataSource.getSelectedItem();
                     DBDataSource dbDataSource = (DBDataSource) DataSourceManager.getDataSource(code.getId());
                     try {
-                        List<DBSchema> schemaList = dbDataSource.getSchemas();
-                        schemas.setItems(FXCollections.observableArrayList(schemaList));
-                        schemas.getSelectionModel().select(0);
+                        if(dbDataSource.isAvailable()) {
+                            List<DBSchema> schemaList = dbDataSource.getSchemas();
+                            schemas.setItems(FXCollections.observableArrayList(schemaList));
+                            schemas.getSelectionModel().select(0);
+                        }
                     } catch (Exception e) {
                         MUDialog.showExceptionDialog(e);
                     }

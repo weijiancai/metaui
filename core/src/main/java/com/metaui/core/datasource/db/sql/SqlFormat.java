@@ -82,7 +82,7 @@ public class SqlFormat {
             } else if (stmt instanceof SQLInsertStatement) {
                 SQLInsertStatement insertStatement = (SQLInsertStatement) stmt;
                 String tableName = insertStatement.getTableName().getSimpleName();
-                DBTable table = schema.getTable(tableName);
+
 
                 for (int i = 0; i < insertStatement.getColumns().size(); i++) {
                     DataMap dataMap = new DataMap();
@@ -97,11 +97,15 @@ public class SqlFormat {
                         dataMap.put(VALUE, "");
                         dataMap.put(VALUE_LENGTH, "0");
                     }
-                    if (table != null) {
-                        DBColumn column = table.getColumn(colName);
-                        if (column != null) {
-                            dataMap.put(DB_DATA_TYPE, column.getDataTypeString());
-                            dataMap.put(MAX_LENGTH, column.getMaxLength());
+
+                    if (schema != null) {
+                        DBTable table = schema.getTable(tableName);
+                        if (table != null) {
+                            DBColumn column = table.getColumn(colName);
+                            if (column != null) {
+                                dataMap.put(DB_DATA_TYPE, column.getDataTypeString());
+                                dataMap.put(MAX_LENGTH, column.getMaxLength());
+                            }
                         }
                     }
 
@@ -110,7 +114,6 @@ public class SqlFormat {
             } else if (stmt instanceof SQLUpdateStatement) {
                 SQLUpdateStatement updateStatement = (SQLUpdateStatement) stmt;
                 String tableName = updateStatement.getTableName().getSimpleName();
-                DBTable table = schema.getTable(tableName);
 
                 for (SQLUpdateSetItem item : updateStatement.getItems()) {
                     DataMap dataMap = new DataMap();
@@ -120,9 +123,12 @@ public class SqlFormat {
                     dataMap.put(VALUE, value);
                     dataMap.put(VALUE_LENGTH, value.length());
 
-                    DBColumn column = table.getColumn(colName);
-                    dataMap.put(DB_DATA_TYPE, column.getDataTypeString());
-                    dataMap.put(MAX_LENGTH, column.getMaxLength());
+                    if (schema != null) {
+                        DBTable table = schema.getTable(tableName);
+                        DBColumn column = table.getColumn(colName);
+                        dataMap.put(DB_DATA_TYPE, column.getDataTypeString());
+                        dataMap.put(MAX_LENGTH, column.getMaxLength());
+                    }
 
                     dataList.add(dataMap);
                 }
