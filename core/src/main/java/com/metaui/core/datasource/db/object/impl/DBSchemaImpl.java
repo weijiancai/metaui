@@ -51,7 +51,7 @@ public class DBSchemaImpl extends DBObjectImpl implements DBSchema {
             tables = loader.loadTables(this);
             // 放入map
             for (DBTable table : tables) {
-                tableMap.put(table.getName(), table);
+                tableMap.put(table.getName().toLowerCase(), table);
             }
         }
         return tables;

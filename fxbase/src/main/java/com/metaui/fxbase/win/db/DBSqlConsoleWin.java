@@ -155,7 +155,7 @@ public class DBSqlConsoleWin extends BorderPane implements IView {
         formatTable.setOnCellRender((event, obj) -> {
             BaseTableColumn column = event.getColumn();
             DataMap rowData = event.getRowData();
-            String type = rowData.getString(SqlFormat.DB_DATA_TYPE).toLowerCase();
+            String type = rowData.getString(SqlFormat.DB_DATA_TYPE, "").toLowerCase();
             String value = rowData.getString(SqlFormat.VALUE);
 
             if (SqlFormat.VALUE_LENGTH.equals(column.getId())) {

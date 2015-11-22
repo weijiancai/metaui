@@ -50,11 +50,16 @@ public class OracleLoader extends BaseDBLoader {
     @Override
     protected String getSchemaSql() {
         return "select\n" +
-                "                name as SCHEMA_NAME,\n" +
+                "                USERNAME as SCHEMA_NAME,\n" +
                 "                'N' as IS_PUBLIC,\n" +
-                "                (case when database_id > 3 then 'N' else 'Y' end) as IS_SYSTEM\n" +
-                "            from sys.databases\n" +
-                "            order by name asc";
+                "                decode(USERNAME, 'SYS', 'Y', 'SYSTEM', 'Y', 'N') as IS_SYSTEM\n" +
+                "            from ALL_USERS\n" +
+                "            union (\n" +
+                "                select\n" +
+                "                    'PUBLIC',\n" +
+                "                    'Y' as IS_PUBLIC,\n" +
+                "                    'Y' as IS_SYSTEM\n" +
+                "                from DUAL)";
     }
 
     @Override

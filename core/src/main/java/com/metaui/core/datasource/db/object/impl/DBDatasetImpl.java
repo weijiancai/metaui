@@ -30,7 +30,7 @@ public abstract class DBDatasetImpl extends DBObjectImpl implements DBDataset {
             String[] strs = columnName.split("\\.");
             columnName = strs[strs.length - 1];
         }
-        return columnMap.get(columnName);
+        return columnMap.get(columnName.toLowerCase());
     }
 
     @Override

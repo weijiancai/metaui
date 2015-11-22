@@ -21,7 +21,7 @@ public class DBCopy {
     private DBDataSource source;
     private DBDataSource target;
 
-    private List<DataMap> dataMaps = new ArrayList<>();
+    private List<DataMap> dataMaps = new ArrayList<DataMap>();
 
     public DBCopy(DBDataSource source, DBDataSource target) throws Exception {
         this.source = source;
@@ -36,19 +36,19 @@ public class DBCopy {
             dataMap.put("sourceTableComment", sourceTable.getComment());
             dataMap.put("sourceNumRows", sourceTable.getNumRows());
 
-            DBTable targetTable = targetSchema.getTable(sourceTable.getName());
+            final DBTable targetTable = targetSchema.getTable(sourceTable.getName());
             if (targetTable != null) {
                 dataMap.put("targetNumRows", targetTable.getNumRows());
                 dataMap.put("isImported", "false");
                 dataMap.put("importedRows", 0); // 已导入行
 
-                List<DBColumn> columns = targetTable.getColumns();
+                final List<DBColumn> columns = targetTable.getColumns();
                 System.out.println(columns);
 
                 // 查询数据
                 String sql = "select * from " + sourceTable.getName();
                 JdbcTemplate template = new JdbcTemplate(source);
-                JdbcTemplate targetTemplate = new JdbcTemplate(target);
+                final JdbcTemplate targetTemplate = new JdbcTemplate(target);
                 int count = 0;
                 template.query(sql, new Callback<DataMap>() {
                     @Override
@@ -77,9 +77,9 @@ public class DBCopy {
         DBSchema targetSchema = target.getDbConnection().getSchema();
         for (DBTable sourceTable : sourceTables) {
             System.out.println(sourceTable);
-            DBTable targetTable = targetSchema.getTable(sourceTable.getName());
+            final DBTable targetTable = targetSchema.getTable(sourceTable.getName());
             if (targetTable != null) {
-                List<DBColumn> columns = targetTable.getColumns();
+                final List<DBColumn> columns = targetTable.getColumns();
                 System.out.println(columns);
 
                 // 查询数据

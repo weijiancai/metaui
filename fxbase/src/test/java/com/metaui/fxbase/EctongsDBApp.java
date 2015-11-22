@@ -23,6 +23,18 @@ public class EctongsDBApp extends DBApp {
         ds.setPwd("yhdtpass2013#");
 
         DataSourceManager.addDataSource(ds);
+
+        ds = new DBDataSource();
+        ds.setId("ecargo");
+        ds.setName("ecargo");
+        ds.setDisplayName("ecargo");
+        ds.setDatabaseType(DatabaseType.ORACLE);
+        ds.setDriverClass(JdbcDrivers.ORACLE);
+        ds.setUrl("jdbc:oracle:thin:@//192.168.31.118:1521/orcl");
+        ds.setUserName("ecargo");
+        ds.setPwd("ecargo");
+
+        DataSourceManager.addDataSource(ds);
     }
 
     public static void main(String[] args) {

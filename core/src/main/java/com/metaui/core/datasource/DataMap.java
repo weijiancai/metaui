@@ -69,6 +69,21 @@ public class DataMap extends HashMap<String,Object> {
     }
 
     /**
+     * 获得key对应的字符串值
+     *
+     * @param key Key
+     * @return 返回key对应的字符串值
+     * @since 1.0.0
+     */
+    public String getString(String key, String defaultValue) {
+        String result = UObject.toString(get(key));
+        if (UString.isEmpty(result)) {
+            result = defaultValue;
+        }
+        return result;
+    }
+
+    /**
      * 将key，value添加到结果集中，key会转成小写
      *
      * @param key key
