@@ -210,13 +210,13 @@ public class UFile {
         ClassPathDataSource cp = ClassPathDataSource.getInstance();
         try {
             ITreeNode tree = cp.getNavTree(source);
-            iteratorTree(tree, new Callback<ITreeNode>() {
+            iteratorTree(tree, new Callback<ITreeNode, Void>() {
                 @Override
-                public void call(ITreeNode node, Object... obj) throws Exception {
+                public Void call(ITreeNode node, Object... obj) throws Exception {
                     InputStream is = UIO.getInputStream("/" + node.getId(), UIO.FROM.CP);
                     File file = new File(target, node.getId());
                     if (node.getChildren().size() > 0) {
-                        return;
+                        return null;
                     }
 
                     File parentDir = file.getParentFile();
@@ -224,6 +224,8 @@ public class UFile {
                         parentDir.mkdirs();
                     }
                     write(is, new FileOutputStream(file));
+
+                    return null;
                 }
             });
 
@@ -232,7 +234,7 @@ public class UFile {
         }
     }
 
-    private static void iteratorTree(ITreeNode node, Callback<ITreeNode> callback) throws Exception {
+    private static void iteratorTree(ITreeNode node, Callback<ITreeNode, Void> callback) throws Exception {
         callback.call(node);
         List<ITreeNode> children = node.getChildren();
         if (children != null && children.size() > 0) {
@@ -302,5 +304,29 @@ public class UFile {
             }
         }
         return list;
+    }
+
+    /**
+     * 读取大文本文件，使用回掉函数处理行数据
+     *
+     * @param filePath
+     * @param charset
+     * @param callback
+     * @throws Exception
+     */
+    public static void readFile(String filePath, String charset, Callback<String, Boolean> callback) throws Exception {
+        // 输入/输出缓冲区大小，默认为5M
+        int CACHE_SIZE = 10 * 1024 * 1024;
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), charset), CACHE_SIZE);
+        String line;
+        try {
+            while ((line = br.readLine()) != null) {
+                if (!callback.call(line)) {
+                    break;
+                }
+            }
+        } finally {
+            br.close();
+        }
     }
 }

@@ -28,7 +28,7 @@ public class DBCopy {
         this.target = target;
 
         // 查询源数据库中所有表
-        List<DBTable> sourceTables = getSourceTables();
+        /*List<DBTable> sourceTables = getSourceTables();
         DBSchema targetSchema = target.getDbConnection().getSchema();
         for (DBTable sourceTable : sourceTables) {
             DataMap dataMap = new DataMap();
@@ -66,6 +66,46 @@ public class DBCopy {
                 }, 0, 0);
             }
             break;
+        }*/
+    }
+
+    public void copyTable(String tableName) throws Exception {
+        copyTable(tableName, "");
+    }
+
+    public void copyTable(String tableName, String appendSql) throws Exception {
+        final DBTable sourceTable = source.getDbConnection().getSchema().getTable(tableName);
+        if (sourceTable == null) {
+            throw new Exception("表【" + tableName + "】不存在！");
+        }
+        DBSchema targetSchema = target.getDbConnection().getSchema();
+        final DBTable targetTable = targetSchema.getTable(sourceTable.getName());
+        if (targetTable != null) {
+            final List<DBColumn> columns = targetTable.getColumns();
+            System.out.println(columns);
+
+            // 查询数据
+            String sql = "select * from " + sourceTable.getName() + " " + appendSql;
+            System.out.println(sql);
+            JdbcTemplate template = new JdbcTemplate(source);
+            final JdbcTemplate targetTemplate = new JdbcTemplate(target);
+            template.query(sql, new Callback<DataMap, Void>() {
+                @Override
+                public Void call(DataMap dataMap, Object... obj) throws Exception {
+                    System.out.println(dataMap);
+                    List<Object> values = new ArrayList<Object>();
+                    for (DBColumn column : columns) {
+                        values.add(dataMap.get(column.getName()));
+                    }
+                    // 插入
+                    String sql = SqlBuilder.create().insert(targetTable.getName(), columns).build();
+                    targetTemplate.save(sql, values);
+
+                    return null;
+                }
+            }, 0, 0);
+            // 提交
+            targetTemplate.commit();
         }
     }
 
@@ -85,9 +125,9 @@ public class DBCopy {
                 // 查询数据
                 String sql = "select * from " + sourceTable.getName();
                 JdbcTemplate template = new JdbcTemplate(source);
-                template.query(sql, new Callback<DataMap>() {
+                template.query(sql, new Callback<DataMap, Void>() {
                     @Override
-                    public void call(DataMap dataMap, Object... obj) throws Exception {
+                    public Void call(DataMap dataMap, Object... obj) throws Exception {
                         System.out.println(dataMap);
                         List<Object> values = new ArrayList<Object>();
                         for (DBColumn column : columns) {
@@ -96,6 +136,8 @@ public class DBCopy {
                         // 插入
                         String sql = SqlBuilder.create().insert(targetTable.getName(), columns).build();
                         JdbcTemplate.save(target, sql, values);
+
+                        return null;
                     }
                 }, 0, 0);
             }

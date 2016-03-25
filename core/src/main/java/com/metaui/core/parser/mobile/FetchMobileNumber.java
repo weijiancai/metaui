@@ -28,14 +28,14 @@ public class FetchMobileNumber {
     private static List<String> codeSegmentList = new ArrayList<String>();
 
     private Map<String, String> cookies;
-    private Callback<List<MobileNumber>> callback;
+    private Callback<List<MobileNumber>, Void> callback;
     private File mobileFile = new File("D:\\workspace\\metaui\\core\\src\\main\\java\\com\\metaui\\core\\parser\\mobile\\mobile.txt");
     private PrintWriter pw;
 
     public FetchMobileNumber() {
     }
 
-    public FetchMobileNumber(Callback<List<MobileNumber>> callback) {
+    public FetchMobileNumber(Callback<List<MobileNumber>, Void> callback) {
         this.callback = callback;
     }
 

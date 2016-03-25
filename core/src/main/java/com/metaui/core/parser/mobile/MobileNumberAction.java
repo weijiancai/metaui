@@ -17,9 +17,9 @@ public class MobileNumberAction {
     public void fetchMobileNumber() throws Exception {
         final Meta meta = MetaManager.getMeta("MobileNumber");
 
-        FetchMobileNumber fetchMobileNumber = new FetchMobileNumber(new Callback<List<MobileNumber>>() {
+        FetchMobileNumber fetchMobileNumber = new FetchMobileNumber(new Callback<List<MobileNumber>, Void>() {
             @Override
-            public void call(List<MobileNumber> result, Object... obj) throws Exception {
+            public Void call(List<MobileNumber> result, Object... obj) throws Exception {
                 for (MobileNumber mobileNumber : result) {
                     DataMap map = new DataMap();
                     map.put("code", mobileNumber.getCode());
@@ -31,6 +31,8 @@ public class MobileNumberAction {
                     meta.insertRow(map);
                 }
                 meta.save();
+
+                return null;
             }
         });
 

@@ -44,6 +44,17 @@ public class JdbcTemplate {
 
     public JdbcTemplate(DBDataSource dataSource) {
         this.dataSource = dataSource;
+        newConnection();
+    }
+
+    public DBDataSource getDataSource() {
+        return dataSource;
+    }
+
+    /**
+     * 新创建连接
+     */
+    public void newConnection() {
         try {
             DBConnection dbConn = dataSource.getDbConnection();
             conn = dbConn.getConnection();
@@ -52,10 +63,6 @@ public class JdbcTemplate {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public DBDataSource getDataSource() {
-        return dataSource;
     }
 
     public List<DataMap> queryForList(String sql) throws Exception {
@@ -195,7 +202,7 @@ public class JdbcTemplate {
         return map;
     }
 
-    public void query(String sql, Callback<ResultSet> callback, Object... values) throws Exception {
+    public void query(String sql, Callback<ResultSet, Void> callback, Object... values) throws Exception {
         PreparedStatement pstmt = conn.prepareStatement(sql);
         if (null != values && values.length > 0) {
             int i = 1;
@@ -221,7 +228,7 @@ public class JdbcTemplate {
      * @param values
      * @throws Exception
      */
-    public void query(String sql, Callback<DataMap> callback, int start, int max, Object... values) throws Exception {
+    public void query(String sql, Callback<DataMap, Void> callback, int start, int max, Object... values) throws Exception {
         try {
             start = start <= 0 ? 1 : start; // 开始行号从1开始
 
@@ -497,6 +504,10 @@ public class JdbcTemplate {
     public void update(String sql) throws SQLException {
         try {
             System.out.println(sql);
+            // Oracle去掉最后的;要不然报错ORA-00911: 无效字符
+            if (databaseType != null && DatabaseType.ORACLE == databaseType && sql.endsWith(";")) {
+                sql = sql.substring(0, sql.length() - 1);
+            }
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.executeUpdate();
             pstmt.close();
