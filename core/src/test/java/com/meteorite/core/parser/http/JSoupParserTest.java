@@ -226,4 +226,37 @@ public class JSoupParserTest {
         Document doc = parser.parse();
         System.out.println(doc.html());
     }
+
+    @Test
+    public void testEcargoWeb() throws Exception {
+        String url = "http://localhost:9001/ecargo/policyQuery!clientPolicyQuery.action";
+
+        Map<String, String> cookies = new HashMap<String, String>();
+        cookies.put("ADMINCONSOLESESSION", "DZyqW20LfxTnk2HpjsCC09jxPn9MQv14FLQc8BTLQkyJrhqp0lGs!1072346402");
+        cookies.put("JSESSIONID", "QT1tW22RR6wn4JdyBx0RL9wY0K6FTThSBc53NCkG1RJpQhFGyCyn!1072346402");
+        cookies.put("sid", "QT1tW22RR6wn4JdyBx0RL9wY0K6FTThSBc53NCkG1RJpQhFGyCyn%211072346402%211458992817107");
+
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("ifflag", "false");
+        data.put("beginDate", "2016-03-16");
+        data.put("endDate", "2016-03-26");
+        data.put("policyStatus", "61");
+        data.put("insuranceID", "1");
+        data.put("buid", "39262");
+        /*data.put("", "");
+        data.put("", "");
+        data.put("", "");
+        data.put("", "");*/
+
+        Connection conn = Jsoup.connect(url);
+        conn.userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0");
+        System.out.println(conn.execute().cookies());
+
+        conn = Jsoup.connect(url);
+        conn.header("myreq", "1637f2b4e86554f0ffbc21ea06f8756d");
+        conn.header("myver", "3136333766326234653836353534663066666263323165613036663837353664");
+        conn.header("x-forwarded-for", "192.168.1.2");
+        Document doc = conn.cookies(cookies).data(data).post();
+        System.out.println(doc.html());
+}
 }

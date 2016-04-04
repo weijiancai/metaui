@@ -52,7 +52,7 @@ public class JSoupParser {
             e.printStackTrace();
         }*/
 
-        return conn.get();
+        return conn.post();
     }
 
     public Connection connect() {
