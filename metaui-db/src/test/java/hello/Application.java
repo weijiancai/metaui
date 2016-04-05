@@ -1,6 +1,7 @@
 package hello;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.metaui.db.MyJdbcTemplate;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -50,11 +51,17 @@ public class Application {
         return new JdbcTemplate(dataSource());
     }
 
+    @Bean
+    MyJdbcTemplate myJdbcTemplate() {
+        return new MyJdbcTemplate();
+    }
+
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(Application.class);
         MessagePrinter printer = context.getBean(MessagePrinter.class);
         printer.printMessage();
         ShippingDao dao = context.getBean(ShippingDao.class);
-        System.out.println(dao.getShippingCount());
+//        System.out.println(dao.getShippingCount());
+        dao.update();
     }
 }
