@@ -31,10 +31,12 @@ public class Application {
     @Bean(initMethod = "init", destroyMethod = "close")
     DruidDataSource dataSource() throws SQLException {
         DruidDataSource dataSource =  new DruidDataSource();
-        dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        dataSource.setUrl("jdbc:sqlserver://weiyi1998.com:18888;databaseName=yhbis_wy");
+        dataSource.setDriverClassName("net.sourceforge.jtds.jdbc.Driver");
+        dataSource.setUrl("jdbc:jtds:sqlserver://weiyi1998.com:18888;databaseName=yhbis_wy");
         dataSource.setUsername("sa");
         dataSource.setPassword("123!@#qwe");
+        dataSource.setValidationQuery("select top 1 1 from sysobjects");
+        dataSource.setTestWhileIdle(true);
         dataSource.setMinIdle(1);
         dataSource.setMaxActive(20);
         dataSource.setMaxWait(60000);
@@ -43,10 +45,10 @@ public class Application {
         return dataSource;
     }
 
-    /*@Bean
-    JdbcTemplate mockJdbcTemplate() {
-        return new JdbcTemplate();
-    }*/
+    @Bean
+    JdbcTemplate mockJdbcTemplate() throws SQLException {
+        return new JdbcTemplate(dataSource());
+    }
 
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(Application.class);

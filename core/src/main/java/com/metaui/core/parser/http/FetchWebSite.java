@@ -298,9 +298,9 @@ public class FetchWebSite {
             int end = url.indexOf("/", 7);
             baseUrl = url.substring(0, end == -1 ? url.length() : end);
         }
-        if (!url.startsWith(baseUrl)) {
+        /*if (!url.startsWith(baseUrl)) {
             return;
-        }
+        }*/
 
         final File imagesDir = new File(baseDir, "images");
         try {

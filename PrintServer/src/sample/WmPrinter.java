@@ -180,7 +180,7 @@ public class WmPrinter implements Runnable, DocumentListener, Printable, PrintJo
      * The main function is made for debugging this application separately only.
      */
     public static void main(String args[]) {
-        new WmPrinter(PrintServiceLookup.lookupDefaultPrintService(), "http://115.29.163.55:9587/html/wm/print/pack_tag/wy_zgsy.jsp?task_id=2D7A22520F0B4074B07DB2A4C1A82A2F");
+        new WmPrinter(PrintServiceLookup.lookupDefaultPrintService(), "http://www.bg-online.com.cn:9587/html/wm/print/pack_tag/normal.jsp?task_id=AA6C508A69374B5DA731B850EE967817");
 
     }
 
