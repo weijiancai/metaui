@@ -2,6 +2,7 @@ package com.metaui.core.datasource;
 
 import com.metaui.core.util.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,6 +56,10 @@ public class DataMap extends HashMap<String,Object> {
      * @since 1.0.0
      */
     public String getString(String key) {
+        Object obj = get(key);
+        if (obj != null && obj instanceof Date) {
+            return UDate.dateToString((Date) obj, "yyyy-MM-dd HH:mm:ss");
+        }
         return UObject.toString(get(key));
     }
 
