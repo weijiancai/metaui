@@ -29,6 +29,7 @@
         <module>metaui-excel</module>
         <module>metaui-db</module>
         <module>metaui-core</module>
+        <module>metaui-eshop</module>
     </modules>
 
     <properties>
