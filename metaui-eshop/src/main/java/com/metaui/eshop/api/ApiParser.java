@@ -1,5 +1,7 @@
 package com.metaui.eshop.api;
 
+import com.metaui.eshop.api.domain.Category;
+
 import java.util.List;
 
 /**
@@ -14,5 +16,5 @@ public interface ApiParser {
      *
      * @return 返回Api分类信息
      */
-    List<ApiCategory> parse() throws Exception;
+    List<Category> parse() throws Exception;
 }

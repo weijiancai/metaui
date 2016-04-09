@@ -258,5 +258,33 @@ public class JSoupParserTest {
         conn.header("x-forwarded-for", "192.168.1.2");
         Document doc = conn.cookies(cookies).data(data).post();
         System.out.println(doc.html());
-}
+    }
+
+    @Test
+    public void testWeibo() throws Exception {
+        String url = "http://login.weibo.cn/login/";
+        JSoupParser parser = new JSoupParser(url);
+        Document doc = parser.parse();
+//        System.out.println(doc.html());
+        Map<String, String> data = new HashMap<>();
+        List<Element> list = doc.body().select("input");
+        for (Element element : list) {
+            String name = element.attr("name");
+            String value = element.attr("value");
+            if (name.startsWith("mobile")) {
+                data.put(name, "2242860137@qq.com");
+            } else if(name.startsWith("password")) {
+                data.put(name, "yangjing");
+            } else {
+                data.put(name, value);
+            }
+        }
+        System.out.println(data);
+        String action = doc.select("form").attr("action");
+        System.out.println(action);
+        url += action;
+        parser.setUrl(url);
+        doc = parser.parse(data);
+        System.out.println(doc.html());
+    }
 }

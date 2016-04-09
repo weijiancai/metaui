@@ -4,10 +4,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import java.io.File;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -31,7 +28,7 @@ public class JAXBUtil {
         return marshalToString(listBean, classes);
     }
 
-    public static <T> void marshalListToFile(List<T> list, File file, Class<?> classes) throws Exception {
+    public static <T> void marshalListToFile(List<T> list, File file, Class<?>... classes) throws Exception {
         ListBean<T> listBean = new ListBean<T>(list);
 
         marshalToFile(listBean, file, classes);
@@ -70,7 +67,10 @@ public class JAXBUtil {
     }
     
     @SuppressWarnings("unchecked")
-    public static <T> T unmarshal(File file, Class<T> clazz) throws Exception {
+    public static <T> T unmarshal(File file, Class<T>... clazz) throws Exception {
+        if (!file.exists()) {
+            return null;
+        }
         return (T)getUnmarshaller(clazz).unmarshal(file);
     }
 
@@ -88,6 +88,13 @@ public class JAXBUtil {
     @SuppressWarnings("unchecked")
     public static <T> List<T> unmarshalList(InputStream inputStream, Class<?>... classes) throws Exception {
         ListBean<T> listBean = (ListBean<T>) getUnmarshaller(classes).unmarshal(inputStream);
+
+        return listBean.getList();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> List<T> unmarshalList(File file, Class<?>... classes) throws Exception {
+        ListBean<T> listBean = (ListBean<T>) getUnmarshaller(classes).unmarshal(new FileInputStream(file));
 
         return listBean.getList();
     }

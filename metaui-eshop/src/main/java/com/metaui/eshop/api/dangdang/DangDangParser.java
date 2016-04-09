@@ -1,12 +1,19 @@
 package com.metaui.eshop.api.dangdang;
 
 import com.metaui.core.util.JSoupParser;
-import com.metaui.eshop.api.ApiCategory;
+import com.metaui.core.util.jaxb.JAXBUtil;
+import com.metaui.eshop.api.ApiSiteName;
+import com.metaui.eshop.api.domain.ApiInfo;
+import com.metaui.eshop.api.domain.Category;
 import com.metaui.eshop.api.ApiParser;
+import com.metaui.eshop.api.xml.DangDangXml;
+import com.metaui.eshop.moudle.EShopModule;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,30 +28,61 @@ public class DangDangParser implements ApiParser {
     private static Logger log = LoggerFactory.getLogger(DangDangParser.class);
     // 分类url
     private static final String CATEGORY_URL = "http://open.dangdang.com/index.php?c=documentCenterG3&f=show&page_id=9";
-    private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36";
 
     @Override
-    public List<ApiCategory> parse() throws Exception {
-        List<ApiCategory> categories = new ArrayList<ApiCategory>();
+    public List<Category> parse() throws Exception {
+        List<Category> categories = new ArrayList<Category>();
 
         for(int i = 1; i < 7; i++) {
             categories.add(parseCategory(CATEGORY_URL + i));
+            if (i == 1) {
+                break;
+            }
         }
+
+        // 保存
+        DangDangXml xml = new DangDangXml();
+        xml.setCategories(categories);
+        xml.save();
 
         return categories;
     }
 
-    private ApiCategory parseCategory(String url) throws IOException {
-//        Document doc = Jsoup.connect(url).userAgent(USER_AGENT).get();
+    private Category parseCategory(String url) throws IOException {
         JSoupParser parser = new JSoupParser(url);
         Document doc = parser.parse();
         String name = doc.select("div.api_list > h1").text();
         String desc = doc.select("ul.detail_list li").get(0).select("div.theme_content > p").text();
 
-        ApiCategory category = new ApiCategory();
+        List<Element> elements = doc.select("table.kindTable1 tr ");
+        List<ApiInfo> infos = new ArrayList<ApiInfo>();
+        for (Element element : elements) {
+            String apiUrl = element.select("a").attr("href");
+            System.out.println("apiUrl:" + apiUrl);
+            infos.add(parseApiInfo(apiUrl));
+            break;
+        }
+
+        Category category = new Category();
         category.setName(name);
         category.setDesc(desc);
+        category.setApiInfos(infos);
 
         return category;
+    }
+
+    private ApiInfo parseApiInfo(String url) throws IOException {
+        JSoupParser parser = new JSoupParser(url);
+        Document doc = parser.parse();
+        String id = doc.select("div.api_list > h1").text();
+        String name = doc.select("div.api_list > h3").text();
+        String desc = doc.select("ul.detail_list li").get(0).select("theme_content").html();
+
+        ApiInfo info = new ApiInfo();
+        info.setId(id);
+        info.setName(name);
+        info.setDesc(desc);
+
+        return info;
     }
 }

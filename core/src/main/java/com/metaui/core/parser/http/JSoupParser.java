@@ -14,6 +14,7 @@ import java.util.Map;
  */
 public class JSoupParser {
     private String url;
+    private Map<String, String> cookies = new HashMap<>();
 
     public JSoupParser(String url) {
         this.url = url;
@@ -29,18 +30,22 @@ public class JSoupParser {
 
     public Document parse(Map<String, String> data, Map<String, String> headers, Map<String, String> cookieMap) throws IOException {
         Connection conn = Jsoup.connect(url).timeout(50000);
-        conn.userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0");
+//        conn.userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0");
+        conn.userAgent("Mozilla/5.0 (iPhone; CPU iPhone OS 8_0 like Mac OS X) AppleWebKit/600.1.3 (KHTML, like Gecko) Version/8.0 Mobile/12A4345d Safari/600.1.4");
 
         if (headers != null && headers.size() > 0) {
             for (Map.Entry<String, String> entry : headers.entrySet()) {
                 conn.header(entry.getKey(), entry.getValue());
             }
         }
+        Map<String, String> cm = conn.execute().cookies();
+        cookies.putAll(cm);
 
-        Map<String, String> cookies = conn.execute().cookies();
         if (cookieMap != null && cookieMap.size() > 0) {
             cookies.putAll(cookieMap);
         }
+        conn.execute().cookies().putAll(cookies);
+
         System.out.println(cookies);
         if (data != null) {
             conn.data(data);
@@ -51,8 +56,13 @@ public class JSoupParser {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }*/
+        conn.followRedirects(false);//此行必须添加
 
         return conn.post();
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public Connection connect() {
