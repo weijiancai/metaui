@@ -1,6 +1,8 @@
 package com.metaui.eshop.api.domain;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * 代码示例
@@ -10,6 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * 2016/4/9.
  */
 @XmlRootElement
+@XmlType(propOrder = {"language", "code"})
 public class CodeExample {
     /**
      * 代码语言
@@ -20,6 +23,7 @@ public class CodeExample {
      */
     private String code;
 
+    @XmlAttribute
     public CodeLanguage getLanguage() {
         return language;
     }

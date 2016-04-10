@@ -1,6 +1,8 @@
 package com.metaui.eshop.api.domain;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * 参数信息
@@ -10,6 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * 2016/4/9.
  */
 @XmlRootElement
+@XmlType(propOrder = {"id", "name", "type", "require", "desc", "example", "category", "scope"})
 public class ParamInfo {
     /**
      * 参数唯一标识
@@ -44,6 +47,7 @@ public class ParamInfo {
      */
     private ParamScope scope;
 
+    @XmlAttribute
     public String getId() {
         return id;
     }
@@ -52,6 +56,7 @@ public class ParamInfo {
         this.id = id;
     }
 
+    @XmlAttribute
     public String getName() {
         return name;
     }
@@ -60,6 +65,7 @@ public class ParamInfo {
         this.name = name;
     }
 
+    @XmlAttribute
     public String getType() {
         return type;
     }
@@ -68,6 +74,7 @@ public class ParamInfo {
         this.type = type;
     }
 
+    @XmlAttribute
     public boolean isRequire() {
         return isRequire;
     }
@@ -84,6 +91,7 @@ public class ParamInfo {
         this.desc = desc;
     }
 
+    @XmlAttribute
     public String getExample() {
         return example;
     }
@@ -92,6 +100,7 @@ public class ParamInfo {
         this.example = example;
     }
 
+    @XmlAttribute
     public ParamCategory getCategory() {
         return category;
     }
@@ -100,6 +109,7 @@ public class ParamInfo {
         this.category = category;
     }
 
+    @XmlAttribute
     public ParamScope getScope() {
         return scope;
     }

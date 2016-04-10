@@ -37,9 +37,6 @@ public class DangDangParser implements ApiParser {
 
         for(int i = 1; i < 7; i++) {
             categories.add(parseCategory(CATEGORY_URL + i));
-            if (i == 1) {
-                break;
-            }
         }
 
         // 保存
@@ -62,7 +59,6 @@ public class DangDangParser implements ApiParser {
             String apiUrl = element.select("a").attr("href");
             System.out.println("apiUrl:" + apiUrl);
             infos.add(parseApiInfo(apiUrl));
-            break;
         }
 
         Category category = new Category();
@@ -78,35 +74,50 @@ public class DangDangParser implements ApiParser {
         Document doc = parser.parse();
         String id = doc.select("div.api_list > h1").text();
         String name = doc.select("div.api_list > h3").text();
-        String desc = doc.select("ul.detail_list li").get(0).select("theme_content").html();
+        String desc = doc.select("ul.detail_list > li").get(0).select("div.theme_content").html();
         String sysParamsUrl = "http://open.dangdang.com/index.php?c=documentCenter&f=show&page_id=89";
-        List<ParamInfo> sysParamsList = parseSysParams(sysParamsUrl);
+//        List<ParamInfo> sysParamsList = parseSysParams(sysParamsUrl);
         List<ParamInfo> appParamsList = parseAppParams(doc);
-        List<ParamInfo> returnParamsList = parseReturnParams(doc);
-        List<CodeExample> resCodesList = parseResCodes(doc);
+//        List<ParamInfo> returnParamsList = parseReturnParams(doc);
+//        List<CodeExample> reqCodesList = parseReqCodes(doc);
+//        List<CodeExample> resCodesList = parseResCodes(doc);
 
         ApiInfo info = new ApiInfo();
         info.setId(id);
         info.setName(name);
         info.setDesc(desc);
-        info.setSysParams(sysParamsList);
+        info.setUrl(url);
+//        info.setSysParams(sysParamsList);
         info.setAppParams(appParamsList);
-        info.setReturnParams(returnParamsList);
-        info.setResCodes(resCodesList);
+//        info.setReturnParams(returnParamsList);
+//        info.setReqCodes(reqCodesList);
+//        info.setResCodes(resCodesList);
 
         return info;
     }
 
-    private List<CodeExample> parseResCodes(Document doc) throws IOException {
-        List<CodeExample> resCodesList = new ArrayList<CodeExample>();
-        String codeStr = doc.select("div.right ul.detail_list li").get(3).select("div.theme_content p").text();
-        String code = codeStr.substring(codeStr.indexOf("："));
+    private List<CodeExample> parseReqCodes(Document doc) throws IOException {
+        List<CodeExample> list = new ArrayList<CodeExample>();
+        String code = doc.select("div.right ul.detail_list li").get(2).select("div.theme_content").html();
 
         CodeExample codeExample = new CodeExample();
         codeExample.setLanguage(CodeLanguage.XML);
         codeExample.setCode(code);
+        list.add(codeExample);
 
-        return resCodesList;
+        return list;
+    }
+
+    private List<CodeExample> parseResCodes(Document doc) throws IOException {
+        List<CodeExample> list = new ArrayList<CodeExample>();
+        String code = doc.select("div.right ul.detail_list li").get(3).select("div.theme_content").html();
+
+        CodeExample codeExample = new CodeExample();
+        codeExample.setLanguage(CodeLanguage.XML);
+        codeExample.setCode(code);
+        list.add(codeExample);
+
+        return list;
     }
 
     private List<ParamInfo> parseReturnParams(Document doc) throws IOException {
@@ -134,19 +145,25 @@ public class DangDangParser implements ApiParser {
 
     private List<ParamInfo> parseAppParams(Document doc) throws IOException {
         List<ParamInfo> appParamsList = new ArrayList<ParamInfo>();
-        Elements trElements = doc.select("table.kindTable.kindTable2").get(0).select("tbody tr");
+        Elements tableElements = doc.select("ul.detail_list li").get(1).select("table.kindTable.kindTable2");
+        if (tableElements.size() == 0) {
+            return new ArrayList<>();
+        }
+        Elements trElements = tableElements.get(0).select("tbody tr");
+
         for (int i = 1; i < trElements.size(); i ++) {
             Element trElement = trElements.get(i);
-            String name = trElement.select("td").get(0).text();
-            String id = trElement.select("td").get(1).text();
-            String type = trElement.select("td").get(2).text();
-            String requireStr = trElement.select("td").get(3).text();
-            boolean require = false;
-            if(requireStr.equals("Y")) {
-                require = true;
+            Elements tds = trElement.select("td");
+            if (tds.size() == 0) {
+                continue;
             }
-            String example = trElement.select("td").get(4).text();
-            String desc = trElement.select("td").get(5).text();
+            String name = tds.get(0).text();
+            String id = tds.get(1).text();
+            String type = tds.get(2).text();
+            String requireStr = tds.get(3).text();
+            boolean require = "Y".equals(requireStr);
+            String example = tds.get(4).text();
+            String desc = tds.get(5).text();
 
             ParamInfo paramInfo = new ParamInfo();
             paramInfo.setId(id);

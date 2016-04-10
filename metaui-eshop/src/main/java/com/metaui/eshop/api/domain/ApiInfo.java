@@ -1,8 +1,6 @@
 package com.metaui.eshop.api.domain;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 import java.util.List;
 
 /**
@@ -13,7 +11,7 @@ import java.util.List;
  * 2016/4/9.
  */
 @XmlRootElement
-@XmlType(propOrder = {"id", "name", "desc", "explain", "authorize", "scene", "sysParams", "appParams", "returnParams", "reqCodes", "resCodes", "exceptionCodes", "errorInfos"})
+@XmlType(propOrder = {"id", "name", "desc", "explain", "authorize", "scene", "url", "sysParams", "appParams", "returnParams", "reqCodes", "resCodes", "exceptionCodes", "errorInfos"})
 public class ApiInfo {
     /**
      * 接口唯一标识
@@ -39,6 +37,10 @@ public class ApiInfo {
      * 应用场景
      */
     private String scene;
+    /**
+     * api url
+     */
+    private String url;
     /**
      * 系统参数列表
      */
@@ -118,6 +120,16 @@ public class ApiInfo {
         this.scene = scene;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    @XmlElementWrapper(name = "systemParams")
+    @XmlElement(name = "param")
     public List<ParamInfo> getSysParams() {
         return sysParams;
     }
@@ -126,6 +138,8 @@ public class ApiInfo {
         this.sysParams = sysParams;
     }
 
+    @XmlElementWrapper(name = "appParams")
+    @XmlElement(name = "param")
     public List<ParamInfo> getAppParams() {
         return appParams;
     }
@@ -134,6 +148,8 @@ public class ApiInfo {
         this.appParams = appParams;
     }
 
+    @XmlElementWrapper(name = "returnParams")
+    @XmlElement(name = "param")
     public List<ParamInfo> getReturnParams() {
         return returnParams;
     }
@@ -142,6 +158,8 @@ public class ApiInfo {
         this.returnParams = returnParams;
     }
 
+    @XmlElementWrapper(name = "requestCodes")
+    @XmlElement(name = "code")
     public List<CodeExample> getReqCodes() {
         return reqCodes;
     }
@@ -150,6 +168,8 @@ public class ApiInfo {
         this.reqCodes = reqCodes;
     }
 
+    @XmlElementWrapper(name = "responseCodes")
+    @XmlElement(name = "code")
     public List<CodeExample> getResCodes() {
         return resCodes;
     }
@@ -158,6 +178,8 @@ public class ApiInfo {
         this.resCodes = resCodes;
     }
 
+    @XmlElementWrapper(name = "exceptionCodes")
+    @XmlElement(name = "code")
     public List<CodeExample> getExceptionCodes() {
         return exceptionCodes;
     }
@@ -166,11 +188,18 @@ public class ApiInfo {
         this.exceptionCodes = exceptionCodes;
     }
 
+    @XmlElementWrapper(name = "errorCodes")
+    @XmlElement(name = "error")
     public List<ErrorInfo> getErrorInfos() {
         return errorInfos;
     }
 
     public void setErrorInfos(List<ErrorInfo> errorInfos) {
         this.errorInfos = errorInfos;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s\n%s", id, name);
     }
 }

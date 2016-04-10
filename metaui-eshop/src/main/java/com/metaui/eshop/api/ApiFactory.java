@@ -1,12 +1,13 @@
 package com.metaui.eshop.api;
 
-import com.metaui.core.util.jaxb.JAXBUtil;
 import com.metaui.eshop.api.dangdang.DangDangParser;
+import com.metaui.eshop.api.dangdang.DangDangTester;
+import com.metaui.eshop.api.domain.Account;
 import com.metaui.eshop.api.domain.Category;
 import com.metaui.eshop.api.xml.DangDangXml;
 import com.metaui.eshop.moudle.EShopModule;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,24 @@ import java.util.List;
  * 2016/4/9.
  */
 public class ApiFactory {
+    private static List<Account> accounts = new ArrayList<>();
+
+    static {
+        try {
+            if (accounts.size() == 0) {
+                // 读取
+                File file = new File(EShopModule.getPath(), "account");
+                if (file.exists()) {
+                    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+                    accounts = (List<Account>) ois.readObject();
+                    ois.close();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * 获得Api接口分类
      *
@@ -43,5 +62,54 @@ public class ApiFactory {
         }
 
         return list;
+    }
+
+    public static ApiTester getTester(ApiSiteName name) throws Exception {
+        switch (name) {
+            case DANG_DANG: {
+                return new DangDangTester();
+            }
+            default: {
+                throw new IllegalArgumentException("未知Api站点名称：" + name);
+            }
+        }
+    }
+
+    public static Account getAccount(ApiSiteName site, String name) throws Exception {
+        for (Account account : accounts) {
+            if (account.getApiSite() == site && account.getName().equals(name)) {
+                return account;
+            }
+        }
+
+        return null;
+    }
+
+    public static List<Account> getAccounts(ApiSiteName siteName) {
+        List<Account> list = new ArrayList<>();
+        for (Account account : accounts) {
+            if (account.getApiSite() == siteName) {
+                list.add(account);
+            }
+        }
+        return list;
+    }
+
+    public static void addAccount(Account account) throws Exception {
+        Account ac = getAccount(account.getApiSite(), account.getName());
+        if (ac == null) {
+            accounts.add(account);
+        } else {
+            ac.setToken(account.getToken());
+            ac.setKey(account.getKey());
+            ac.setSecret(account.getSecret());
+        }
+
+        // 保存
+        File file = new File(EShopModule.getPath(), "account");
+        file.delete();
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
+        oos.writeObject(accounts);
+        oos.close();
     }
 }

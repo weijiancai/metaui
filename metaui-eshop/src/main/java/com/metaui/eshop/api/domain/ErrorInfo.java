@@ -1,6 +1,8 @@
 package com.metaui.eshop.api.domain;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * 错误码
@@ -10,6 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * 2016/4/9.
  */
 @XmlRootElement
+@XmlType(propOrder = {"id", "name", "desc", "solution"})
 public class ErrorInfo {
     /**
      * 错误码唯一标识
@@ -28,6 +31,7 @@ public class ErrorInfo {
      */
     private String solution;
 
+    @XmlAttribute
     public String getId() {
         return id;
     }
@@ -36,6 +40,7 @@ public class ErrorInfo {
         this.id = id;
     }
 
+    @XmlAttribute
     public String getName() {
         return name;
     }

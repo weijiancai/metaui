@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.WebView?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.metaui.eshop.ui.EShopApiCtrl">
+   <top>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <items>
+            <Label text="API接口" />
+            <ComboBox fx:id="apiSiteCB" prefWidth="150.0" />
+            <Label text="账户" />
+            <ChoiceBox fx:id="accountCB" prefWidth="150.0" />
+            <Button fx:id="btnAddAccount" mnemonicParsing="false" text="增加" />
+        </items>
+      </ToolBar>
+   </top>
+   <left>
+      <Accordion fx:id="categoryAccordion" prefHeight="760.0" prefWidth="250.0" BorderPane.alignment="CENTER" />
+   </left>
+   <center>
+      <TabPane prefHeight="760.0">
+         <tabs>
+            <Tab closable="false" text="测试">
+               <content>
+                  <SplitPane dividerPositions="0.30097087378640774" prefHeight="160.0" BorderPane.alignment="CENTER">
+                    <items>
+                       <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <top>
+                              <GridPane fx:id="appParamGridPane" alignment="CENTER" hgap="3.0" BorderPane.alignment="CENTER">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="90.0" />
+                                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Label alignment="CENTER" text="参数名称" />
+                                    <Label text="参数值" GridPane.columnIndex="1" />
+                                 </children>
+                              </GridPane>
+                           </top>
+                           <center>
+                              <HBox alignment="TOP_CENTER" prefHeight="701.0" prefWidth="383.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <Button fx:id="btnTest" mnemonicParsing="false" text="提交测试" />
+                                 </children>
+                              </HBox>
+                           </center>
+                        </BorderPane>
+                       <BorderPane prefHeight="701.0" prefWidth="310.0">
+                           <top>
+                              <Label text="返回结果：" BorderPane.alignment="TOP_LEFT" />
+                           </top>
+                           <center>
+                              <TextArea fx:id="taResult" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                           </center></BorderPane>
+                    </items>
+                  </SplitPane>
+               </content>
+            </Tab>
+            <Tab closable="false" text="API接口">
+               <content>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <top>
+                        <Label fx:id="titleLabel" text="标题" BorderPane.alignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                     </top>
+                     <center>
+                        <ScrollPane fitToWidth="true" prefViewportHeight="707.0" prefViewportWidth="1030.0">
+                           <content>
+                              <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <Label text="接口描述">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="apiDescLabel" />
+                                    <Label text="说明">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="explainLabel" text="Label" />
+                                    <Label text="授权">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="authorizeLabel" text="Label" />
+                                    <Label text="应用场景">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="sceneLabel" text="Label" />
+                                    <Label layoutX="10.0" layoutY="142.0" text="系统参数">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TableView fx:id="sysParamTable" prefHeight="200.0" prefWidth="200.0" />
+                                    <Label text="应用参数">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TableView fx:id="appParamTable" prefHeight="200.0" prefWidth="200.0" />
+                                    <Label text="返回参数">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TableView fx:id="returnParamTable" prefHeight="200.0" prefWidth="200.0" />
+                                 </children>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
+                     </center>
+                  </BorderPane>
+               </content>
+            </Tab>
+            <Tab closable="false" text="网页">
+               <content>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <center>
+                        <WebView fx:id="apiWebView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                     </center>
+                  </BorderPane>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+   </center>
+</BorderPane>
