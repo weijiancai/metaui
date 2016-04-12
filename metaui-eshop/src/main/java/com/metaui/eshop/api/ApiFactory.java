@@ -4,7 +4,10 @@ import com.metaui.eshop.api.dangdang.DangDangParser;
 import com.metaui.eshop.api.dangdang.DangDangTester;
 import com.metaui.eshop.api.domain.Account;
 import com.metaui.eshop.api.domain.Category;
+import com.metaui.eshop.api.taobao.TaoBaoParser;
+import com.metaui.eshop.api.taobao.TaoBaoTester;
 import com.metaui.eshop.api.xml.DangDangXml;
+import com.metaui.eshop.api.xml.TaoBaoXml;
 import com.metaui.eshop.moudle.EShopModule;
 
 import java.io.*;
@@ -56,6 +59,15 @@ public class ApiFactory {
                 }
                 break;
             }
+            case TAO_BAO: {
+                TaoBaoXml xml = new TaoBaoXml();
+                xml.load();
+                list = xml.getCategories();
+                if (list == null) {
+                    list = new TaoBaoParser().parse();
+                }
+                break;
+            }
             default: {
                 throw new IllegalArgumentException("未知Api站点名称：" + name);
             }
@@ -68,6 +80,9 @@ public class ApiFactory {
         switch (name) {
             case DANG_DANG: {
                 return new DangDangTester();
+            }
+            case TAO_BAO: {
+                return new TaoBaoTester();
             }
             default: {
                 throw new IllegalArgumentException("未知Api站点名称：" + name);

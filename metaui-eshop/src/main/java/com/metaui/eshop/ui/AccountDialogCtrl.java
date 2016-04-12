@@ -10,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
@@ -35,6 +36,8 @@ public class AccountDialogCtrl implements Initializable {
     private TextField tfSecret;
     @FXML
     private Button btnSave;
+    @FXML
+    private CheckBox isSandbox;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -50,6 +53,7 @@ public class AccountDialogCtrl implements Initializable {
                 account.setToken(tfToken.getText());
                 account.setKey(tfKey.getText());
                 account.setSecret(tfSecret.getText());
+                account.setSandbox(isSandbox.isSelected());
                 try {
                     ApiFactory.addAccount(account);
                 } catch (Exception e) {

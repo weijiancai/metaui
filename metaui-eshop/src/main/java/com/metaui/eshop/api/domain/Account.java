@@ -17,6 +17,7 @@ public class Account implements Serializable {
     private String token;
     private String key;
     private String secret;
+    private boolean isSandbox;
 
     public ApiSiteName getApiSite() {
         return apiSite;
@@ -56,6 +57,14 @@ public class Account implements Serializable {
 
     public void setSecret(String secret) {
         this.secret = secret;
+    }
+
+    public boolean isSandbox() {
+        return isSandbox;
+    }
+
+    public void setSandbox(boolean sandbox) {
+        isSandbox = sandbox;
     }
 
     @Override

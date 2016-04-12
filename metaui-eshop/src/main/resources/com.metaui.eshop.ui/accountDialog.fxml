@@ -25,7 +25,12 @@
             <Label text="名称" GridPane.rowIndex="1" />
             <TextField fx:id="tfName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Api接口" />
-            <ComboBox fx:id="cbApiSite" prefWidth="150.0" GridPane.columnIndex="1" />
+            <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1">
+               <children>
+                  <ComboBox fx:id="cbApiSite" prefWidth="150.0" />
+                  <CheckBox fx:id="isSandbox" mnemonicParsing="false" text="沙箱环境" />
+               </children>
+            </HBox>
          </children>
          <columnConstraints>
             <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="80.0" />
