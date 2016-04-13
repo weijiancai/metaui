@@ -12,15 +12,18 @@
       <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
             <Label text="API接口" />
-            <ComboBox fx:id="apiSiteCB" prefWidth="150.0" />
+            <ComboBox fx:id="apiSiteCB" prefWidth="90.0" />
             <Label text="账户" />
-            <ChoiceBox fx:id="accountCB" prefWidth="150.0" />
+            <ChoiceBox fx:id="accountCB" prefWidth="230.0" />
             <Button fx:id="btnAddAccount" mnemonicParsing="false" text="增加" />
+            <Button fx:id="btnModifyAccount" mnemonicParsing="false" text="修改" />
         </items>
       </ToolBar>
    </top>
    <left>
-      <Accordion fx:id="categoryAccordion" prefHeight="760.0" prefWidth="250.0" BorderPane.alignment="CENTER" />
+       <ScrollPane prefHeight="760.0" prefWidth="250.0" BorderPane.alignment="CENTER">
+           <Accordion fx:id="categoryAccordion" prefWidth="250.0"/>
+       </ScrollPane>
    </left>
    <center>
       <TabPane prefHeight="760.0">

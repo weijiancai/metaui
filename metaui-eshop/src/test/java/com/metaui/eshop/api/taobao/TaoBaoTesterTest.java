@@ -4,6 +4,7 @@ import com.metaui.eshop.api.domain.Account;
 import com.metaui.eshop.api.domain.ApiInfo;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,5 +59,31 @@ public class TaoBaoTesterTest {
         TaoBaoTester tester = new TaoBaoTester();
         String result = tester.test(account, info, params);
         System.out.println(result);
+    }
+
+    @Test
+    public void testTaoBaoSendBox() throws Exception {
+        Account account = new Account();
+        account.setKey("test");
+        account.setSecret("test");
+        account.setToken("61022110c46ff0ec3e611aab62c7e25ecbc045bc2841f9f2074082786");
+        account.setSandbox(true);
+
+        ApiInfo info = new ApiInfo();
+        info.setId("taobao.trade.fullinfo.get");
+
+        Map<String, String> params = new HashMap<>();
+        params.put("fields", "tid,type,status,payment,orders");
+        params.put("tid", "194145140048627");
+
+        TaoBaoTester tester = new TaoBaoTester();
+        String result = tester.test(account, info, params);
+        System.out.println(result);
+    }
+
+    @Test
+    public void testGetTbTestSessionKey() throws IOException {
+        String sessionKey = new TaoBaoTester().getTbTestSessionKey();
+        System.out.println(sessionKey);
     }
 }

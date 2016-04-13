@@ -62,4 +62,15 @@ public class AccountDialogCtrl implements Initializable {
             }
         });
     }
+
+    public void setAccount(Account account) {
+        if (account != null) {
+            cbApiSite.setValue(account.getApiSite());
+            tfName.setText(account.getName());
+            tfToken.setText(account.getToken());
+            tfKey.setText(account.getKey());
+            tfSecret.setText(account.getSecret());
+            isSandbox.setSelected(account.isSandbox());
+        }
+    }
 }

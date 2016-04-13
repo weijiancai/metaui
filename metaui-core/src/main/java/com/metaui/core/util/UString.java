@@ -25,6 +25,15 @@ public class UString {
         return !isEmpty(str);
     }
 
+    public static boolean isNotEmpty(String[] strings) {
+        for (String str : strings) {
+            if (isEmpty(str)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static String substringBefore(String str, String separator) {
         if (isEmpty(str) || separator == null) {
             return str;

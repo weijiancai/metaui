@@ -1,6 +1,7 @@
 package com.metaui.eshop.api.taobao;
 
 import com.metaui.core.util.JSoupParser;
+import com.metaui.core.util.UString;
 import com.metaui.eshop.api.ApiParser;
 import com.metaui.eshop.api.dangdang.DangDangParser;
 import com.metaui.eshop.api.domain.ApiInfo;
@@ -38,7 +39,6 @@ public class TaoBaoParser implements ApiParser {
         Elements elements = doc.select("ul.menu-1 > li > a");
         for(Element element : elements) {
             categories.add(parseCategory("http://open.taobao.com/" + element.attr("href")));
-            break;
         }
 
         // 保存
@@ -66,7 +66,6 @@ public class TaoBaoParser implements ApiParser {
                 info.setId(tds.get(0).text());
                 info.setName(tds.get(2).text());
                 infos.add(info);
-                break;
             }
         }
 
@@ -78,14 +77,14 @@ public class TaoBaoParser implements ApiParser {
         return category;
     }
 
-    private ApiInfo parseApiInfo(String url) throws IOException {
+    public ApiInfo parseApiInfo(String url) throws IOException {
         JSoupParser parser = new JSoupParser(url);
         Document doc = parser.parse();
         String id = doc.select("h2.mtl-main").text();
         String name = doc.select("h2.mtl-main > span").text();
         String desc = doc.select("p.mtl-desc").text();
 //        List<ParamInfo> sysParamsList = parseSysParams(sysParamsUrl);
-//        List<ParamInfo> appParamsList = parseAppParams(doc);
+        List<ParamInfo> appParamsList = parseAppParams(doc);
 //        List<ParamInfo> returnParamsList = parseReturnParams(doc);
 //        List<CodeExample> reqCodesList = parseReqCodes(doc);
 //        List<CodeExample> resCodesList = parseResCodes(doc);
@@ -96,11 +95,49 @@ public class TaoBaoParser implements ApiParser {
         info.setDesc(desc);
         info.setUrl(url);
 //        info.setSysParams(sysParamsList);
-//        info.setAppParams(appParamsList);
+        info.setAppParams(appParamsList);
 //        info.setReturnParams(returnParamsList);
 //        info.setReqCodes(reqCodesList);
 //        info.setResCodes(resCodesList);
 
         return info;
+    }
+
+    private List<ParamInfo> parseAppParams(Document doc) throws IOException {
+        List<ParamInfo> appParamsList = new ArrayList<ParamInfo>();
+        if (doc.select("div.J_sCon").size() == 0) {
+            return new ArrayList<>();
+        }
+        Elements tableElements = doc.select("div.J_sCon").get(1).select("table.table");
+        if (tableElements.size() == 0) {
+            return new ArrayList<>();
+        }
+        Elements trElements = tableElements.get(0).select("> tbody > tr");
+
+        for (Element trElement : trElements) {
+            Elements tds = trElement.select("td");
+            if (tds.size() == 0 || trElement.hasClass("open-wrap")) {
+                continue;
+            }
+            String id = UString.trim(tds.get(0).ownText());
+//            String name = tds.get(1).text();
+            String type = tds.get(1).text();
+            String requireStr = tds.get(2).text();
+            boolean require = "必须".equals(requireStr);
+            String example = tds.get(3).text();
+            String desc = tds.get(5).text();
+
+            ParamInfo paramInfo = new ParamInfo();
+            paramInfo.setId(id);
+//            paramInfo.setName(name);
+            paramInfo.setType(type);
+            paramInfo.setRequire(require);
+            paramInfo.setExample(example);
+            paramInfo.setDesc(desc);
+
+            appParamsList.add(paramInfo);
+        }
+
+        return appParamsList;
     }
 }

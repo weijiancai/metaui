@@ -1,5 +1,6 @@
 package com.metaui.eshop.api.amazon;
 
+import com.metaui.core.util.JSoupParser;
 import org.apache.commons.codec.binary.Base64;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -43,8 +44,8 @@ public class AmazonSign {
         parameters.put("SellerId", urlEncode("A2BJRKK636DQMN"));
         parameters.put("SignatureMethod", urlEncode(ALGORITHM));
         parameters.put("SignatureVersion", urlEncode("2"));
-        parameters.put("SubmittedFromDate", urlEncode("2013-05-01T12:00:00Z"));
-        parameters.put("Timestamp", urlEncode("2013-05-02T16:00:00Z"));
+//        parameters.put("SubmittedFromDate", urlEncode("2013-05-01T12:00:00Z"));
+        parameters.put("Timestamp", urlEncode("2016-04-11T21:42:52Z"));
         parameters.put("Version", urlEncode("2013-09-01"));
 
         System.out.println(new Date());
@@ -55,12 +56,23 @@ public class AmazonSign {
         String signature = sign(formattedParameters, secretKey);
 
         // Add signature to the parameters and display final results
-        parameters.put("Signature", urlEncode(signature));
-        parameters.put("AmazonOrderId", "C03-6051918-4780805");
+//        parameters.put("Signature", urlEncode(signature));
+        parameters.put("Signature", "g/YTA9HMsbWJZ7v9YBmQewD6FtkDD8SlWKZYVQNpgjY=");
+        parameters.put("AmazonOrderId.Id.1", "C02-3104734-8660044");
         String url = calculateStringToSignV2(parameters, serviceUrl);
         System.out.println(url);
         url = "https://mws.amazonservices.com.cn/Orders/2013-09-01?AWSAccessKeyId=AKIAIUPF5HHXOHP33PXQ&Action=GetOrder&SellerId=A2BJRKK636DQMN&SignatureVersion=2&Timestamp=2016-04-11T02%3A44%3A48Z&Version=2013-09-01&Signature=8W0iiMV0Jtea%2BnukhZnqfb1pa6zIUEeRmmA6vOh2tWI%3D&SignatureMethod=HmacSHA256&AmazonOrderId.Id.1=C03-6051918-4780805";
-        Document doc = Jsoup.connect(serviceUrl).header("x-amazon-user-agent", "AmazonJavascriptScratchpad/1.0").data(parameters).post();
+        JSoupParser parser = new JSoupParser("https://mws.amazonservices.com.cn/Orders/2013-09-01");
+        Map<String, String> headers = new HashMap<>();
+        headers.put("x-amazon-user-agent", "AmazonJavascriptScratchpad/1.0 (Language=Javascript)\n");
+        headers.put("X-Requested-With", "XMLHttpRequest\n");
+        Map<String, String> cookies = new HashMap<>();
+        cookies.put("session-id-time-cn", "1460962800l");
+        cookies.put("session-id-cn", "475-2855409-1672501");
+        cookies.put("ubid-acbcn", "475-9817303-5467017");
+        cookies.put("csm-hit", "32.13|1460410865762");
+        Document doc = parser.parse(parameters,headers, cookies);
+//        Document doc = Jsoup.connect(serviceUrl).header("x-amazon-user-agent", "AmazonJavascriptScratchpad/1.0 (Language=Javascript)").data(parameters).get();
         System.out.println(doc.html());
     }
 

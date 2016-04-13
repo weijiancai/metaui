@@ -12,6 +12,8 @@ import java.io.Serializable;
  * 2016/4/10.
  */
 public class Account implements Serializable {
+    public static final long serialVersionUID = 1L;
+
     private ApiSiteName apiSite;
     private String name;
     private String token;

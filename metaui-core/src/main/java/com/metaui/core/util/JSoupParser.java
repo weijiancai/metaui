@@ -29,7 +29,7 @@ public class JSoupParser {
 
     public Document parse(Map<String, String> data, Map<String, String> headers, Map<String, String> cookieMap) throws IOException {
         Connection conn = Jsoup.connect(url).timeout(50000);
-        conn.userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0");
+        conn.userAgent("Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36");
 
         if (headers != null && headers.size() > 0) {
             for (Map.Entry<String, String> entry : headers.entrySet()) {
@@ -37,10 +37,13 @@ public class JSoupParser {
             }
         }
 
-        Map<String, String> cookies = conn.execute().cookies();
-        if (cookieMap != null && cookieMap.size() > 0) {
-            cookies.putAll(cookieMap);
+        if (cookieMap != null) {
+            conn.cookies(cookieMap);
         }
+        Map<String, String> cookies = conn.execute().cookies();
+        /*if (cookieMap != null && cookieMap.size() > 0) {
+            cookies.putAll(cookieMap);
+        }*/
         System.out.println(cookies);
         if (data != null) {
             conn.data(data);

@@ -22,6 +22,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.web.WebView;
 
 import java.net.URL;
@@ -39,6 +40,8 @@ public class EShopApiCtrl implements Initializable {
     private ChoiceBox<Account> accountCB;
     @FXML
     private Button btnAddAccount;
+    @FXML
+    private Button btnModifyAccount;
     @FXML
     private Accordion categoryAccordion;
     @FXML
@@ -93,6 +96,22 @@ public class EShopApiCtrl implements Initializable {
                 }
             }
         });
+        // 修改账号按钮
+        btnModifyAccount.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    URL url = getClass().getResource("/com.metaui.eshop.ui/accountDialog.fxml");
+                    FXMLLoader loader = new FXMLLoader(url);
+                    Parent parent = loader.load();
+                    AccountDialogCtrl dialog = loader.getController();
+                    dialog.setAccount(accountCB.getValue());
+                    MUDialog.showCustomDialog("添加账号", parent, null);
+                } catch (Exception e) {
+                    MUDialog.showException(e);
+                }
+            }
+        });
         // Api接口测试
         btnTest.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -106,6 +125,7 @@ public class EShopApiCtrl implements Initializable {
                         MUDialog.showMessage("请选择账号！");
                         return;
                     }
+                    taResult.setText("");
                     ApiTester tester = ApiFactory.getTester(apiSiteCB.getValue());
                     String result = tester.test(account, apiInfo, getParams());
                     taResult.setText(result);
@@ -161,17 +181,23 @@ public class EShopApiCtrl implements Initializable {
     }
 
     private void initAccordion(ApiSiteName siteName) throws Exception {
+        // 移除所有Accordion Pane
+        categoryAccordion.getPanes().removeAll(categoryAccordion.getPanes());
+
         List<Category> categories = ApiFactory.getApi(siteName);
         for (Category category : categories) {
             List<ApiInfo> list = category.getApiInfos();
-            ListView<ApiInfo> listView = new ListView<>(FXCollections.observableArrayList(list));
-            // 添加选中list事件
-            listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ApiInfo>() {
-                @Override
-                public void changed(ObservableValue<? extends ApiInfo> observable, ApiInfo oldValue, ApiInfo newValue) {
-                    initApiInfo(newValue);
-                }
-            });
+            ListView<ApiInfo> listView = new ListView<>();
+            if (list != null) {
+                listView.setItems(FXCollections.observableArrayList(list));
+                // 添加选中list事件
+                listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ApiInfo>() {
+                    @Override
+                    public void changed(ObservableValue<? extends ApiInfo> observable, ApiInfo oldValue, ApiInfo newValue) {
+                        initApiInfo(newValue);
+                    }
+                });
+            }
 
             TitledPane pane = new TitledPane(category.getName(), listView);
             categoryAccordion.getPanes().add(pane);
@@ -180,6 +206,8 @@ public class EShopApiCtrl implements Initializable {
 
     private void initApiInfo(ApiInfo info) {
         this.apiInfo = info;
+        // 清空返回结果
+        taResult.setText("");
 
         titleLabel.setText(info.getId() + "    " + info.getName());
         apiDescLabel.setText(info.getDesc());
@@ -210,6 +238,9 @@ public class EShopApiCtrl implements Initializable {
         int row = 1;
         for (ParamInfo param : info.getAppParams()) {
             Label idLabel = new Label(param.getId());
+            if (param.isRequire()) {
+                idLabel.setTextFill(Color.RED);
+            }
             nodes.add(idLabel);
             TextField textField = new TextField();
             textField.setPromptText(param.getExample());
@@ -222,6 +253,8 @@ public class EShopApiCtrl implements Initializable {
             appParamGridPane.add(textField, 1, row);
 //            appParamGridPane.add(descLabel, 2, row);
             row++;
+//            out_sid=921889466257
+
         }
     }
 

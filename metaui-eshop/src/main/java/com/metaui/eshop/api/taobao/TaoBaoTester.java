@@ -1,5 +1,8 @@
 package com.metaui.eshop.api.taobao;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.metaui.core.util.UDate;
 import com.metaui.core.util.UString;
 import com.metaui.eshop.api.ApiTester;
@@ -36,6 +39,7 @@ import java.util.Map;
 public class TaoBaoTester implements ApiTester {
     public static final String URL = "http://gw.api.taobao.com/router/rest";
     public static final String SANDBOX_URL = "http://gw.api.tbsandbox.com/router/rest";
+    private static final int TIMEOUT = 1000 * 2;
 
     @Override
     public String test(Account account, ApiInfo api, Map<String, String> params) throws Exception {
@@ -52,9 +56,22 @@ public class TaoBaoTester implements ApiTester {
         data.put("sign", signTopRequest(data, account.getSecret()));
 
         String url = account.isSandbox() ? SANDBOX_URL : URL;
-        Document doc = Jsoup.connect(url).data(data).post();
+        Document doc = Jsoup.connect(url).data(data).timeout(TIMEOUT).post();
+        String json = doc.body().html();
+        JSONObject obj = JSON.parseObject(json);
 
-        return doc.html();
+        return JSON.toJSONString(obj, SerializerFeature.PrettyFormat);
+    }
+
+    /**
+     * 获得淘宝沙箱test Appkey的SessionKey
+     * @return
+     */
+    public String getTbTestSessionKey() throws IOException {
+        String url = "http://mini.tbsandbox.com/tools/getSessionKey.htm?appkey=test&submit=%E6%90%9C+%E7%B4%A2";
+        Document doc = Jsoup.connect(url).get();
+        System.out.println(doc.html());
+        return doc.body().select("table.content-table tr").get(2).select("td:eq(2)").text();
     }
 
     public String getToken() throws IOException {
@@ -70,8 +87,10 @@ public class TaoBaoTester implements ApiTester {
         params.put("client_secret", "sandbox7d1ecfc8f4775fba746b866b2");
         params.put("grant_type", "authorization_code");
 
-        Document doc = Jsoup.connect("https://oauth.tbsandbox.com/token").data(params).post();
-        return doc.html();
+//        Document doc = Jsoup.connect("https://oauth.tbsandbox.com/token").data(params).post();
+//        return doc.html();
+        WebUtils.setIgnoreSSLCheck(true);
+        return WebUtils.doPost("https://oauth.tbsandbox.com/token", params, 30000, 30000);
     }
 
 
