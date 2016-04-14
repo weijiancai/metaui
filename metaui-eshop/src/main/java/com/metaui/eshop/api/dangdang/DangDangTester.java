@@ -1,6 +1,7 @@
 package com.metaui.eshop.api.dangdang;
 
 import com.metaui.core.util.UDate;
+import com.metaui.core.util.format.CodeFormatFactory;
 import com.metaui.eshop.api.ApiTester;
 import com.metaui.eshop.api.domain.Account;
 import com.metaui.eshop.api.domain.ApiInfo;
@@ -42,7 +43,7 @@ public class DangDangTester implements ApiTester {
 
         Document doc = Jsoup.connect(URL).data(data).get();
 
-        return doc.html();
+        return CodeFormatFactory.xml(doc.html());
     }
 
     private String md5(String content) throws NoSuchAlgorithmException {

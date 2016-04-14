@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.metaui.core.util.UDate;
 import com.metaui.core.util.UString;
+import com.metaui.core.util.format.CodeFormatFactory;
 import com.metaui.eshop.api.ApiTester;
 import com.metaui.eshop.api.domain.Account;
 import com.metaui.eshop.api.domain.ApiInfo;
@@ -58,9 +59,8 @@ public class TaoBaoTester implements ApiTester {
         String url = account.isSandbox() ? SANDBOX_URL : URL;
         Document doc = Jsoup.connect(url).data(data).timeout(TIMEOUT).post();
         String json = doc.body().html();
-        JSONObject obj = JSON.parseObject(json);
 
-        return JSON.toJSONString(obj, SerializerFeature.PrettyFormat);
+        return CodeFormatFactory.json(json);
     }
 
     /**
