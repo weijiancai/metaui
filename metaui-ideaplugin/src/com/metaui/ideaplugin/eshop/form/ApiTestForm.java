@@ -75,7 +75,7 @@ public class ApiTestForm {
             if (paramInfo.isRequire()) {
                 label.setForeground(JBColor.RED);
             }
-            label.setPreferredSize(new Dimension(130, 22));
+            label.setPreferredSize(new Dimension(100, 22));
             hBox.add(label);
 
             JTextField textField = new JTextField();

@@ -89,10 +89,12 @@ public class EShopApiForm {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
                 DefaultMutableTreeNode note = (DefaultMutableTreeNode) apiTree.getLastSelectedPathComponent();
-                Object obj = note.getUserObject();
-                if (obj instanceof ApiInfo) {
-                    ApiInfo info = (ApiInfo) obj;
-                    initApi(info);
+                if (note != null) {
+                    Object obj = note.getUserObject();
+                    if (obj instanceof ApiInfo) {
+                        ApiInfo info = (ApiInfo) obj;
+                        initApi(info);
+                    }
                 }
             }
         });
@@ -107,8 +109,10 @@ public class EShopApiForm {
         for (Category category : model.getCategory(siteName)) {
             DefaultMutableTreeNode categoryNode = new DefaultMutableTreeNode(category);
             root.add(categoryNode);
-            for (ApiInfo apiInfo : category.getApiInfos()) {
-                categoryNode.add(new DefaultMutableTreeNode(apiInfo));
+            if (category != null && category.getApiInfos() != null) {
+                for (ApiInfo apiInfo : category.getApiInfos()) {
+                    categoryNode.add(new DefaultMutableTreeNode(apiInfo));
+                }
             }
         }
         apiTree.setModel(new DefaultTreeModel(root));
