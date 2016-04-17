@@ -43,7 +43,8 @@ public class DangDangTester implements ApiTester {
 
         Document doc = Jsoup.connect(URL).data(data).get();
 
-        return CodeFormatFactory.xml(doc.html());
+//        return CodeFormatFactory.xml(doc.html());
+        return  doc.html();
     }
 
     private String md5(String content) throws NoSuchAlgorithmException {

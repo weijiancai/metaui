@@ -1,0 +1,43 @@
+<idea-plugin version="2">
+    <id>com.metaui.ideaplugin</id>
+    <name>MetaUI for idea plugin</name>
+    <version>1.0</version>
+    <vendor email="support@metaui.com" url="http://www.metaui.com">MetaUI</vendor>
+
+    <description><![CDATA[
+      MetaUI for idea plugin
+    ]]></description>
+
+    <change-notes><![CDATA[
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>
+    ]]>
+    </change-notes>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="141.0"/>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <group id="MetaUIPlugin.Menu" text="_Meta UI" description="Meta UI Menu">
+            <add-to-group group-id="MainMenu" anchor="last"/>
+            <action id="MetaUIPlugin.EShopAction" class="com.metaui.ideaplugin.eshop.EShopAction" text="网店API" description="网店API"/>
+        </group>
+    </actions>
+
+    <application-components>
+        <component>
+            <implementation-class>com.metaui.ideaplugin.MetaUIPlugin</implementation-class>
+        </component>
+    </application-components>
+</idea-plugin>

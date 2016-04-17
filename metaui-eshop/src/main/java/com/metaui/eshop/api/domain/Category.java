@@ -55,4 +55,9 @@ public class Category {
     public void setApiInfos(List<ApiInfo> apiInfos) {
         this.apiInfos = apiInfos;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
