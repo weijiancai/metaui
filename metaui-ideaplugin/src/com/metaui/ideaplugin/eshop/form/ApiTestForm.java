@@ -80,6 +80,7 @@ public class ApiTestForm {
 
             JTextField textField = new JTextField();
             textField.setToolTipText(paramInfo.getExample());
+            textField.setPreferredSize(new Dimension(280, 22));
             hBox.add(textField);
             componentList.put(textField, paramInfo);
 

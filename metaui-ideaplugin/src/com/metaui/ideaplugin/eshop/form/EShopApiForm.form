@@ -83,7 +83,9 @@
         <children>
           <component id="f1996" class="com.intellij.ui.treeStructure.Tree" binding="apiTree">
             <constraints/>
-            <properties/>
+            <properties>
+              <rootVisible value="true"/>
+            </properties>
           </component>
         </children>
       </scrollpane>

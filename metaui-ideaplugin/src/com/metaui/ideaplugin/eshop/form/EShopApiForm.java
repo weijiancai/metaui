@@ -46,6 +46,7 @@ public class EShopApiForm {
         model = new EShopApiModel();
 
         apiTree.setRootVisible(false);
+        apiTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
         initData();
     }
 

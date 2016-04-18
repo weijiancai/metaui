@@ -51,7 +51,7 @@ public class EShopAction extends AnAction {
             @Override
             public void run() {
                 JFrame frame = new JFrame();
-                frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 //                frame.setLocationRelativeTo(null);
                 frame.setTitle("网店API");
                 int width = 1280;
