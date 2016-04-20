@@ -13,4 +13,3 @@ hs_err_pid*
 #idea
 .idea/
 *.iml
-metatools/src/test/java/com/metaui/tools/socket/server/SocketServerTest.java

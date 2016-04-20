@@ -72,6 +72,7 @@ public class EShopApiForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AccountDialog dialog = new AccountDialog(model, null);
+                dialog.setLocationRelativeTo(null);
                 dialog.pack();
                 dialog.setVisible(true);
             }

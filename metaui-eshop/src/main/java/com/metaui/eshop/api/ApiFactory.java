@@ -1,5 +1,6 @@
 package com.metaui.eshop.api;
 
+import com.metaui.core.util.UString;
 import com.metaui.eshop.api.dangdang.DangDangParser;
 import com.metaui.eshop.api.dangdang.DangDangTester;
 import com.metaui.eshop.api.domain.Account;
@@ -115,9 +116,9 @@ public class ApiFactory {
         if (ac == null) {
             accounts.add(account);
         } else {
-            ac.setToken(account.getToken());
-            ac.setKey(account.getKey());
-            ac.setSecret(account.getSecret());
+            ac.setToken(UString.trim(account.getToken()));
+            ac.setKey(UString.trim(account.getKey()));
+            ac.setSecret(UString.trim(account.getSecret()));
         }
 
         // 保存

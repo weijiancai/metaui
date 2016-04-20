@@ -1,8 +1,11 @@
 package com.metaui.eshop.api;
 
 import com.metaui.eshop.api.domain.Account;
+import com.metaui.eshop.api.domain.ApiInfo;
 import com.metaui.eshop.api.domain.Category;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -26,6 +29,18 @@ public class EShopApiModel {
     }
 
     public List<Category> getCategory(ApiSiteName siteName) throws Exception {
-        return ApiFactory.getApi(siteName);
+        List<Category> list = ApiFactory.getApi(siteName);
+        // 排序
+        for (Category category : list) {
+            if (category.getApiInfos() != null) {
+                Collections.sort(category.getApiInfos(), new Comparator<ApiInfo>() {
+                    @Override
+                    public int compare(ApiInfo o1, ApiInfo o2) {
+                        return o1.getId().compareTo(o2.getId());
+                    }
+                });
+            }
+        }
+        return list;
     }
 }
