@@ -38,8 +38,8 @@ import java.util.Map;
  * 2016/4/10.
  */
 public class TaoBaoTester implements ApiTester {
-    public static final String URL = "http://gw.api.taobao.com/router/rest";
-    public static final String SANDBOX_URL = "http://gw.api.tbsandbox.com/router/rest";
+    private static final String URL = "http://gw.api.taobao.com/router/rest";
+    private static final String SANDBOX_URL = "http://gw.api.tbsandbox.com/router/rest";
     private static final int TIMEOUT = 1000 * 2;
 
     @Override

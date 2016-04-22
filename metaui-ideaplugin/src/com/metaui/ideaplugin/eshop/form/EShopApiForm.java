@@ -66,6 +66,12 @@ public class EShopApiForm {
                 }
             }
         });
+        // 初始化第一个
+        try {
+            initApiSite(model.getApiSites().get(0));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // 添加账号
         btnAddAccount.addActionListener(new ActionListener() {
