@@ -63,5 +63,10 @@ public class Application {
         ShippingDao dao = context.getBean(ShippingDao.class);
 //        System.out.println(dao.getShippingCount());
         dao.update();
+
+        //
+        /*YwPxDao dao = context.getBean(YwPxDao.class);
+        dao.updatePxStockOut();
+        System.out.println("success");*/
     }
 }

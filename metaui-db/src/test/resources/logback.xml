@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!--日志文件所在位置-->
+    <property name="LOG_HOME" value="/metaui/log"/>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <Encoding>GBK</Encoding>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <encoder>
+                <pattern>[%d{yyyy-MM-dd:HH:mm:ss:SSS}][%thread][%level][ %logger{50}] %msg%n</pattern>
+            </encoder>
+        </layout>
+    </appender>
+    <!--所有日志-->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <Encoding>GBK</Encoding>
+        <prudent>false</prudent>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <MaxFileSize>100MB</MaxFileSize>
+            <!--日志文件的名称-->
+            <FileNamePattern>${LOG_HOME}/001_all_localhost_%d{yyyy-MM-dd}.log</FileNamePattern>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%logger{50}] %msg%n</pattern>
+        </layout>
+        <!--为以后压缩日志文件备用-->
+        <!--<triggeringPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+        <!--<MaxFileSize>100MB</MaxFileSize>-->
+        <!--</triggeringPolicy>-->
+    </appender>
+
+    <logger name="java.sql.Connection" additivity="true">
+        <level value="DEBUG" />
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="java.sql.Statement" additivity="true">
+        <level value="DEBUG" />
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="java.sql.PreparedStatement" additivity="true">
+        <level value="DEBUG" />
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="java.sql.ResultSet" additivity="true">
+        <level value="DEBUG" />
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="com.alibaba.druid" additivity="true" level="DEBUG">
+        <!--<appender-ref ref="FILE"/>
+        <appender-ref ref="STDOUT"/>-->
+    </logger>
+    <logger name="org.springframework.jdbc.core" level="DEBUG">
+
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" level="INFO"/>
+        <appender-ref ref="FILE" level="INFO"/>
+    </root>
+</configuration>

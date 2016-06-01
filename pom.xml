@@ -104,6 +104,12 @@
                 <version>1.0.13</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
+                <version>1.7.20</version>
+            </dependency>
+
             <!-- test libs -->
             <dependency>
                 <groupId>junit</groupId>
