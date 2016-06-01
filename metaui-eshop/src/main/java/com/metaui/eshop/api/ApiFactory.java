@@ -1,12 +1,16 @@
 package com.metaui.eshop.api;
 
+import com.metaui.core.util.UString;
 import com.metaui.eshop.api.dangdang.DangDangParser;
 import com.metaui.eshop.api.dangdang.DangDangTester;
 import com.metaui.eshop.api.domain.Account;
 import com.metaui.eshop.api.domain.Category;
+import com.metaui.eshop.api.jingdong.JingDongParser;
+import com.metaui.eshop.api.jingdong.JingDongTester;
 import com.metaui.eshop.api.taobao.TaoBaoParser;
 import com.metaui.eshop.api.taobao.TaoBaoTester;
 import com.metaui.eshop.api.xml.DangDangXml;
+import com.metaui.eshop.api.xml.JingDongXml;
 import com.metaui.eshop.api.xml.TaoBaoXml;
 import com.metaui.eshop.moudle.EShopModule;
 
@@ -68,6 +72,15 @@ public class ApiFactory {
                 }
                 break;
             }
+            case JING_DONG: {
+                JingDongXml xml = new JingDongXml();
+                xml.load();
+                list = xml.getCategories();
+                if (list == null) {
+                    list = new JingDongParser().parse();
+                }
+                break;
+            }
             default: {
                 throw new IllegalArgumentException("未知Api站点名称：" + name);
             }
@@ -83,6 +96,9 @@ public class ApiFactory {
             }
             case TAO_BAO: {
                 return new TaoBaoTester();
+            }
+            case JING_DONG: {
+                return new JingDongTester();
             }
             default: {
                 throw new IllegalArgumentException("未知Api站点名称：" + name);
@@ -115,9 +131,9 @@ public class ApiFactory {
         if (ac == null) {
             accounts.add(account);
         } else {
-            ac.setToken(account.getToken());
-            ac.setKey(account.getKey());
-            ac.setSecret(account.getSecret());
+            ac.setToken(UString.trim(account.getToken()));
+            ac.setKey(UString.trim(account.getKey()));
+            ac.setSecret(UString.trim(account.getSecret()));
         }
 
         // 保存

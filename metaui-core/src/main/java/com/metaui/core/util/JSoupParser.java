@@ -30,6 +30,7 @@ public class JSoupParser {
     public Document parse(Map<String, String> data, Map<String, String> headers, Map<String, String> cookieMap) throws IOException {
         Connection conn = Jsoup.connect(url).timeout(50000);
         conn.userAgent("Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36");
+        conn.followRedirects(false); // 重定向
 
         if (headers != null && headers.size() > 0) {
             for (Map.Entry<String, String> entry : headers.entrySet()) {

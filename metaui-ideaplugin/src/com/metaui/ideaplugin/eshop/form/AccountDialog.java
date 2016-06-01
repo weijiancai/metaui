@@ -5,6 +5,7 @@ import com.intellij.openapi.ui.Messages;
 import com.metaui.eshop.api.ApiSiteName;
 import com.metaui.eshop.api.EShopApiModel;
 import com.metaui.eshop.api.domain.Account;
+import com.metaui.swing.model.MUComboBoxModel;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -23,6 +24,7 @@ public class AccountDialog extends JDialog {
     private Account account;
     private EShopApiModel model;
 
+    @SuppressWarnings("unchecked")
     public AccountDialog(EShopApiModel model, Account account) {
         this.model = model;
         this.account = account;
@@ -66,6 +68,8 @@ public class AccountDialog extends JDialog {
             tfKey.setText(account.getKey());
             tfSecret.setText(account.getSecret());
         }
+
+        cbApiSiteNames.setModel(new MUComboBoxModel(model.getApiSites()));
     }
 
     private void onOK() {

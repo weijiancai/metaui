@@ -66,12 +66,19 @@ public class EShopApiForm {
                 }
             }
         });
+        // 初始化第一个
+        try {
+            initApiSite(model.getApiSites().get(0));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // 添加账号
         btnAddAccount.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AccountDialog dialog = new AccountDialog(model, null);
+                dialog.setLocationRelativeTo(null);
                 dialog.pack();
                 dialog.setVisible(true);
             }
