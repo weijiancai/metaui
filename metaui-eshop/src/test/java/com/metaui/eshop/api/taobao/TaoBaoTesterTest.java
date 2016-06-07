@@ -88,15 +88,25 @@ public class TaoBaoTesterTest {
         Account account = new Account();
         account.setKey("test");
         account.setSecret("test");
-        account.setToken("61022110c46ff0ec3e611aab62c7e25ecbc045bc2841f9f2074082786");
+        account.setToken("61000069aac7ab1b08339c893846e7575fd340c878b9b932074082786");
         account.setSandbox(true);
 
-        ApiInfo info = new ApiInfo();
+        /*ApiInfo info = new ApiInfo();
         info.setId("taobao.trade.fullinfo.get");
 
         Map<String, String> params = new HashMap<>();
         params.put("fields", "tid,type,status,payment,orders");
-        params.put("tid", "194145140048627");
+        params.put("tid", "194145140048627");*/
+
+        ApiInfo info = new ApiInfo();
+        info.setId("taobao.items.onsale.get");
+
+        Map<String, String> params = new HashMap<>();
+        params.put("fields", "approve_status,num_iid,title,nick,type,cid,product_id,pic_url,num,props,valid_thru,list_time,price,has_discount,has_invoice,has_warranty,has_showcase,modified,delist_time,postage_id,seller_cids,outer_id,sold_quantity");
+//        params.put("cid", "33");
+//        params.put("start_modified", "2000-01-01 00:00:00");
+//        params.put("is_cspu", "false");
+//        params.put("q", "沙箱测试");
 
         TaoBaoTester tester = new TaoBaoTester();
         String result = tester.test(account, info, params);

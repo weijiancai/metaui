@@ -27,13 +27,13 @@ public class ShippingDao {
 
     public void update() {
         // 查询主表
-        String sql = "SELECT * from wm_op_shipping where input_date < '2016-06-02 00:00:00' and input_date >='2016-04-01 00:11:03' order by input_date";
+        String sql = "SELECT * from wm_op_shipping where input_date < '2016-06-08 00:00:00' and input_date >='2016-04-01 00:11:03' order by input_date";
         List<DataMap> list = template.queryForList(sql);
         System.out.println("检索：" + list.size());
         int k = 0;
         for (DataMap map : list) {
             int packageAmount = map.getInt("package_amount");
-            System.out.println(String.format("%5d %20s %s", k++, map.getString("shipping_code"), map.getString("input_date")));
+//            System.out.println(String.format("%5d %20s %s", k++, map.getString("shipping_code"), map.getString("input_date")));
 
             // 查询明细
             sql = "SELECT * FROM wm_op_shipping_item WHERE shipping_id=?";

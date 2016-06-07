@@ -168,6 +168,22 @@ public class JSoupParserTest {
     }
 
     @Test
+    public List<String> getZhang1() throws IOException {
+        String url = "http://www.177tvbxs.net/files/article/html/38/38770/";
+        JSoupParser parser = new JSoupParser(url);
+        Document doc = parser.parse();
+        Elements elements = doc.select("div.bdsharebuttonbox > table td a");
+        List<String> list = new ArrayList<String>();
+        for (Element element : elements) {
+            String head = element.text();
+            String urlStr  = element.attr("href");
+            System.out.println(head + " --> " + urlStr);
+            list.add(urlStr);
+        }
+        return list;
+    }
+
+    @Test
     public void testConnect() throws IOException {
         String url = "http://www.capub.cn/pdm";
         JSoupParser parser = new JSoupParser(url);
