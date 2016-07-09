@@ -51,8 +51,8 @@ public class MUTable extends StackPane implements IView {
     private BorderPane tablePane = new BorderPane(); // 表格面板
 
     private TableColumnChangeListener tableColumnChangeListener;
-    private Callback<TableCellRenderEvent> onCellRender;
-    private Callback<TableDataChangeEvent> onDataChange;
+    private Callback<TableCellRenderEvent, Void> onCellRender;
+    private Callback<TableDataChangeEvent, Void> onDataChange;
 
     public MUTable() {
         this.model = new TableModel();
@@ -283,19 +283,19 @@ public class MUTable extends StackPane implements IView {
         return queryForm;
     }
 
-    public Callback<TableCellRenderEvent> getOnCellRender() {
+    public Callback<TableCellRenderEvent, Void> getOnCellRender() {
         return onCellRender;
     }
 
-    public void setOnCellRender(Callback<TableCellRenderEvent> onCellRender) {
+    public void setOnCellRender(Callback<TableCellRenderEvent, Void> onCellRender) {
         this.onCellRender = onCellRender;
     }
 
-    public Callback<TableDataChangeEvent> getOnDataChange() {
+    public Callback<TableDataChangeEvent, Void> getOnDataChange() {
         return onDataChange;
     }
 
-    public void setOnDataChange(Callback<TableDataChangeEvent> onDataChange) {
+    public void setOnDataChange(Callback<TableDataChangeEvent, Void> onDataChange) {
         this.onDataChange = onDataChange;
     }
 }

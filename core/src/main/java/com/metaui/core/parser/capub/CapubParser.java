@@ -375,11 +375,17 @@ public class CapubParser {
 		params.put("password", password);
 		params.put("captcha", captcha);
 		Connection conn = Jsoup.connect(LOGIN_URL).timeout(TIME_OUT);
-		Document doc = conn.data(params).userAgent(USER_AGENT).cookies(cookieMap).post();
+        cookieMap.putAll(conn.response().cookies());
+        System.out.println(cookieMap);
+        Document doc = conn.data(params).userAgent(USER_AGENT).cookies(cookieMap).post();
 		System.out.println(doc.html());
 		if(doc.text().contains("errorCode")) {
 			throw new Exception("验证码无效！");
 		}
+	}
+
+	public static void main(String[] args) throws Exception {
+		login("weijiancai", "7758521", "2343");
 	}
 	
 	/**

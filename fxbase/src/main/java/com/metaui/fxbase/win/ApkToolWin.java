@@ -2,6 +2,7 @@ package com.metaui.fxbase.win;
 
 import com.metaui.core.meta.DisplayStyle;
 import com.metaui.core.ui.IView;
+import com.metaui.core.util.Callback;
 import com.metaui.core.util.apk.ApkTool;
 import com.metaui.fxbase.model.ActionModel;
 import com.metaui.fxbase.model.FormFieldModel;
@@ -67,10 +68,14 @@ public class ApkToolWin extends BorderPane implements IView {
 
         ActionModel decode = ActionModel.builder()
                 .displayName("反编译")
-                .callback((aVoid, obj) -> {
-                    FormFieldModel apkFilePath = form.getModel().getFieldByName("apkFilePath");
-                    String message = ApkTool.decode(new File(apkFilePath.getValue()));
-                    System.out.println(message);
+                .callback(new Callback<Void, Void>() {
+                    @Override
+                    public Void call(Void aVoid, Object... obj) throws Exception {
+                        FormFieldModel apkFilePath = form.getModel().getFieldByName("apkFilePath");
+                        String message = ApkTool.decode(new File(apkFilePath.getValue()));
+                        System.out.println(message);
+                        return null;
+                    }
                 })
                 .build();
 

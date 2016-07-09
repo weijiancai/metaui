@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class JSoupParser {
     private String url;
-    private Map<String, String> cookies = new HashMap<>();
+    private Map<String, String> cookies = new HashMap<String, String>();
 
     public JSoupParser(String url) {
         this.url = url;

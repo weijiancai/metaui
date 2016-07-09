@@ -35,7 +35,7 @@ public class ActionModelBuilder {
         return this;
     }
 
-    public ActionModelBuilder callback(Callback<Void> callback) {
+    public ActionModelBuilder callback(Callback<Void, Void> callback) {
         model.setCallback(callback);
         return this;
     }

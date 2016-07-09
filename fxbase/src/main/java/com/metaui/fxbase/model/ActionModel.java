@@ -18,7 +18,7 @@ public class ActionModel {
     private StringProperty displayName = new SimpleStringProperty();
     private IntegerProperty sortNum = new SimpleIntegerProperty();
 
-    private Callback<Void> callback;
+    private Callback<Void, Void> callback;
 
     public String getId() {
         return id.get();
@@ -68,11 +68,11 @@ public class ActionModel {
         this.sortNum.set(sortNum);
     }
 
-    public Callback<Void> getCallback() {
+    public Callback<Void, Void> getCallback() {
         return callback;
     }
 
-    public void setCallback(Callback<Void> callback) {
+    public void setCallback(Callback<Void, Void> callback) {
         this.callback = callback;
     }
 

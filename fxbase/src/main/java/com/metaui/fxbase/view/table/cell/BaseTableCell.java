@@ -68,7 +68,7 @@ public class BaseTableCell extends TableCell<DataMap, String> {
     protected void updateItem(String item, boolean empty) {
         super.updateItem(item, empty);
         if (tableColumn != null && !empty) {
-            Callback<TableCellRenderEvent> onCellRender = tableColumn.getTable().getOnCellRender();
+            Callback<TableCellRenderEvent, Void> onCellRender = tableColumn.getTable().getOnCellRender();
             if (onCellRender != null) {
                 MUTable table = tableColumn.getTable();
                 TableCellRenderEvent event = new TableCellRenderEvent();
