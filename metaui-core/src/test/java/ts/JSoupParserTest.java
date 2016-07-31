@@ -1,7 +1,12 @@
 package ts;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.metaui.core.parser.http.JSoupParser;
+import com.metaui.core.util.UIO;
 import com.metaui.core.util.UString;
+import org.apache.commons.io.IOUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -9,8 +14,15 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Test;
 
+import javax.net.ssl.*;
+import javax.swing.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -322,5 +334,62 @@ public class JSoupParserTest {
         parser.setUrl(url);
         doc = parser.parse(data);
         System.out.println(doc.html());*/
+    }
+
+    /**
+     * 解决Https请求,返回404错误
+     */
+    private static void trustEveryone() {
+        try {
+            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
+            SSLContext context = SSLContext.getInstance("TLS");
+            context.init(null, new X509TrustManager[]{new X509TrustManager() {
+
+                public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                }
+
+                public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                }
+
+                public X509Certificate[] getAcceptedIssuers() {
+                    return new X509Certificate[0];
+                }
+            }}, new SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testQueryTicket() throws Exception {
+        trustEveryone();
+        boolean isNotFind = true;
+        while (isNotFind) {
+            for(int j = 1; j < 31; j++) {
+                String url = String.format("https://kyfw.12306.cn/otn/leftTicket/query?leftTicketDTO.train_date=2016-08-%02d&leftTicketDTO.from_station=JCF&leftTicketDTO.to_station=BJP&purpose_codes=ADULT", j);
+                System.out.println(url);
+                String result = IOUtils.toString(new URL(url));
+                JSONObject obj = JSON.parseObject(result);
+                JSONArray data = obj.getJSONArray("data");
+                for(int i =0; i < data.size(); i++) {
+                    String rw_num = data.getJSONObject(i).getJSONObject("queryLeftNewDTO").getString("rw_num");
+                    String yw_num = data.getJSONObject(i).getJSONObject("queryLeftNewDTO").getString("yw_num");
+                    String message = "软卧：" + rw_num + "\r\n" + "硬卧：" + yw_num;
+                    System.out.println(message);
+                    if (!"无".equals(rw_num) || !"无".equals(yw_num)) {
+//                        isNotFind = false;
+                        JOptionPane.showMessageDialog(null, message, "火车票：2016-08-" + String.format("%02d", j), JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+                Thread.sleep(1000 * 10); // 一分钟间隔
+            }
+        }
+
     }
 }
