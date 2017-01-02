@@ -19,6 +19,7 @@ import java.util.*;
 public class ShippingDao {
     @Autowired
     private MyJdbcTemplate template;
+    private int updateCount;
 
     public int getShippingCount() {
         String sql = "SELECT  count(1) from wm_op_shipping";
@@ -27,7 +28,7 @@ public class ShippingDao {
 
     public void update() {
         // 查询主表
-        String sql = "SELECT * from wm_op_shipping where input_date < '2016-06-08 00:00:00' and input_date >='2016-04-01 00:11:03' order by input_date";
+        String sql = "SELECT * from wm_op_shipping where input_date > '2016-09-01 00:00:00' and input_date < '2016-10-01 00:11:03' order by input_date";
         List<DataMap> list = template.queryForList(sql);
         System.out.println("检索：" + list.size());
         int k = 0;
@@ -84,6 +85,7 @@ public class ShippingDao {
 
         System.out.println("最后一条记录：");
         System.out.println(list.get(list.size() - 1));
+        System.out.println("更新记录数：" + updateCount);
     }
 
     public void updatePackageAmount(DataMap map, DataMap itemMap, int packageAmount) {
@@ -97,6 +99,7 @@ public class ShippingDao {
         System.out.println("--> " + itemId + " , " + itemMap.getString("receipt_id") + ", " + packageAmount);
         String sql = "UPDATE wm_op_shipping_item SET package_amount=? WHERE shipping_item_id=?";
         template.update(sql, packageAmount, itemId);
+        updateCount++;
     }
 
     public static void main(String[] args) {
