@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<!--
+
+Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 2.3.1
+
+Version: 1.3
+
+Author: KeenThemes
+
+Website: http://www.keenthemes.com/preview/?theme=metronic
+
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469
+
+-->
+
+<html ng-app="toolsApp">
+<!-- BEGIN HEAD -->
+
+<head>
+	<meta charset="utf-8" />
+	<title>Metronic | Admin Dashboard Template</title>
+	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+	<meta content="" name="description" />
+	<meta content="" name="author" />
+	<!-- BEGIN GLOBAL MANDATORY STYLES -->
+	<link href="/public/css/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+	<!--<link href="/views/admin/media/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css"/>-->
+	<link href="/public/css/font-awesome-4.3.0/css/font-awesome.css" rel="stylesheet" type="text/css"/>
+	<link href="/public/css/iconfont/iconfont.css" rel="stylesheet" type="text/css"/>
+	<!--<link href="/views/admin/media/css/style-metro.css" rel="stylesheet" type="text/css"/>-->
+	<link href="/views/admin/media/css/style.css" rel="stylesheet" type="text/css"/>
+	<link href="/views/admin/media/css/style-responsive.css" rel="stylesheet" type="text/css"/>
+	<link href="/views/admin/media/css/default.css" rel="stylesheet" type="text/css" id="style_color"/>
+	<link href="/views/admin/media/css/uniform.default.css" rel="stylesheet" type="text/css"/>
+	<!-- END GLOBAL MANDATORY STYLES -->
+
+	<!-- BEGIN PAGE LEVEL STYLES --> 
+	<link href="/views/admin/media/css/jquery.gritter.css" rel="stylesheet" type="text/css"/>
+	<link href="/views/admin/media/css/fullcalendar.css" rel="stylesheet" type="text/css"/>
+	<!-- END PAGE LEVEL STYLES -->
+
+    <link href="/public/js/lib/datatable/css/jquery.dataTables.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="/public/js/lib/datatable/extension/ColReorder-1.1.3/css/dataTables.colReorder.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="/public/js/lib/datatable/extension/ColVis-1.1.2/css/dataTables.colVis.css" rel="stylesheet" type="text/css" media="screen"/>
+    <!--<link href="/public/js/lib/datatable/css/dataTables.bootstrap.css" rel="stylesheet" type="text/css" media="screen"/>-->
+    <link href="/public/js/lib/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="/public/js/lib/dmuploader/uploader.css" rel="stylesheet" type="text/css" media="screen"/>
+	<link type="text/css" rel="stylesheet" href="/public/js/lib/bootstrap-daterangepicker/daterangepicker-bs3.css">
+    <link href="/public/js/lib/artDialog/ui-dialog.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="/public/js/lib/metaui/metaui.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="/public/js/lib/metaui/layout.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="/public/js/lib/codemirror/codemirror.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="/public/js/lib/select2-4.0.0/dist/css/select2.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="/tools/css/page_tools.css" rel="stylesheet" type="text/css" media="screen"/>
+
+	<link rel="shortcut icon" href="/views/admin/media/image/favicon.ico" />
+
+</head>
+
+<!-- END HEAD -->
+
+<!-- BEGIN BODY -->
+
+<body class="page-header-fixed" ng-controller="ToolsCtrl">
+	<!-- BEGIN CONTAINER -->
+	<div class="page-container" style="margin-top: 0;">
+		<!-- BEGIN SIDEBAR -->
+		<div class="page-sidebar nav-collapse">
+
+			<!-- BEGIN SIDEBAR MENU -->        
+			<ul class="page-sidebar-menu" data-current="menu_desktop">
+				<li>
+					<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+					<div class="sidebar-toggler hidden-phone"></div>
+					<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+				</li>
+
+				<li id="menu_sport" class="active">
+					<a href="javascript:;" data-target="desktop_string">
+						<i class="icon-cogs"></i><span class="title">字符串处理</span>
+					</a>
+				</li>
+				<li id="menu_game" class="">
+					<a href="javascript:;" data-target="desktop_db">
+						<i class="icon-bookmark-empty"></i><span class="title">数据库</span>
+					</a>
+				</li>
+				<li id="menu_activity" class="">
+					<a href="javascript:;" data-target="desktop_webPageParser">
+						<i class="icon-table"></i><span class="title">网页解析</span>
+					</a>
+				</li>
+				<li id="menu_venue" class="">
+					<a href="javascript:;" data-target="desktop_ftp">
+						<i class="icon-briefcase"></i><span class="title">FTP</span>
+					</a>
+				</li>
+				<li id="menu_user" class="last">
+					<a href="javascript:;" data-target="desktop_tpl">
+						<i class="icon-gift"></i><span class="title">模板</span>
+					</a>
+				</li>
+				<li id="menu_user" class="last">
+					<a href="javascript:;" data-target="desktop_ectongs">
+						<i class="icon-gift"></i><span class="title">易诚通</span>
+					</a>
+				</li>
+			</ul>
+			<!-- END SIDEBAR MENU -->
+		</div>
+		<!-- END SIDEBAR -->
+
+		<!-- BEGIN PAGE -->
+		<div class="page-content">
+			<!-- BEGIN PAGE CONTAINER-->
+			<div class="container-fluid" style="padding: 0;">
+				<!-- BEGIN PAGE HEADER-->
+				<!--<div class="row-fluid">
+					<div class="span12">
+						&lt;!&ndash; BEGIN PAGE TITLE & BREADCRUMB&ndash;&gt;
+						<h3 class="page-title" id="pageTile">
+							字符串处理 <small></small>
+						</h3>
+                        &lt;!&ndash; END PAGE TITLE & BREADCRUMB&ndash;&gt;
+					</div>
+				</div>-->
+				<!-- END PAGE HEADER-->
+
+				<!-- 字符串处理 -->
+                <div id="desktop_string">
+					<% include string.ejs %>
+				</div>
+
+				<!-- 数据库 -->
+				<div id="desktop_db" style="display: none;">
+					<% include db.ejs %>
+				</div>
+
+				<!-- 网页解析 -->
+				<div id="desktop_webPageParser" style="display: none;">
+					<% include webPageParser.ejs %>
+				</div>
+
+				<!-- ftp -->
+				<div id="desktop_ftp" style="display: none;">
+					<% include ftp.ejs %>
+				</div>
+
+				<!-- 模板 -->
+                <div id="desktop_tpl" style="display: none;">
+                    <% include tpl.ejs %>
+                </div>
+
+				<!-- 易诚通 -->
+                <div id="desktop_ectongs" style="display: none;">
+                    <% include ectongs.ejs %>
+					<div class="dropdown">
+						<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							Dropdown
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+							<li><a href="#">Action</a></li>
+							<li><a href="#">Another action</a></li>
+							<li><a href="#">Something else here</a></li>
+							<li><a href="#">Separated link</a></li>
+						</ul>
+					</div>
+                </div>
+			</div>
+			<!-- END PAGE CONTAINER-->
+		</div>
+		<!-- END PAGE -->
+	</div>
+	<!-- END CONTAINER -->
+
+	<!-- BEGIN FOOTER -->
+	<div class="footer">
+		<div class="footer-inner">2013 &copy; Metronic by keenthemes.</div>
+
+		<div class="footer-tools">
+			<span class="go-top"><i class="icon-angle-up"></i></span>
+		</div>
+	</div>
+	<!-- END FOOTER -->
+
+	<!-- 模板 -->
+	<% include template.html %>
+
+	<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+
+	<!-- BEGIN CORE PLUGINS -->
+    <script type="text/javascript" src="/public/js/lib/jquery-2.1.3/jquery-2.1.3.js"></script>
+
+	<!-- IMPORTANT! Load jquery-ui-1.10.1.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+
+	<script src="/views/admin/media/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+	<script src="/public/css/bootstrap/js/bootstrap.js" type="text/javascript"></script>
+
+	<!--[if lt IE 9]>
+
+	<script src="/views/admin/media/js/excanvas.min.js"></script>
+	<script src="/views/admin/media/js/respond.min.js"></script>
+
+	<![endif]-->   
+
+	<script src="/views/admin/media/js/jquery.slimscroll.min.js" type="text/javascript"></script>
+	<script src="/views/admin/media/js/jquery.blockui.min.js" type="text/javascript"></script>
+	<script src="/views/admin/media/js/jquery.cookie.min.js" type="text/javascript"></script>
+	<script src="/views/admin/media/js/jquery.uniform.min.js" type="text/javascript" ></script>
+	<!-- END CORE PLUGINS -->
+
+	<!-- BEGIN PAGE LEVEL PLUGINS -->
+
+	<script src="/views/admin/media/js/date.js" type="text/javascript"></script>
+	<script src="/views/admin/media/js/daterangepicker.js" type="text/javascript"></script>
+	<script src="/views/admin/media/js/jquery.gritter.js" type="text/javascript"></script>
+	<script src="/views/admin/media/js/fullcalendar.min.js" type="text/javascript"></script>
+	<script src="/views/admin/media/js/jquery.easy-pie-chart.js" type="text/javascript"></script>
+	<script src="/views/admin/media/js/jquery.sparkline.min.js" type="text/javascript"></script>
+	<!-- END PAGE LEVEL PLUGINS -->
+
+	<!-- BEGIN PAGE LEVEL SCRIPTS -->
+	<script src="/views/admin/media/js/app.js" type="text/javascript"></script>
+	<!--<script src="/views/admin/media/js/index.js" type="text/javascript"></script>-->
+	<script type="text/javascript" src="/public/js/lib/jquery.validate.js"></script>
+	<script src="/public/js/lib/datatable/js/jquery.dataTables.js" type="text/javascript"></script>
+	<script src="/public/js/lib/datatable/extension/ColReorder-1.1.3/js/dataTables.colReorder.js" type="text/javascript"></script>
+	<script src="/public/js/lib/datatable/extension/ColVis-1.1.2/js/dataTables.colVis.js" type="text/javascript"></script>
+	<script src="/public/js/lib/ztree/js/jquery.ztree.all-3.5.js" type="text/javascript"></script>
+	<script src="/public/js/lib/dmuploader/dmuploader.js" type="text/javascript"></script>
+	<script src="/public/js/lib/dmuploader/uploader_demo.js" type="text/javascript"></script>
+	<script src="/public/js/lib/artDialog/dialog.js" type="text/javascript"></script>
+	<script src="/public/js/lib/codemirror/codemirror.js" type="text/javascript"></script>
+	<script src="/public/js/lib/codemirror/mode/xml/xml.js" type="text/javascript"></script>
+	<script src="/public/js/lib/codemirror/mode/javascript/javascript.js" type="text/javascript"></script>
+	<script src="/public/js/lib/codemirror/mode/css/css.js" type="text/javascript"></script>
+	<script src="/public/js/lib/codemirror/mode/htmlmixed/htmlmixed.js" type="text/javascript"></script>
+	<script type="text/javascript" src="/public/js/lib/bootstrap-daterangepicker/moment.js"></script>
+	<script type="text/javascript" src="/public/js/lib/bootstrap-daterangepicker/daterangepicker.js"></script>
+	<script type="text/javascript" src="/public/js/lib/jeditable/jquery.jeditable.js"></script>
+	<script type="text/javascript" src="/public/js/lib/jeditable/jquery.jeditable.datetimepicker.js"></script>
+	<script type="text/javascript" src="/public/js/lib/jquery-shortcuts/jquery.shortcuts.js"></script>
+	<script type="text/javascript" src="/public/js/lib/select2-4.0.0/dist/js/select2.full.js"></script>
+	<script type="text/javascript" src="http://lib.sinaapp.com/js/angular.js/angular-1.2.19/angular.js"></script>
+	<script src="/public/js/lib/metaui/dict.js" type="text/javascript"></script>
+	<script src="/public/js/lib/metaui/commen.js" type="text/javascript"></script>
+	<script src="/public/js/lib/metaui/metaui.js" type="text/javascript"></script>
+	<script src="/public/js/lib/template.js" type="text/javascript"></script>
+	<script src="/public/js/page_tools.js" type="text/javascript"></script>
+	<script src="/tools/js/tools_angular.js" type="text/javascript"></script>
+	<script src="/tools/js/ftp.js" type="text/javascript"></script>
+	<script src="/tools/js/db.js" type="text/javascript"></script>
+	<script src="/tools/js/tpl.js" type="text/javascript"></script>
+	<script src="/tools/js/ectongs.js" type="text/javascript"></script>
+
+	<!-- END PAGE LEVEL SCRIPTS -->
+
+	<script>
+
+		jQuery(document).ready(function() {    
+		   App.init(); // initlayout and core plugins
+//		   Index.init();
+//		   Index.initCalendar(); // init index page's custom scripts
+//		   Index.initDashboardDaterange();
+//		   Index.initIntro();
+		});
+	</script>
+
+	<!-- END JAVASCRIPTS -->
+</body>
+
+<!-- END BODY -->
+
+</html>

@@ -306,7 +306,7 @@ public class JSoupParserTest {
      */
     @Test
     public void testXzqhdm() throws Exception {
-        String url = "http://www.stats.gov.cn/tjsj/tjbz/xzqhdm/201504/t20150415_712722.html";
+        String url = "http://www.stats.gov.cn/tjsj/tjbz/xzqhdm/201608/t20160809_1386477.html";
         JSoupParser parser = new JSoupParser(url);
         Document doc = parser.parse();
 //        System.out.println(doc.html());
@@ -324,7 +324,7 @@ public class JSoupParserTest {
                 city = UString.trim(name);
             } else if(name.substring(0, 1).equals("　")) {
                 province = UString.trim(name);
-                System.out.println(province);
+                System.out.println(name);
             }
         }
         /*System.out.println(data);
@@ -371,8 +371,8 @@ public class JSoupParserTest {
         trustEveryone();
         boolean isNotFind = true;
         while (isNotFind) {
-            for(int j = 1; j < 31; j++) {
-                String url = String.format("https://kyfw.12306.cn/otn/leftTicket/query?leftTicketDTO.train_date=2016-08-%02d&leftTicketDTO.from_station=JCF&leftTicketDTO.to_station=BJP&purpose_codes=ADULT", j);
+            for(int j = 15; j < 18; j++) {
+                String url = String.format("https://kyfw.12306.cn/otn/leftTicket/queryT?leftTicketDTO.train_date=2016-09-%02d&leftTicketDTO.from_station=JCF&leftTicketDTO.to_station=BJP&purpose_codes=ADULT", j);
                 System.out.println(url);
                 String result = IOUtils.toString(new URL(url));
                 JSONObject obj = JSON.parseObject(result);
@@ -391,5 +391,21 @@ public class JSoupParserTest {
             }
         }
 
+    }
+
+    @Test
+    public void testCip() throws IOException {
+        String url = "http://www.capub.cn:8888/pdm/business/CipInfoAction.do?method=checkApproveNo";
+        Map<String, String> data = new HashMap<>();
+        data.put("approveNo", "2012280294");
+        data.put("captchaNo", "");
+        data.put("approveNo", "chk");
+        Map<String, String> cookies = new HashMap<>();
+        cookies.put("JSESSIONID", "47DF780FC74C15A42B8B21AE0C0B26C2");
+        Document document = Jsoup.connect(url).cookies(cookies).data(data).post();
+        System.out.println(document.html());
+        PrintWriter pw = new PrintWriter("D:/1.html");
+        pw.write(document.html());
+        pw.close();
     }
 }
