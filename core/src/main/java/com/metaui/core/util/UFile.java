@@ -172,10 +172,23 @@ public class UFile {
      * @throws IOException
      */
     public static void write(URL url, File baseDir) throws IOException {
+        write(url, baseDir, null);
+    }
+
+    /**
+     * 将URL中的内容写入文件中，文件名为url的后缀名
+     *
+     * @param url URL
+     * @param baseDir 基准目录
+     * @throws IOException
+     */
+    public static void write(URL url, File baseDir, String fileName) throws IOException {
         if (!baseDir.exists()) {
             baseDir.mkdirs();
         }
-        String fileName = UString.getLastName(url.getFile(), "/");
+        if (fileName == null) {
+            fileName = UString.getLastName(url.getFile(), "/");
+        }
         File file = new File(baseDir, fileName);
         if (file.exists()) {
             return;

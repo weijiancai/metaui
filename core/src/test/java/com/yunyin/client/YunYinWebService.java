@@ -42,7 +42,7 @@ public class YunYinWebService
         super(__getWsdlLocation(), YUNYINWEBSERVICE_QNAME);
     }
 
-    public YunYinWebService(WebServiceFeature... features) {
+    /*public YunYinWebService(WebServiceFeature... features) {
         super(__getWsdlLocation(), YUNYINWEBSERVICE_QNAME, features);
     }
 
@@ -60,7 +60,7 @@ public class YunYinWebService
 
     public YunYinWebService(URL wsdlLocation, QName serviceName, WebServiceFeature... features) {
         super(wsdlLocation, serviceName, features);
-    }
+    }*/
 
     /**
      * 

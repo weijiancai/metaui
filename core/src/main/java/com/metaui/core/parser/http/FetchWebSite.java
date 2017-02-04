@@ -7,6 +7,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import javax.imageio.ImageIO;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -24,6 +25,7 @@ public class FetchWebSite {
     private File baseDir;
     private File errorFile;
     private PrintWriter pw;
+    private Set<String> notInclude = new HashSet<String>();
 
     public FetchWebSite(File saveToDir) throws IOException {
         this.baseDir = saveToDir;
@@ -298,9 +300,9 @@ public class FetchWebSite {
             int end = url.indexOf("/", 7);
             baseUrl = url.substring(0, end == -1 ? url.length() : end);
         }
-        /*if (!url.startsWith(baseUrl)) {
+        if (!url.startsWith(baseUrl)) {
             return;
-        }*/
+        }
 
         final File imagesDir = new File(baseDir, "images");
         try {
@@ -313,12 +315,26 @@ public class FetchWebSite {
                 if (href.contains(".html") || href.contains(".php") || href.endsWith("/") || href.endsWith(".js") || href.contains(".js?")) {
                     continue;
                 }
-                System.out.println(href);
+                if (notInclude.contains(href)) {
+                    continue;
+                }
+                // 读取图片大小
+                final int length = new URL(href).openConnection().getContentLength();
+                System.out.println(href + "  " + (length / 1024) + "K");
+
+                if(length <= 102400) { // 小于100K，不保存
+                    notInclude.add(href);
+                    continue;
+                }
+
+                // 读取图片宽高
+//                ImageIO.read(new URL(href));
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            UFile.write(new URL(href), imagesDir);
+                            System.out.println("length: " + length);
+                            UFile.write(new URL(href), imagesDir, href.replace(baseUrl, "").replace("http://", "").replace("/", "_"));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

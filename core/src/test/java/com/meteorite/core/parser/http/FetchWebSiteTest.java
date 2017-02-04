@@ -1,10 +1,14 @@
 package com.meteorite.core.parser.http;
 
+import com.alibaba.fastjson.JSON;
 import com.metaui.core.parser.http.FetchWebSite;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -72,8 +76,10 @@ public class FetchWebSiteTest {
     @Test
     public void testFetchImages() throws IOException {
 //        String baseUrl = "http://www.7-zhou.com/qizhoujkys/yangsheng_1.html?ext=MjQz3NCwzMjIzLHNpbmthLDI4ODAsMzg0NiwzODQ2LA==";
-        String baseUrl = "http://xixilu.org/";
-        File dir = new File("D:\\fetch\\xixilu");
+//        String baseUrl = "http://xixilu.org/";
+//        String baseUrl = "http://2222AV.CO";
+        String baseUrl = "http://www.xixirenti.net/";
+        File dir = new File("D:\\fetch\\xixirenti");
         FetchWebSite fetchWebSite = new FetchWebSite(dir);
         fetchWebSite.fetchImages(baseUrl);
     }
@@ -87,7 +93,7 @@ public class FetchWebSiteTest {
     }
 
     @Test
-    public void testIYueSai() throws IOException {
+    public void testIYueSai() throws IOException { 
         String baseUrl = "http://www.iyuesai.com/game/416";
         File dir = new File("D:\\fetch\\iyuesai");
         FetchWebSite fetchWebSite = new FetchWebSite(dir);
@@ -100,5 +106,65 @@ public class FetchWebSiteTest {
         File dir = new File("D:\\fetch\\weixin");
         FetchWebSite fetchWebSite = new FetchWebSite(dir);
         fetchWebSite.fetch(baseUrl, 1);
+    }
+
+    @Test
+    public void testImgWidthHeight() throws Exception {
+        /*String url = "http://p.xixirenti.net/uploadfile/2016/1231/46/01.jpg";
+        BufferedImage image = ImageIO.read(new URL(url));
+        System.out.println("width = " + image.getWidth() + ",height = " + image.getHeight());*/
+
+//        String url = "http://www.xixirenti.org/yazhourenti/2016/0824/13_22.html";
+        String url = "http://www.xixirenti.org/yazhourenti/2016/";
+        /*for(int i = 1; i <= 12; i++) { // 月
+            for(int j = 1; j <= 31; j++) { // 日
+                for(int k = 1; k <= 1000; k++) { // 页面
+                    String href = url + String.format("%02d%02d/%d.html", i, j, k);
+                    try {
+                        System.out.println(href + "  " + Jsoup.connect(href).execute().statusCode());
+                    } catch (Exception e) {
+                        break;
+                    }
+
+
+                    for(int m = 1; m <= 100; m++) { // 分页
+                        href = url +  String.format("%02d%02d/%d_%d.html", i, j, k, m);
+                        System.out.println(href);
+                    }
+                }
+            }
+        }*/
+        File dir = new File("D:\\fetch\\xixirenti_1");
+        FetchWebSite fetchWebSite = new FetchWebSite(dir);
+
+        url = "http://www.xixirenti.org/yazhourenti/2016/0825/";
+        for(int k = 1; k <= 1000; k++) { // 页面
+            String href = url + String.format("%d.html", k);
+            try {
+                System.out.println(href);
+                System.out.println(href + "  " + Jsoup.connect(href).execute().statusCode());
+            } catch (Exception e) {
+                continue;
+            }
+
+
+            for(int m = 2; m <= 100; m++) { // 分页
+                href = url +  String.format("%d_%d.html", k, m);
+                System.out.println(href);
+                try {
+//                    System.out.println(href + "  " + Jsoup.connect(href).execute().statusCode());
+                    fetchWebSite.fetchImages(href);
+                } catch (Exception e) {
+                    break;
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testGetBook() throws IOException {
+        String url = "http://192.168.31.109:8000/share/books/";
+        String body = Jsoup.connect(url).ignoreContentType(true).execute().body();
+        System.out.println(body);
     }
 }

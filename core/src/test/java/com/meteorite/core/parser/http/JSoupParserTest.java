@@ -282,7 +282,7 @@ public class JSoupParserTest {
         JSoupParser parser = new JSoupParser(url);
         Document doc = parser.parse();
 //        System.out.println(doc.html());
-        Map<String, String> data = new HashMap<>();
+        Map<String, String> data = new HashMap<String, String>();
         List<Element> list = doc.body().select("input");
         for (Element element : list) {
             String name = element.attr("name");

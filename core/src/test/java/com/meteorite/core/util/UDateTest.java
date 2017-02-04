@@ -3,7 +3,7 @@ package com.meteorite.core.util;
 import com.metaui.core.util.UDate;
 import junit.framework.TestCase;
 
-import java.time.LocalDate;
+//import java.time.LocalDate;
 
 /**
  * @author wei_jc
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class UDateTest extends TestCase {
     public void testToLocalDate() throws Exception {
         String date = "2012-03-01 10:55:23.0";
-        System.out.println(UDate.toLocalDate(date));
-        System.out.println(UDate.dateToString(LocalDate.now()));
+//        System.out.println(UDate.toLocalDate(date));
+//        System.out.println(UDate.dateToString(LocalDate.now()));
     }
 }

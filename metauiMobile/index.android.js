@@ -148,4 +148,4 @@ const styles = StyleSheet.create({
     },
 });
 
-AppRegistry.registerComponent('metauiMobile', () => FetchList);
+AppRegistry.registerComponent('metauiMobile', () => require('./movies/MoviesApp.android'));

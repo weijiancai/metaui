@@ -15,13 +15,15 @@ public class DBTest {
     @Test
     public void testAdd() throws Exception {
         // 添加数据源
-//        db = DB.add("wy", "jdbc:sqlserver://weiyi1998.com:18888;databaseName=yhbis", "sa", "123!@#qwe");
-        db = DB.add("lhcbs", "jdbc:sqlserver://123.56.42.198:1433;databaseName=lhcbs", "ectwms", "ectongs2015$");
-        assertEquals("lhcbs", db.getSchema());
+        db = DB.add("wy", "jdbc:sqlserver://weiyi1998.com:18888;databaseName=yhbis", "sa", "123!@#qwe");
+//        db = DB.add("lhcbs", "jdbc:sqlserver://123.56.42.198:1433;databaseName=lhcbs", "ectwms", "ectongs2015$");
+//        assertEquals("lhcbs", db.getSchema());
+        assertEquals("yhbis", db.getSchema());
 
     }
 
     @Test public void testUse() {
 //        DB.use();
+        db.table("yhbis.dbo.wm_op_order", "")
     }
 }

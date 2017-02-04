@@ -1,5 +1,8 @@
 package com.metaui.core.parser.http;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -67,6 +70,16 @@ public class JSoupParser {
 
     public Connection connect() {
         return Jsoup.connect(url);
+    }
+
+    public JSONArray getJsonArray() throws IOException {
+        String body = Jsoup.connect(url).ignoreContentType(true).execute().body();
+        return JSON.parseArray(body);
+    }
+
+    public JSONObject getJson() throws IOException {
+        String body = Jsoup.connect(url).ignoreContentType(true).execute().body();
+        return JSON.parseObject(body);
     }
 
     public static void main(String[] args) throws IOException {
