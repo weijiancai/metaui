@@ -41,26 +41,26 @@ public class HelloServiceService
     public HelloServiceService() {
         super(__getWsdlLocation(), HELLOSERVICESERVICE_QNAME);
     }
-
-    public HelloServiceService(WebServiceFeature... features) {
-        super(__getWsdlLocation(), HELLOSERVICESERVICE_QNAME, features);
-    }
-
-    public HelloServiceService(URL wsdlLocation) {
-        super(wsdlLocation, HELLOSERVICESERVICE_QNAME);
-    }
-
-    public HelloServiceService(URL wsdlLocation, WebServiceFeature... features) {
-        super(wsdlLocation, HELLOSERVICESERVICE_QNAME, features);
-    }
-
-    public HelloServiceService(URL wsdlLocation, QName serviceName) {
-        super(wsdlLocation, serviceName);
-    }
-
-    public HelloServiceService(URL wsdlLocation, QName serviceName, WebServiceFeature... features) {
-        super(wsdlLocation, serviceName, features);
-    }
+//
+//    public HelloServiceService(WebServiceFeature... features) {
+//        super(__getWsdlLocation(), HELLOSERVICESERVICE_QNAME, features);
+//    }
+//
+//    public HelloServiceService(URL wsdlLocation) {
+//        super(wsdlLocation, HELLOSERVICESERVICE_QNAME);
+//    }
+//
+//    public HelloServiceService(URL wsdlLocation, WebServiceFeature... features) {
+//        super(wsdlLocation, HELLOSERVICESERVICE_QNAME, features);
+//    }
+//
+//    public HelloServiceService(URL wsdlLocation, QName serviceName) {
+//        super(wsdlLocation, serviceName);
+//    }
+//
+//    public HelloServiceService(URL wsdlLocation, QName serviceName, WebServiceFeature... features) {
+//        super(wsdlLocation, serviceName, features);
+//    }
 
     /**
      * 

@@ -1,29 +1,13 @@
 package com.metaui.fxbase.view.form;
 
-import com.metaui.core.dict.FormType;
-import com.metaui.core.dict.QueryModel;
-import com.metaui.core.meta.DisplayStyle;
-import com.metaui.core.meta.MetaDataType;
-import com.metaui.core.util.UDate;
-import com.metaui.core.util.UString;
-import com.metaui.core.util.UUIDUtil;
 import com.metaui.core.view.config.FormFieldConfig;
-import com.metaui.fxbase.MuEventHandler;
-import com.metaui.fxbase.model.FormFieldModel;
 import javafx.beans.property.StringProperty;
-import javafx.event.ActionEvent;
-import javafx.geometry.Pos;
-import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-
-import java.util.Date;
 
 /**
  * @author wei_jc
@@ -41,7 +25,7 @@ public abstract class BaseFormField extends HBox {
 
     public BaseFormField(FormFieldConfig config) {
         this.config = config;
-        this.isQuery = config.getFormConfig().getFormType() == FormType.QUERY;
+//        this.isQuery = config.getFormConfig().getFormType() == FormType.QUERY;
         init();
     }
 
@@ -70,7 +54,7 @@ public abstract class BaseFormField extends HBox {
     protected void init() {
         initPrep();
 
-        this.prefWidthProperty().bind(config.widthProperty());
+        /*this.prefWidthProperty().bind(config.widthProperty());
         this.prefHeightProperty().bind(config.heightProperty());
         this.setAlignment(Pos.CENTER_LEFT);
         this.setSpacing(5);
@@ -104,13 +88,13 @@ public abstract class BaseFormField extends HBox {
             this.setValue(defaultValue);
         }
         // 绑定值
-        config.valueProperty().bindBidirectional(valueProperty());
+        config.valueProperty().bindBidirectional(valueProperty());*/
 
         initAfter();
     }
 
     protected void initAfter() {
-        if(isQuery && !this.getClass().isAssignableFrom(MUDate.class) && !this.getClass().isAssignableFrom(MUDateRange.class)) {
+        /*if(isQuery && !this.getClass().isAssignableFrom(MUDate.class) && !this.getClass().isAssignableFrom(MUDateRange.class)) {
             btnQueryModel = new Hyperlink("=");
             btnQueryModel.setBorder(null);
             btnQueryModel.setMinWidth(30);
@@ -238,11 +222,11 @@ public abstract class BaseFormField extends HBox {
 
             // 设置查询模式
             setQueryModel(config.getQueryModel().toSqlModel());
-        }
+        }*/
     }
 
     private void setQueryModel(String queryModel) {
-        btnQueryModel.setText(queryModel);
+        /*btnQueryModel.setText(queryModel);
         switch (queryModel) {
             case "=":
                 config.setQueryModel(QueryModel.EQUAL);
@@ -277,12 +261,13 @@ public abstract class BaseFormField extends HBox {
             case "not null":
                 config.setQueryModel(QueryModel.NOT_NULL);
                 break;
-        }
+        }*/
     }
 
     public HBox getLabelNode() {
         return labelBox;
     }
+/*
 
     public static BaseFormField getInstance(FormFieldModel model) {
         DisplayStyle displayStyle = model.getDisplayStyle();
@@ -299,9 +284,11 @@ public abstract class BaseFormField extends HBox {
         } else if (DisplayStyle.TEXT == displayStyle) {
             return new MUText(model);
         }
-        /* else if (DisplayStyle.DATA_SOURCE == displayStyle) {
+        */
+/* else if (DisplayStyle.DATA_SOURCE == displayStyle) {
             node = new MuDataSource(field);
-        }*/ else if (DisplayStyle.DATE == displayStyle) {
+        }*//*
+ else if (DisplayStyle.DATE == displayStyle) {
             if (model.getFormModel().getFormType() == FormType.QUERY) {
                 return new MUDateRange(model);
             } else {
@@ -310,6 +297,7 @@ public abstract class BaseFormField extends HBox {
         }
         return new MUTextField(model);
     }
+*/
 
     public void setLabelRequire(boolean isRequire) {
         if (isRequire) {

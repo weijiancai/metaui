@@ -68,7 +68,7 @@ public class TaoBaoTesterTest {
         Account account = new Account();
         account.setKey("1021499544");
         account.setSecret("sandbox7d1ecfc8f4775fba746b866b2");
-        account.setToken("610122955a1dcaafc7b4050785012c164de761e665168242074082786");
+        account.setToken("6100e03e96411adb578b8a82cb0118e5b270098223eb9c42074082786");
         account.setSandbox(true);
 
         ApiInfo info = new ApiInfo();
@@ -76,7 +76,7 @@ public class TaoBaoTesterTest {
 
         Map<String, String> params = new HashMap<>();
         params.put("fields", "tid,type,status,payment,orders");
-        params.put("tid", "1526233859431677");
+        params.put("tid", "262836597896637");
 
         TaoBaoTester tester = new TaoBaoTester();
         String result = tester.test(account, info, params);
@@ -103,6 +103,36 @@ public class TaoBaoTesterTest {
 
         Map<String, String> params = new HashMap<>();
         params.put("fields", "approve_status,num_iid,title,nick,type,cid,product_id,pic_url,num,props,valid_thru,list_time,price,has_discount,has_invoice,has_warranty,has_showcase,modified,delist_time,postage_id,seller_cids,outer_id,sold_quantity");
+//        params.put("cid", "33");
+//        params.put("start_modified", "2000-01-01 00:00:00");
+//        params.put("is_cspu", "false");
+//        params.put("q", "沙箱测试");
+
+        TaoBaoTester tester = new TaoBaoTester();
+        String result = tester.test(account, info, params);
+        System.out.println(result);
+    }
+
+    @Test
+    public void testZtTaoBaoSendBox() throws Exception {
+        Account account = new Account();
+        account.setKey("1021499544");
+        account.setSecret("sandbox7d1ecfc8f4775fba746b866b2");
+        account.setToken("6100e03e96411adb578b8a82cb0118e5b270098223eb9c42074082786");
+        account.setSandbox(true);
+
+        /*ApiInfo info = new ApiInfo();
+        info.setId("taobao.trade.fullinfo.get");
+
+        Map<String, String> params = new HashMap<>();
+        params.put("fields", "tid,type,status,payment,orders");
+        params.put("tid", "194145140048627");*/
+
+        ApiInfo info = new ApiInfo();
+        info.setId("taobao.trades.sold.get");
+
+        Map<String, String> params = new HashMap<>();
+        params.put("fields", "tid,type,status,payment,orders");
 //        params.put("cid", "33");
 //        params.put("start_modified", "2000-01-01 00:00:00");
 //        params.put("is_cspu", "false");

@@ -77,19 +77,19 @@ public class MUForm extends BorderPane implements IView {
         gridPane.setPadding(new Insets(5, 0, 0, 0));
 
         Region labelGap;
-        BaseFormField formField;
+        /*BaseFormField formField;
         Region fieldGap;
         int idxRow = 0;
         int idxCol = 0;
 
         for (FormFieldModel field : config.getFormFields()) {
-            /*if (onlyShowHidden) { // 只显示隐藏的
+            *//*if (onlyShowHidden) { // 只显示隐藏的
                 if (field.isDisplay()) {
                     continue;
                 }
             } else if (!field.isDisplay()) { // 不显示
                 continue;
-            }*/
+            }*//*
 
             formField = BaseFormField.getInstance(field);
             queryList.add(formField);
@@ -144,7 +144,7 @@ public class MUForm extends BorderPane implements IView {
                     gridPane.add(fieldGap, idxCol++, idxRow);
                 }
             }
-        }
+        }*/
 
         return gridPane;
     }

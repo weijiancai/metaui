@@ -77,7 +77,8 @@ public class FetchWebSiteTest {
     public void testFetchImages() throws IOException {
 //        String baseUrl = "http://www.7-zhou.com/qizhoujkys/yangsheng_1.html?ext=MjQz3NCwzMjIzLHNpbmthLDI4ODAsMzg0NiwzODQ2LA==";
 //        String baseUrl = "http://xixilu.org/";
-//        String baseUrl = "http://2222AV.CO";
+//        String baseUrl = "HTTP://111av.ORG;
+//        String baseUrl = "https://povd.com";
         String baseUrl = "http://www.xixirenti.net/";
         File dir = new File("D:\\fetch\\xixirenti");
         FetchWebSite fetchWebSite = new FetchWebSite(dir);
