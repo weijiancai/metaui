@@ -55,7 +55,8 @@ function init() {
 
 function save() {
     if(configFile) {
-        fs.writeFile(configFile, JSON.stringify(systemConfig));
+        fs.writeFileSync(configFile, JSON.stringify(systemConfig));
+        // fs.writeFile(configFile, JSON.stringify(systemConfig));
     }
 }
 
